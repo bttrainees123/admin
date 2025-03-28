@@ -342,6 +342,7 @@ const Header = () => {
               <Form.Control
                 type='file' ref={fileInputRef} onChange={handleProfilePic}
               />
+              
               <div style={{ position: 'relative' }}>
                 <span onClick={handleImageClose} id='my-icon' className="close AClass" style={{ position: 'absolute', cursor: 'pointer', fontSize: '25px', display: 'none' }} >&times;</span>
                 <img alt='' src={file} style={{ maxWidth: "154px" }} />

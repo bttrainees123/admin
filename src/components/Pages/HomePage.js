@@ -1,31 +1,51 @@
+import axios from 'axios'
 import React, { useState } from 'react'
+import ProgressBar from 'react-bootstrap/ProgressBar';
+
 
 const HomePage = () => {
-  const [formValues, setFormValues] = useState([{ name: "", email: "", password: "", age: "" }])
+  const [image, setImage] = useState()
+  const [progressBar, setProgressBar] = useState(0)
+  const [formValues, setFormValues] = useState([{ name: "", email: "", password: "", age: "", image: null }])
 
-  
- const validateUserName = (username) =>
-  validateField(username, /^[a-z0-9]+$/i, 'username-error');
+  const handleFile = (val) => {
+    const file = val.target.files[0]
+    const formData = new FormData()
+    setImage(URL.createObjectURL(file))
+    formData.append('file', file)
+    axios.post('http://localhost:3000/upload', formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+      onUploadProgress: val => {
+        setProgressBar(Math.round(100 * val.loaded) / val.total)
+      }
+    }).then(res => setImage(URL.createObjectURL(file))).catch(err => console.log("error: ", err)
+    )
+  }
+
+  const validateUserName = (username) =>
+    validateField(username, /^[a-z0-9]+$/i, 'username-error');
 
 
- const validateEmail = (email) =>
-  validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,6}$/, 'email-error');
+  const validateEmail = (email) =>
+    validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,6}$/, 'email-error');
 
 
-const validateAge = (age) => {
-  const isValid = parseInt(age, 10) >= 16 && parseInt(age, 10) <= 90
-  document.getElementById('age-error').style.display = isValid ? 'none' : 'block';
-  return isValid;
-};
+  const validateAge = (age) => {
+    const isValid = parseInt(age, 10) >= 16 && parseInt(age, 10) <= 90
+    document.getElementById('age-error').style.display = isValid ? 'none' : 'block';
+    return isValid;
+  };
 
-const validatePassword = (password) =>
-  validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'password-error');
+  const validatePassword = (password) =>
+    validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'password-error');
 
-const validateField = (field, regex, errorId) => {
-  const isValid = field === "" || regex.test(field);
-  document.getElementById(errorId).style.display = isValid ? 'none' : 'block';
-  return isValid;
-};
+  const validateField = (field, regex, errorId) => {
+    const isValid = field === "" || regex.test(field);
+    document.getElementById(errorId).style.display = isValid ? 'none' : 'block';
+    return isValid;
+  };
 
   let handleChange = (i, e) => {
     let newFormValues = [...formValues];
@@ -34,7 +54,7 @@ const validateField = (field, regex, errorId) => {
   }
 
   let addFormFields = () => {
-    setFormValues([...formValues, { name: "", email: "", password: "", age: "" }])
+    setFormValues([...formValues, { name: "", email: "", password: "", age: "", image: null }])
   }
 
   let removeFormFields = (i) => {
@@ -79,6 +99,27 @@ const validateField = (field, regex, errorId) => {
               <input type="text" className="form-control" name="age" value={element.age || ""} onInput={(e) => validateAge(e.target.value)} onChange={e => handleChange(index, e)} placeholder="Enter age" />
               <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span><br />
             </div>
+            <div className="form-group">
+              <label>Image: </label><br />
+              <input type="file" className="form-control" name="image" value={element.image || ""} onChange={handleFile} />
+              <br /> <br />
+              {/* <div className='progressbar'> 
+                  <div className='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-label='progressbar' aria-valuenow={60} aria-valuemin={0} aria-valuemax={100} style={{width: `${progressBar}%`}}>
+                  </div>
+              </div> */}
+              <div><ProgressBar animated now={progressBar} onChange={console.log(progressBar)} label={`${progressBar}%`} style={{ width: `${progressBar}%` }} /></div>
+
+              <br />
+              {
+                
+                image &&
+                <img src={image} alt='' className='w-25 h-25' />
+              } 
+
+            </div>
+            {/* {progressBar === 1000 ? (<img src={image} alt='' className='w-25 h-25' />) : (<ProgressBar animated now={progressBar} onChange={(e) => handleProgress(e.target.value)} label={`${progressBar}%`} style={{ width: `${progressBar}%` }} />)} */}
+
+
             {
               index ?
                 <button type="button" className="btn btn-danger" onClick={() => removeFormFields(index)}>Remove</button>
@@ -87,7 +128,7 @@ const validateField = (field, regex, errorId) => {
           </div>
         ))}
         <div className="button-section">
-          <button className="btn btn-success" style={{ margin: '5px' }} type="button" onClick={() => addFormFields()}>Add</button>
+          {/* <button className="btn btn-success" style={{ margin: '5px' }} type="button" onClick={() => addFormFields()}>Add</button> */}
           <button className="btn btn-primary" style={{ margin: '5px' }} type="submit">Submit</button>
         </div>
       </form>
