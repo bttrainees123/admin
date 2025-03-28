@@ -11,6 +11,24 @@ axios.interceptors.response.use(function (response) {
     console.log("Response", response);
     return response;
   }, function (error) {
+    if(error.response.status === 401){
+        console.error("Unauthorized User")
+    }
+    else if(error.response.status === 404){
+        console.error("Not Found...")
+    }
+    else if(error.response.status === 400){
+        console.error("Bad Request")
+    }
+    else if(error.response.status === 408){
+        console.error("Request Timeout")
+    }
+    else if(error.response.status === 413){
+        console.error("Content Too Large")
+    }
+    else{
+        console.error("Unexpacted Error Occured")
+    }
     return Promise.reject(error);
   });
 
@@ -73,4 +91,3 @@ export default axios;
 //     }
 //     return config;
 //   });
-  
