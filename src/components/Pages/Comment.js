@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { getComments } from '../features/commentSlice'
 import eye from "../image/eye.svg"
 import deletePic from "../image/delete1.svg"
+import CommentForm from './CommentForm'
 
 const Comment = () => {
     const dispatch = useDispatch()
@@ -55,6 +56,7 @@ const Comment = () => {
                         </li>))) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
                 </ul>
             </div>
+            <CommentForm />
 
         </div>
     )

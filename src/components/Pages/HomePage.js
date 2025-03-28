@@ -1,14 +1,18 @@
-import axios from 'axios'
-import React, { useState } from 'react'
+import axios from '../utils/middlewares'
+import React, { useEffect, useState } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import DragNDrop from './DragNDrop';
 
 
 const HomePage = () => {
   const [image, setImage] = useState()
+  const [file, setFile] = useState([])
   const [progressBar, setProgressBar] = useState(0)
   const [formValues, setFormValues] = useState([{ name: "", email: "", password: "", age: "", image: null }])
 
-  const handleFile = (val) => {
+  const handleFile = (ind, val) => {
+    handleChange(ind, val)
+    // console.log("ppppppp", formValues[ind][val]);
     const file = val.target.files[0]
     const formData = new FormData()
     setImage(URL.createObjectURL(file))
@@ -18,7 +22,9 @@ const HomePage = () => {
         "Content-Type": "multipart/form-data"
       },
       onUploadProgress: val => {
-        setProgressBar(Math.round(100 * val.loaded) / val.total)
+        console.log("val.loaded", val.loaded, "val.total", val.total);
+        
+        setProgressBar(Math.floor(100 * val.loaded) / val.total)
       }
     }).then(res => setImage(URL.createObjectURL(file))).catch(err => console.log("error: ", err)
     )
@@ -99,24 +105,25 @@ const HomePage = () => {
               <input type="text" className="form-control" name="age" value={element.age || ""} onInput={(e) => validateAge(e.target.value)} onChange={e => handleChange(index, e)} placeholder="Enter age" />
               <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span><br />
             </div>
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Image: </label><br />
-              <input type="file" className="form-control" name="image" value={element.image || ""} onChange={handleFile} />
-              <br /> <br />
+              <input type="file" className="form-control" name="image" value={element.image || ""} onChange={(e) => handleFile(index, e)} />
+              <br /> <br /> */}
               {/* <div className='progressbar'> 
                   <div className='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-label='progressbar' aria-valuenow={60} aria-valuemin={0} aria-valuemax={100} style={{width: `${progressBar}%`}}>
                   </div>
               </div> */}
-              <div><ProgressBar animated now={progressBar} onChange={console.log(progressBar)} label={`${progressBar}%`} style={{ width: `${progressBar}%` }} /></div>
-
+              {/* <div>
+                {progressBar === 100 ? (<ProgressBar variant='success' animated now={progressBar} label={`${progressBar}%`} style={{ width: `${progressBar}%` }} />):( <ProgressBar animated now={progressBar} label={`${progressBar}%`} style={{ width: `${progressBar}%` }} />)}
+                </div>
               <br />
               {
-                
+
                 image &&
                 <img src={image} alt='' className='w-25 h-25' />
-              } 
+              }
 
-            </div>
+            </div> */}
             {/* {progressBar === 1000 ? (<img src={image} alt='' className='w-25 h-25' />) : (<ProgressBar animated now={progressBar} onChange={(e) => handleProgress(e.target.value)} label={`${progressBar}%`} style={{ width: `${progressBar}%` }} />)} */}
 
 
@@ -125,10 +132,14 @@ const HomePage = () => {
                 <button type="button" className="btn btn-danger" onClick={() => removeFormFields(index)}>Remove</button>
                 : null
             }
+            <div>
+              <DragNDrop onFilesSelected={setFile} width="300px" height="400px" />
+            </div>
           </div>
+          
         ))}
         <div className="button-section">
-          {/* <button className="btn btn-success" style={{ margin: '5px' }} type="button" onClick={() => addFormFields()}>Add</button> */}
+          <button className="btn btn-success" style={{ margin: '5px' }} type="button" onClick={() => addFormFields()}>Add</button>
           <button className="btn btn-primary" style={{ margin: '5px' }} type="submit">Submit</button>
         </div>
       </form>
