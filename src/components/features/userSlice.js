@@ -3,11 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   username: "",
   email: "",
+  ImgFile: null,
   age: "",
   password: "",
   gender: "",
   subject: [],
   stream: "",
+  success: false
 };
 
 export const userSlice = createSlice({
@@ -29,6 +31,8 @@ export const userSlice = createSlice({
     },
     updateUser: (state, action) => {
       state.username = action.payload.username;
+      state.ImgFile = action.payload.file
+      state.success = action.payload.success
       const users = JSON.parse(localStorage.getItem("data")) || [];
       users[action.payload.index] = action.payload;
       localStorage.setItem("data", JSON.stringify(users));

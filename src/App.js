@@ -7,21 +7,41 @@ import HandleLoginRoute from './components/PrivateRoutes/HandleLoginRoute';
 import AddTasks from './components/Tasks/AddTasks';
 import HomePage from './components/Pages/HomePage';
 import Product from './components/Pages/Product';
-import Sideer from './components/sider/Sideer';
+import { ToastContainer, toast } from 'react-toastify';
 // import Task from './components/Pages/Task';
 import CartItem from './components/Pages/CartItem';
+import Toast from 'react-bootstrap/Toast';
 
+export const showToast = () => {
+  <div>
+    <ToastContainer />
+  </div>
+}
 
-function App() {
-  // const isLoggedIn = localStorage.getItem('isLoggedIn')
-  // if(!isLoggedIn ){
-  //   return <LoginPage />
-  // }
+export function toasterMessage() {
+    
   return (
+    <>
+      <Toast  style={{ background: '#D0F0C0', marginTop: '0px', marginLeft: '700px', position: 'absolute', zIndex: '1' }} delay={3000} autohide>
+        <Toast.Header>
+          {/* <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" /> */}
+          {/* <strong className="me-auto">{username}</strong> */}
+        </Toast.Header>
+        <Toast.Body>You have Successfully change your data.</Toast.Body>
+      </Toast>
+    </>
+  );
+  
+}
+function App() {
+
+  return (
+    <>
+
 
       <BrowserRouter>
         <Routes>
-        <Route path='/' element={<HomePage />} />
+          <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<HandleLoginRoute Component={LoginPage} />} />
           <Route path='/projects' element={<PrivateRoute Component={Project} />} />
           {/* <Route path='/projects' element={isLoggedIn === true ? <Project/> : navigate('/login)}/> */}
@@ -32,7 +52,8 @@ function App() {
           {/* <Route path='/tasks' element={<PrivateRoute Component={Task} />} /> */}
           <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter></>
+
   );
 }
 

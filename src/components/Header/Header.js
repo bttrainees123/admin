@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useSelector } from 'react-redux';
 import '../css/custom.css'
+import Toast from 'react-bootstrap/Toast';
 
 const Header = () => {
   // const dispatch = useDispatch()
@@ -20,11 +21,12 @@ const Header = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [subject, setSubject] = useState([]);
+  const [addedUser, setaddedUser] = useState({})
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const genderInputRef = useRef()
-
-  const { username } = useSelector((state) => state.users)
+  const [success, setSuccess] = useState(false)
+  const { username, ImgFile } = useSelector((state) => state.users)
 
   const mySearch = () => {
     let input = document.getElementById("myInput");
@@ -39,6 +41,17 @@ const Header = () => {
         card.style.display = "none";
       }
     });
+  }
+
+  function toasterMessage(){
+    return (
+    <Toast style={{background: '#D0F0C0', marginBottom: '5px'}} onClose={() => setSuccess(false)} delay={3000} autohide>
+    <Toast.Header>
+      <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" />
+      <strong className="me-auto">{username}</strong>
+    </Toast.Header>
+    <Toast.Body>User added Successfully</Toast.Body>
+  </Toast>);
   }
 
   const validateField = (field, regex, errorId) => {
@@ -210,9 +223,11 @@ const Header = () => {
       // dispatch(saveUser(userData))
       const user = JSON.parse(localStorage.getItem('data')) || [];
       user.push(userData);
+      setaddedUser(userData)
       localStorage.setItem('data', JSON.stringify(user));
       handleClear();
       handleFormClose()
+      setSuccess(true)
     }
   };
 
@@ -221,17 +236,13 @@ const Header = () => {
       <div className="top_header d-flex align-items-center justify-content-between">
 
         <h1 >Projects</h1>
-        <div >
-          <span  className='fs-5'>{username}</span>
-
-
           <input type="text" id="myInput" onKeyUp={mySearch} placeholder="search" />
-        </div>
         <div className="header_notification d-flex align-items-center gap-2">
           <div className="filter-dropdown green-filter dropdown">
             <button className="btn filter-btn green-filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span><img src={clock} alt="" className="fltrimg" /> 00 : 12 : 01</span> <img src={angleDown} className="ms-1" alt="" />
             </button>
+            
             <ul className="dropdown-menu">
               <li><Link className="dropdown-item" to="/">Action</Link></li>
               <li><Link className="dropdown-item" to="/">Another action</Link>
@@ -240,6 +251,7 @@ const Header = () => {
                 here</Link></li>
             </ul>
           </div>
+          {success && toasterMessage()}
           <div className="header_icon position-relative notification d-flex align-items-center justify-content-center">
             {/* <img src={notification} alt='' /> */}
             {/* <span className="notification_alert"></span> */}
@@ -340,7 +352,7 @@ const Header = () => {
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Profile photo</Form.Label>
               <Form.Control
-                type='file' ref={fileInputRef} onChange={handleProfilePic}
+                type='file' ref={fileInputRef} multiple onChange={handleProfilePic}
               />
               
               <div style={{ position: 'relative' }}>
@@ -359,6 +371,8 @@ const Header = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      {/* {success && (<Alert onClose={() => setSuccess(false)} dismissible variant='success'><Alert.Heading>Successfully added</Alert.Heading><p>You have Successfully added a data</p></Alert>)} */}
+      
     </>
   )
 }
