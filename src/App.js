@@ -42,6 +42,7 @@ function App() {
           <Route path='/products' element={<PrivateRoute Component={Product} />} />
           {/* <Route path='/tasks' element={<PrivateRoute Component={Task} />} /> */}
           <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
+          <Route path='/projects/:created_date' element={<PrivateRoute Component={CartItem} />} />
         </Routes>
       </BrowserRouter></>
 

@@ -13,13 +13,12 @@ import { getUsers }
 import Sideer from '../sider/Sideer'
 import Header from '../Header/Header'
 import { useNavigate } from 'react-router-dom';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import events from './Calender/events';
+import timeGridPlugin from '@fullcalendar/timegrid'
+import axios from '../utils/middlewares';
 
 const Project = () => {
   const dispatch = useDispatch()
@@ -56,13 +55,13 @@ const Project = () => {
   //   alert(arg.dateStr);
   // };
 
+
   const handleCloseDelete = () => setShowDelete(false);
 
   const handleClose = () => {
     setShow(false);
   }
   const handleShow = () => setShow(true);
-
 
   useEffect(() => {
     const fetchData = () => {
@@ -89,7 +88,6 @@ const Project = () => {
   //   )
   // }
 
-
   const handleDelete = (ind) => {
     const updatedData = userData.filter((_, i) => i !== ind)
     setUserData(updatedData)
@@ -107,8 +105,6 @@ const Project = () => {
     dispatch(getUsers())
   }, [dispatch])
 
-
-
   const validateEmail = (email) =>
     validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,6}$/, 'email-error');
 
@@ -120,13 +116,17 @@ const Project = () => {
 
   const handleDateClick = (e) => {
     // alert(e.dateStr);
-    e.dayEl.bgColor = 'pink'
+    const created_date = e.dateStr
+    const token = '255|AU2GCstU1ycrHapE29Z9D8lLeI85BzGPC70xru3W'
+    const response = axios.get(`https://laravel9.etrueconcept.com/btpms/api/activity-log?${created_date}=&user_id=`, { headers: {"Authorization" : `Bearer ${token}`}, params: {created_date} })
+    console.log("Response ", response);
+    navigate(`btpms/api/activity-log?${created_date}=&user_id=`)
+
+    // e.dayEl.bgColor = 'pink'
     console.log("event ", e);
-    setTimeout(() => {
-      e.dayEl.bgColor = 'white'
-    }, 3000);
-  
-    
+    e.dayEl.onmouseover = 'pointer'
+
+
   };
   function renderEventContent(eventInfo) {
     return (
@@ -136,7 +136,6 @@ const Project = () => {
       </>
     );
   }
-
 
   const validateRequiredFields = () => {
     let isValid = true;
@@ -188,7 +187,6 @@ const Project = () => {
     }
   }
 
-
   const handleSave = (e) => {
     e.preventDefault()
     if (validateUserName(editData.username) &&
@@ -210,8 +208,6 @@ const Project = () => {
     }
   }
 
-
-
   const validateLocalEmail = (email) => {
     const duplicateEmailCheck = document.getElementById('duplicate-error');
     const user = JSON.parse(localStorage.getItem('data')) || [];
@@ -228,7 +224,6 @@ const Project = () => {
     { name: 'Math ', key: 'math', label: 'Math ' },
     { name: 'Biology ', key: 'bio', label: 'Biology ' },
   ];
-
 
   // function toasterMessage() {
 
@@ -258,8 +253,6 @@ const Project = () => {
   //   return isValid;
   // };
 
-
-
   // const validatePassword = (password) =>
   //   validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'password-error');
 
@@ -281,8 +274,6 @@ const Project = () => {
   // }
   // };
 
-
-
   return (
     <>
       <div className="main_container">
@@ -294,29 +285,34 @@ const Project = () => {
             <div className="body_content">
               {/* {success && toasterMessage()} */}
               <Header />
-              <div style={{ textAlign: 'center', marginLeft: '300px', marginBottom: '50px', height: '200px', width: '500px'}}>
-                  <FullCalendar
-                    plugins={[dayGridPlugin, interactionPlugin]}
-                    initialView="dayGridMonth"
-                    headerToolbar={{
-                      start: "prev",
-                      center: "title",
-                      right: "next",
-                      
-                    }}
-                    
-                    weekends={false}
-                    dateClick={(e) => handleDateClick(e)}
-                    events={[
-                      { title: "event 1", date: "2021-05-07" },
-                      { title: "event 2", date: "2021-05-17" }
-                    ]}
-                    eventContent={renderEventContent}
-                  />
-                </div>
+              <div style={{ textAlign: 'center', marginLeft: '200px', marginBottom: '100px', height: '250px', width: '700px' }}>
+                <FullCalendar
+                  plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
+                  initialView="dayGridMonth"
+                  dayCellDidMount={(e) => {
+                    e.el.style.cursor = 'pointer'
+                    if (e.date.getDate() === new Date().getDate() && e.date.getMonth() === new Date().getMonth()) {
+
+                      e.el.style.backgroundColor = 'purple'
+                      e.el.style.color = 'white'
+                    }
+                  }}
+                  selectable={true}
+                  headerToolbar={{
+                    start: "prev prevYear",
+                    center: "title",
+                    end: 'today nextYear next',
+
+                  }}
+                  weekends={true}
+                  dateClick={(e) => {
+                    handleDateClick(e)
+                  }}
+                />
+              </div>
               {/* {success && (<Alert onClose={() => setSuccess(false)} dismissible variant='success'><Alert.Heading>Successfully updated</Alert.Heading><p>You have Successfully change your data</p></Alert>)} */}
-              <div className="contact-profile" style={{marginTop: '240px'}}>
-              
+              <div className="contact-profile" style={{ marginTop: '400px' }}>
+
                 <div className="row">
                   {userData.length > 0 ? (userData.map((user, ind) => (
                     <div key={ind} id='for-search' className="col-lg-6 mb-3" >
@@ -377,7 +373,7 @@ const Project = () => {
                 {/* <div style={{ marginBottom: '20px', marginLeft: '430px' }}>
                   <Calendar onChange={onChange} value={value} />
                 </div> */}
-                
+
 
                 <div className="row">
                   {data.length > 0 ? (data.map((user, ind) => (
