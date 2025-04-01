@@ -6,13 +6,20 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 // import Pagination from './Pagination'
 import { useDispatch, useSelector } from 'react-redux'
+import { setSuccess } from '../features/successSlice';
 import { updateUser } from '../features/userSlice'
 import { getUsers }
   from '../features/apiSlice'
 import Sideer from '../sider/Sideer'
 import Header from '../Header/Header'
-import Toast from 'react-bootstrap/Toast';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import events from './Calender/events';
 
 const Project = () => {
   const dispatch = useDispatch()
@@ -27,20 +34,27 @@ const Project = () => {
   const [deleteInd, setDeleteInd] = useState(null)
   // const [currPage, setCurrPage] = useState([])
   const { data, isLoading, isError } = useSelector((state) => state.api)
-  const [success, setSuccess] = useState(false)
-  const [editUser, setEditUser] = useState({})
-  const { username, ImgFile } = useSelector((state) => state.users)
+  // const [success, setSuccess] = useState(false)
+  // const [editUser, setEditUser] = useState({})
+  // const { username, ImgFile } = useSelector((state) => state.users)
+  const [date, setDate] = useState(new Date());
+  const [value, onChange] = useState(new Date());
+  // type ValuePiece = Date | null;
 
+  // const Value = ValuePiece | [ValuePiece, ValuePiece];
 
+  // const [value, onChange] = useState(new Date());
   // const pageLimit = 2;
-
-
-
 
   const handleShowDelete = (ind) => {
     setShowDelete(true);
     setDeleteInd(ind)
   }
+
+  // function FullCalendarComponent() {
+  // const handleDateClick = (arg) => {
+  //   alert(arg.dateStr);
+  // };
 
   const handleCloseDelete = () => setShowDelete(false);
 
@@ -51,30 +65,30 @@ const Project = () => {
 
 
   useEffect(() => {
-    const storedData = localStorage.getItem("data");
-    const user = JSON.parse(localStorage.getItem("user"));
+    const fetchData = () => {
+      const storedData = JSON.parse(localStorage.getItem("data")) || [];
+      const user = JSON.parse(localStorage.getItem("user"));
 
-    if (user) {
-      const loggedInUserData = user
-      setLoggedInUser(user);
-      console.log("+++++++++++++++++++++========", loggedInUser);
-      if (storedData) {
-        const allUsers = JSON.parse(storedData);
-        console.log("All Users", allUsers);
-
-        const filteredUsers = allUsers
-          .filter(
-            (u) => u.email !== loggedInUserData.email
-          );
+      if (user) {
+        setLoggedInUser(user);
+        const filteredUsers = storedData.filter((u) => u.email !== user.email);
         setUserData(filteredUsers);
-        console.log("Usersssss", userData);
+      } else {
+        setUserData(storedData);
       }
-    } else {
-      if (storedData) {
-        setUserData(JSON.parse(storedData));
-      }
-    }
-  }, [editData]);
+    };
+
+    fetchData();
+  }, []);
+
+  // const calenderShow = () => {
+  //   return (
+  //     <div>
+  //       <Calendar onChange={onChange} value={value} />
+  //     </div>
+  //   )
+  // }
+
 
   const handleDelete = (ind) => {
     const updatedData = userData.filter((_, i) => i !== ind)
@@ -104,6 +118,24 @@ const Project = () => {
     return isValid;
   };
 
+  const handleDateClick = (e) => {
+    // alert(e.dateStr);
+    e.dayEl.bgColor = 'pink'
+    console.log("event ", e);
+    setTimeout(() => {
+      e.dayEl.bgColor = 'white'
+    }, 3000);
+  
+    
+  };
+  function renderEventContent(eventInfo) {
+    return (
+      <>
+        <b>{eventInfo.timeText}</b>
+        <i>{eventInfo.event.title}</i>
+      </>
+    );
+  }
 
 
   const validateRequiredFields = () => {
@@ -138,7 +170,7 @@ const Project = () => {
   }
 
   const handleChange = (e) => {
-    console.log("Successfull ", success);
+    // console.log("Successfull ", success);
     const { name, value, type, checked } = e.target
     if (type === "checkbox") {
       setEditData((prevData) => ({
@@ -165,20 +197,16 @@ const Project = () => {
       // validateLocalEmail(editData.email) &&
       validateRequiredFields()
     ) {
-      console.log("Successfull2 ", success);
+      // console.log("Successfull2 ", success);
 
-      editData.index = editInd
-      setSuccess(true)
-      dispatch(updateUser(editData))
-      handleClose()
-      setEditInd(null)
-      console.log("Edit Data ", editData);
-      setEditUser(editData)
-      setEditData({})
-      setSuccess(true)
-      setTimeout(() => {
-        navigate('/')
-   }, 2000);
+      editData.index = editInd;
+      dispatch(updateUser(editData));
+      dispatch(setSuccess(true));
+      // localStorage.setItem("success", JSON.stringify(true));
+      navigate("/");
+      setShow(false);
+      setEditInd(null);
+      setEditData({});
     }
   }
 
@@ -202,21 +230,18 @@ const Project = () => {
   ];
 
 
-  function toasterMessage() {
-    
-    return (
-      <>
-        <Toast style={{ background: '#D0F0C0', marginTop: '0px', marginLeft: '700px', position: 'absolute', zIndex: '1' }} onClose={() => setSuccess(false)} delay={5000} autohide>
-          <Toast.Header>
-            {/* <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" /> */}
-            {/* <strong className="me-auto">{username}</strong> */}
-          </Toast.Header>
-          <Toast.Body>You have Successfully change your data.</Toast.Body>
-        </Toast>
-      </>
-    );
-    
-  }
+  // function toasterMessage() {
+
+  //   return (
+  //     <>
+  //       <Toast style={{ background: '#D0F0C0', marginTop: '0px', marginLeft: '700px', position: 'absolute', zIndex: '1' }} onClose={() => setSuccess(false)} delay={5000} autohide>
+
+  //         <Toast.Body>You have Successfully change your data.</Toast.Body>
+  //       </Toast>
+  //     </>
+  //   );
+
+  // }
 
   const validateField = (field, regex, errorId) => {
     const isValid = regex.test(field);
@@ -267,12 +292,31 @@ const Project = () => {
           <div className="intersight_content">
 
             <div className="body_content">
-              {success && toasterMessage()}
-              <Header check={success} />
-
+              {/* {success && toasterMessage()} */}
+              <Header />
+              <div style={{ textAlign: 'center', marginLeft: '300px', marginBottom: '50px', height: '200px', width: '500px'}}>
+                  <FullCalendar
+                    plugins={[dayGridPlugin, interactionPlugin]}
+                    initialView="dayGridMonth"
+                    headerToolbar={{
+                      start: "prev",
+                      center: "title",
+                      right: "next",
+                      
+                    }}
+                    
+                    weekends={false}
+                    dateClick={(e) => handleDateClick(e)}
+                    events={[
+                      { title: "event 1", date: "2021-05-07" },
+                      { title: "event 2", date: "2021-05-17" }
+                    ]}
+                    eventContent={renderEventContent}
+                  />
+                </div>
               {/* {success && (<Alert onClose={() => setSuccess(false)} dismissible variant='success'><Alert.Heading>Successfully updated</Alert.Heading><p>You have Successfully change your data</p></Alert>)} */}
-              <div className="contact-profile">
-
+              <div className="contact-profile" style={{marginTop: '240px'}}>
+              
                 <div className="row">
                   {userData.length > 0 ? (userData.map((user, ind) => (
                     <div key={ind} id='for-search' className="col-lg-6 mb-3" >
@@ -301,6 +345,7 @@ const Project = () => {
                           <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
                             <p className="my-2 font-14 body-sub-heading ">Stream: <span> {user.stream}</span></p>
                             <p className="my-2 font-14 body-sub-heading ">Age: <span>{user.age}</span>  </p>
+                            {/* <p className="my-2 font-14 body-sub-heading ">Updated on: <span>{date}</span>  </p> */}
                           </div>
                           {/* <div className="project-progress mt-2">
                           <div className="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
@@ -328,7 +373,11 @@ const Project = () => {
                   )
                   )) : (<h1>No data found</h1>)}
 
-                </div>
+                </div >
+                {/* <div style={{ marginBottom: '20px', marginLeft: '430px' }}>
+                  <Calendar onChange={onChange} value={value} />
+                </div> */}
+                
 
                 <div className="row">
                   {data.length > 0 ? (data.map((user, ind) => (
@@ -470,6 +519,13 @@ const Project = () => {
                             <span id='subject-error' style={{ display: 'none', color: 'red' }}>Select at least one subject</span>
                           </Form.Group>
                         </div>
+                        {/* <div>
+                          <Form.Group>
+                            <Form.Label className='label-me'>Select Date:</Form.Label>
+                            <DatePicker selected={date} onChange={(date) => setDate(date)} />
+                          </Form.Group>
+                        </div> */}
+
                       </Form>
                     </Modal.Body>
                     <Modal.Footer>

@@ -9,7 +9,8 @@ const initialState = {
   gender: "",
   subject: [],
   stream: "",
-  success: false
+  success: false,
+  date: Date.now()
 };
 
 export const userSlice = createSlice({
@@ -24,7 +25,6 @@ export const userSlice = createSlice({
       state.gender = action.payload.gender;
       state.subject = action.payload.subject;
       state.stream = action.payload.stream;
-
       const users = JSON.parse(localStorage.getItem("data")) || [];
       users.push(action.payload);
       localStorage.setItem("data", JSON.stringify(users));
@@ -33,6 +33,7 @@ export const userSlice = createSlice({
       state.username = action.payload.username;
       state.ImgFile = action.payload.file
       state.success = action.payload.success
+      state.date = action.payload.date
       const users = JSON.parse(localStorage.getItem("data")) || [];
       users[action.payload.index] = action.payload;
       localStorage.setItem("data", JSON.stringify(users));

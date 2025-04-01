@@ -7,26 +7,17 @@ import HandleLoginRoute from './components/PrivateRoutes/HandleLoginRoute';
 import AddTasks from './components/Tasks/AddTasks';
 import HomePage from './components/Pages/HomePage';
 import Product from './components/Pages/Product';
-import { ToastContainer, toast } from 'react-toastify';
 // import Task from './components/Pages/Task';
 import CartItem from './components/Pages/CartItem';
 import Toast from 'react-bootstrap/Toast';
 
-export const showToast = () => {
-  <div>
-    <ToastContainer />
-  </div>
-}
 
 export function toasterMessage() {
     
   return (
     <>
       <Toast  style={{ background: '#D0F0C0', marginTop: '0px', marginLeft: '700px', position: 'absolute', zIndex: '1' }} delay={3000} autohide>
-        <Toast.Header>
-          {/* <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" /> */}
-          {/* <strong className="me-auto">{username}</strong> */}
-        </Toast.Header>
+       
         <Toast.Body>You have Successfully change your data.</Toast.Body>
       </Toast>
     </>

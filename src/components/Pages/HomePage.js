@@ -1,15 +1,33 @@
 import axios from '../utils/middlewares'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-bootstrap/Toast';
+import { setSuccess } from '../features/successSlice';
+// import { ToastContainer, toast } from 'react-toastify';
 
 
 const HomePage = () => {
+  const dispatch = useDispatch()
   const [formValues, setFormValues] = useState([{ name: '', email: '', password: '', age: '', images: [] }])
   const [progressBars, setProgressBars] = useState(0)
   const fileInputRef = useRef(null);
-  const { success } = useSelector((state) => state.users)
+  const success = useSelector((state) => state.success.successMe);
+
+
+  useEffect(() => {
+    const storedSuccess = localStorage.getItem('success');
+    if (storedSuccess === 'true') {
+      dispatch(setSuccess(true));
+      localStorage.removeItem('success'); 
+    }
+
+    if (success) {
+      setTimeout(() => {
+        dispatch(setSuccess(false));
+      }, 3000); 
+    }
+  }, [success, dispatch]);
 
   const handleFile = (index, event) => {
     console.log("event.target.files", event.target.files);
@@ -63,9 +81,9 @@ const HomePage = () => {
     setFormValues(newFormValues)
   }
 
-  const addFormFields = () => {
-    setFormValues([...formValues, { name: '', email: '', password: '', age: '', images: [] }])
-  }
+  // const addFormFields = () => {
+  //   setFormValues([...formValues, { name: '', email: '', password: '', age: '', images: [] }])
+  // }
 
   const removeFormFields = (i) => {
     let newFormValues = [...formValues]
@@ -95,24 +113,21 @@ const HomePage = () => {
     localStorage.setItem('form', JSON.stringify(user))
     handleClearForm()
   }
+  
   function toasterMessage() {
     
     return (
       <>
-        <Toast  style={{ background: '#D0F0C0', marginTop: '0px', marginLeft: '700px', position: 'absolute', zIndex: '1' }} delay={3000} autohide>
-          <Toast.Header>
-            {/* <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" /> */}
-            {/* <strong className="me-auto">{username}</strong> */}
-          </Toast.Header>
+        <Toast style={{ background: '#D0F0C0', marginLeft: '1000px', position: 'absolute', zIndex: '1' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
           <Toast.Body>You have Successfully change your data.</Toast.Body>
         </Toast>
       </>
     );
-    
   }
   return (
-    <>
-    {success && toasterMessage()}
+    <div style={{marginTop: '0px'}}>
+      <div style={{marginTop: '0px'}}>-{success && toasterMessage()}</div>
+    
       <form style={{ margin: '70px' }} onSubmit={handleSubmit}>
         {formValues.map((element, index) => (
           <div className="form-inline" key={index}
@@ -180,7 +195,7 @@ const HomePage = () => {
           </section>
         </>
       </form>
-    </>
+    </div>
   )
 }
 
