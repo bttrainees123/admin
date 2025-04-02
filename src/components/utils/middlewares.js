@@ -8,7 +8,7 @@ axios.interceptors.request.use(function (config) {
   });
 
 axios.interceptors.response.use(function (response) {
-    console.log("Response", response);
+    console.log("Response", response.data.data);
     return response;
   }, function (error) {
     if(error.response.status === 401){

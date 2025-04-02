@@ -19,6 +19,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from '@fullcalendar/timegrid'
 import axios from '../utils/middlewares';
+import { moment } from 'moment'
 
 const Project = () => {
   const dispatch = useDispatch()
@@ -38,6 +39,7 @@ const Project = () => {
   // const { username, ImgFile } = useSelector((state) => state.users)
   const [date, setDate] = useState(new Date());
   const [value, onChange] = useState(new Date());
+  const [apiData, setApiData] = useState([])
   // type ValuePiece = Date | null;
 
   // const Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -114,13 +116,32 @@ const Project = () => {
     return isValid;
   };
 
-  const handleDateClick = (e) => {
+  function calculateTotalTime(now, then) {
+    if (then === null) {
+      then = "04/09/2013 15:00:00"
+    }
+    let start = new Date(now.replace(" ", "T"))
+    let end = new Date(then.replace(" ", "T"))
+    const timeDifferenceMS = end.getTime() - start.getTime();
+    let milliseconds = parseInt((timeDifferenceMS % 1000) / 100)
+      , seconds = parseInt((timeDifferenceMS / 1000) % 60)
+      , minutes = parseInt((timeDifferenceMS / (1000 * 60)) % 60)
+      , hours = parseInt((timeDifferenceMS / (1000 * 60 * 60)) % 24);
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+    return hours + ":" + minutes + ":" + seconds;
+  }
+
+  const handleDateClick = async (e) => {
     // alert(e.dateStr);
     const created_date = e.dateStr
     const token = '255|AU2GCstU1ycrHapE29Z9D8lLeI85BzGPC70xru3W'
-    const response = axios.get(`https://laravel9.etrueconcept.com/btpms/api/activity-log?${created_date}=&user_id=`, { headers: {"Authorization" : `Bearer ${token}`}, params: {created_date} })
-    console.log("Response ", response);
-    navigate(`btpms/api/activity-log?${created_date}=&user_id=`)
+    const response = await axios(`https://laravel9.etrueconcept.com/btpms/api/activity-log?created_date=&user_id=27`, { headers: { "Authorization": `Bearer ${token}` }, params: { created_date } })
+    setApiData(response.data.data)
+
+    // navigate(`btpms/api/activity-log?${created_date}=&user_id=`, { replace: true })
+
 
     // e.dayEl.bgColor = 'pink'
     console.log("event ", e);
@@ -128,14 +149,7 @@ const Project = () => {
 
 
   };
-  function renderEventContent(eventInfo) {
-    return (
-      <>
-        <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
-      </>
-    );
-  }
+
 
   const validateRequiredFields = () => {
     let isValid = true;
@@ -311,8 +325,36 @@ const Project = () => {
                 />
               </div>
               {/* {success && (<Alert onClose={() => setSuccess(false)} dismissible variant='success'><Alert.Heading>Successfully updated</Alert.Heading><p>You have Successfully change your data</p></Alert>)} */}
-              <div className="contact-profile" style={{ marginTop: '400px' }}>
+              <div className="contact-profile" style={{ marginTop: '350px' }}>
+                <div className="row">
+                  {apiData.length > 0 ? (apiData.map((user, ind) => (
+                    <div key={ind} id='for-search' className="col-lg-6 mb-3" >
+                      <div className="professional_info">
+                        <div className="project-card-top">
+                          <div className="project-card-heading d-flex align-items-center justify-content-between">
+                            <div className="body_heading2 mb-0 ">
+                              <div className='d-flex'>
+                                <h2 className="font-18 mb-0"><span className="me-2"><img src={user.assignees[0].image_url} style={{ maxWidth: "30px", }} alt="" /></span>{user.assignees.name}</h2>
 
+                              </div>
+                              <p className="mb-0 body-sub-heading font-12">Created :- <span>{user.assignees[0].name}</span></p>
+                            </div>
+                            <p className="mb-0 font-14 body-sub-heading ">Project Name: <span> {user.project.name}</span> </p>
+                          </div>
+                          <div className='row'>
+                            <p className="mb-0 font-14 body-sub-heading col">Start Time: <span> {user.track_times[0].start_time}</span> </p>
+                            <p className="mb-0 font-14 body-sub-heading col">working hours: <span> {calculateTotalTime(user.track_times[0].start_time, user.track_times[0].end_time)}</span> </p>
+                          </div>
+                          <p className="mb-0 font-14 body-sub-heading ">End Time: <span> {user.track_times[0].end_time}</span> </p>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  )
+                  )) : (<p style={{ textAlign: 'center' }}>No data found</p>)}
+
+                </div >
                 <div className="row">
                   {userData.length > 0 ? (userData.map((user, ind) => (
                     <div key={ind} id='for-search' className="col-lg-6 mb-3" >

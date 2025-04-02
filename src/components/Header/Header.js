@@ -43,15 +43,15 @@ const Header = () => {
     });
   }
 
-  function toasterMessage(){
+  function toasterMessage() {
     return (
-    <Toast style={{background: '#D0F0C0', marginBottom: '5px'}} onClose={() => setSuccess(false)} delay={3000} autohide>
-    <Toast.Header>
-      <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" />
-      <strong className="me-auto">{username}</strong>
-    </Toast.Header>
-    <Toast.Body>User added Successfully</Toast.Body>
-  </Toast>);
+      <Toast style={{ background: '#D0F0C0', marginBottom: '5px' }} onClose={() => setSuccess(false)} delay={3000} autohide>
+        <Toast.Header>
+          <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" />
+          <strong className="me-auto">{username}</strong>
+        </Toast.Header>
+        <Toast.Body>User added Successfully</Toast.Body>
+      </Toast>);
   }
 
   const validateField = (field, regex, errorId) => {
@@ -194,9 +194,9 @@ const Header = () => {
     if (genderInputRef.current) {
       genderInputRef.current.value = '';
     }
-  if (fileInputRef.current) {
-    fileInputRef.current.value = '';
-  }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const storeData = (e) => {
@@ -236,13 +236,13 @@ const Header = () => {
       <div className="top_header d-flex align-items-center justify-content-between">
 
         <h1 >Projects</h1>
-          <input type="text" id="myInput" onKeyUp={mySearch} placeholder="search" />
+        <input type="text" id="myInput" onKeyUp={mySearch} placeholder="search" />
         <div className="header_notification d-flex align-items-center gap-2">
           <div className="filter-dropdown green-filter dropdown">
             <button className="btn filter-btn green-filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span><img src={clock} alt="" className="fltrimg" /> 00 : 12 : 01</span> <img src={angleDown} className="ms-1" alt="" />
             </button>
-            
+
             <ul className="dropdown-menu">
               <li><Link className="dropdown-item" to="/">Action</Link></li>
               <li><Link className="dropdown-item" to="/">Another action</Link>
@@ -354,7 +354,7 @@ const Header = () => {
               <Form.Control
                 type='file' ref={fileInputRef} multiple onChange={handleProfilePic}
               />
-              
+
               <div style={{ position: 'relative' }}>
                 <span onClick={handleImageClose} id='my-icon' className="close AClass" style={{ position: 'absolute', cursor: 'pointer', fontSize: '25px', display: 'none' }} >&times;</span>
                 <img alt='' src={file} style={{ maxWidth: "154px" }} />
@@ -372,7 +372,7 @@ const Header = () => {
         </Modal.Footer>
       </Modal>
       {/* {success && (<Alert onClose={() => setSuccess(false)} dismissible variant='success'><Alert.Heading>Successfully added</Alert.Heading><p>You have Successfully added a data</p></Alert>)} */}
-      
+
     </>
   )
 }
