@@ -19,7 +19,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from '@fullcalendar/timegrid'
 import axios from '../utils/middlewares';
-import { moment } from 'moment'
 
 const Project = () => {
   const dispatch = useDispatch()
@@ -47,6 +46,25 @@ const Project = () => {
   // const [value, onChange] = useState(new Date());
   // const pageLimit = 2;
 
+//   if (data?.text) {
+//     const text = chain(data?.text).replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, "").replace(/\./g, "").trim().lowerCase().value();
+//     const str = chain(text)
+//     console.log("Str ", str);
+//     const words = chain(text).split(" ").map((item) => {
+//         if (item) {
+//             return item
+//         }
+//     }).value();
+//     console.log("Words >> ", words);
+//     if (difference(VALID_WORDS, words)?.length === 0) {
+//         setMessage("Image has valid words.")
+//     } else {
+//         setMessage("Could not find required text in the image.");
+//     }
+// } else {
+//     setMessage("Could not find any text in image.");
+// }
+
   const handleShowDelete = (ind) => {
     setShowDelete(true);
     setDeleteInd(ind)
@@ -56,7 +74,6 @@ const Project = () => {
   // const handleDateClick = (arg) => {
   //   alert(arg.dateStr);
   // };
-
 
   const handleCloseDelete = () => setShowDelete(false);
 
@@ -82,14 +99,6 @@ const Project = () => {
     fetchData();
   }, []);
 
-  // const calenderShow = () => {
-  //   return (
-  //     <div>
-  //       <Calendar onChange={onChange} value={value} />
-  //     </div>
-  //   )
-  // }
-
   const handleDelete = (ind) => {
     const updatedData = userData.filter((_, i) => i !== ind)
     setUserData(updatedData)
@@ -99,11 +108,6 @@ const Project = () => {
   }
 
   useEffect(() => {
-    // axios('https://jsonplaceholder.typicode.com/users').then(res => {
-    //   setUrlData(res.data)
-    // }).catch(err => {
-    //   console.log("error ", err);
-    // })
     dispatch(getUsers())
   }, [dispatch])
 
@@ -130,26 +134,17 @@ const Project = () => {
     hours = (hours < 10) ? "0" + hours : hours;
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
-    return hours + ":" + minutes + ":" + seconds;
+    return hours + "h:" + minutes + "m:" + seconds+"s";
   }
 
   const handleDateClick = async (e) => {
-    // alert(e.dateStr);
     const created_date = e.dateStr
     const token = '255|AU2GCstU1ycrHapE29Z9D8lLeI85BzGPC70xru3W'
     const response = await axios(`https://laravel9.etrueconcept.com/btpms/api/activity-log?created_date=&user_id=27`, { headers: { "Authorization": `Bearer ${token}` }, params: { created_date } })
     setApiData(response.data.data)
-
-    // navigate(`btpms/api/activity-log?${created_date}=&user_id=`, { replace: true })
-
-
-    // e.dayEl.bgColor = 'pink'
     console.log("event ", e);
     e.dayEl.onmouseover = 'pointer'
-
-
   };
-
 
   const validateRequiredFields = () => {
     let isValid = true;
@@ -210,7 +205,6 @@ const Project = () => {
       validateRequiredFields()
     ) {
       // console.log("Successfull2 ", success);
-
       editData.index = editInd;
       dispatch(updateUser(editData));
       dispatch(setSuccess(true));
@@ -238,19 +232,6 @@ const Project = () => {
     { name: 'Math ', key: 'math', label: 'Math ' },
     { name: 'Biology ', key: 'bio', label: 'Biology ' },
   ];
-
-  // function toasterMessage() {
-
-  //   return (
-  //     <>
-  //       <Toast style={{ background: '#D0F0C0', marginTop: '0px', marginLeft: '700px', position: 'absolute', zIndex: '1' }} onClose={() => setSuccess(false)} delay={5000} autohide>
-
-  //         <Toast.Body>You have Successfully change your data.</Toast.Body>
-  //       </Toast>
-  //     </>
-  //   );
-
-  // }
 
   const validateField = (field, regex, errorId) => {
     const isValid = regex.test(field);

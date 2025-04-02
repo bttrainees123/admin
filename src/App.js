@@ -10,6 +10,8 @@ import Product from './components/Pages/Product';
 // import Task from './components/Pages/Task';
 import CartItem from './components/Pages/CartItem';
 import Toast from 'react-bootstrap/Toast';
+import TextReader from './components/ImageTextReader/TextReader';
+import ImageScanner from './components/ImageTextReader/ImageScanner';
 
 
 export function toasterMessage() {
@@ -42,6 +44,8 @@ function App() {
           <Route path='/products' element={<PrivateRoute Component={Product} />} />
           {/* <Route path='/tasks' element={<PrivateRoute Component={Task} />} /> */}
           <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
+          <Route path='/textReader' element={<PrivateRoute Component={TextReader} />} />
+          <Route path='/text' element={<PrivateRoute Component={ImageScanner} />} />
           <Route path='/projects/:created_date' element={<PrivateRoute Component={CartItem} />} />
         </Routes>
       </BrowserRouter></>
