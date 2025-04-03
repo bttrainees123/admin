@@ -57,6 +57,12 @@ input:focus,
   background-color: var(--secondary-color);
   color: var(--white);
 }
+
+.menu_div li a.active, .menu_div li a:hover {
+  background: linear-gradient(180deg, #A0BDEE 0%, #EBB3BE 100%);
+  color: var(--dark-font-color);
+  font-weight: 500;
+}
 .border-btn {
   border: 1px solid var(--secondary-color-blue);
   color: var(--secondary-color-blue);

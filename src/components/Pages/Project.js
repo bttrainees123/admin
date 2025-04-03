@@ -19,6 +19,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from '@fullcalendar/timegrid'
 import axios from '../utils/middlewares';
+import Toast from 'react-bootstrap/Toast';
+
 
 const Project = () => {
   const dispatch = useDispatch()
@@ -39,6 +41,7 @@ const Project = () => {
   const [date, setDate] = useState(new Date());
   const [value, onChange] = useState(new Date());
   const [apiData, setApiData] = useState([])
+  const success = useSelector((state) => state.success.successMe);
   // type ValuePiece = Date | null;
 
   // const Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -98,7 +101,20 @@ const Project = () => {
 
     fetchData();
   }, []);
+  useEffect(() => {
+    const storedSuccess = localStorage.getItem('success');
+    if (storedSuccess === 'true') {
+      dispatch(setSuccess(true));
+      localStorage.removeItem('success'); 
+    }
 
+    if (success) {
+      setTimeout(() => {
+        dispatch(setSuccess(false));
+      }, 3000); 
+    }
+    
+  }, [success, dispatch]);
   const handleDelete = (ind) => {
     const updatedData = userData.filter((_, i) => i !== ind)
     setUserData(updatedData)
@@ -140,7 +156,7 @@ const Project = () => {
   const handleDateClick = async (e) => {
     const created_date = e.dateStr
     const token = '255|AU2GCstU1ycrHapE29Z9D8lLeI85BzGPC70xru3W'
-    const response = await axios(`https://laravel9.etrueconcept.com/btpms/api/activity-log?created_date=&user_id=27`, { headers: { "Authorization": `Bearer ${token}` }, params: { created_date } })
+    const response = await axios(`https://laravel9.etrueconcept.com/btpms/api/activity-log?created_date=${created_date}&user_id=27`, { headers: { "Authorization": `Bearer ${token}` }})
     setApiData(response.data.data)
     console.log("event ", e);
     e.dayEl.onmouseover = 'pointer'
@@ -239,6 +255,17 @@ const Project = () => {
     return isValid;
   };
 
+  function toasterMessage() {
+    
+    return (
+      <>
+        <Toast style={{ background: '#D0F0C0', marginLeft: '1000px', position: 'absolute', zIndex: '1' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
+          <Toast.Body>You have Successfully LoggedIn.</Toast.Body>
+        </Toast>
+      </>
+    );
+  }
+
   const validateUserName = (username) =>
     validateField(username, /^[a-z0-9]+$/i, 'username-error');
 
@@ -272,13 +299,12 @@ const Project = () => {
   return (
     <>
       <div className="main_container">
-
+      <div style={{marginTop: '0px'}}>-{success && toasterMessage()}</div>
         <div className="limani_body">
           <Sideer />
           <div className="intersight_content">
 
             <div className="body_content">
-              {/* {success && toasterMessage()} */}
               <Header />
               <div style={{ textAlign: 'center', marginLeft: '200px', marginBottom: '100px', height: '250px', width: '700px' }}>
                 <FullCalendar
@@ -431,7 +457,7 @@ const Project = () => {
                             <p className="my-2 font-14 body-sub-heading ">ZipCode: <span className="me-2"> {user.address.zipcode}</span></p>
                             <p className="my-2 font-14 body-sub-heading ">Lat. <span>{user.address.geo.lat}</span> </p>
                             <p className="my-2 font-14 body-sub-heading ">Lng. <span>{user.address.geo.lng}</span> </p>
-                            
+
                           </div>
                         </div>
 
@@ -442,7 +468,7 @@ const Project = () => {
                   )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
 
                 </div>
-                
+
 
                 {editInd !== null && (
                   <Modal show={show} onHide={handleClose}>

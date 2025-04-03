@@ -8,6 +8,7 @@ import logo from '../image/BT-logo.png'
 import correct from '../image/correct.png'
 import { useDispatch } from 'react-redux'
 import { isAuthenticated } from '../features/authSlice'
+import { setSuccess } from '../features/successSlice'
 
 const LoginPage = () => {
 
@@ -46,6 +47,7 @@ const LoginPage = () => {
             file: val.file
           }
           dispatch(isAuthenticated(isUser))
+          dispatch(setSuccess(true));
           // localStorage.setItem('isLoggedIn', 'true');
           // localStorage.setItem('user', JSON.stringify(val));
           navigate('/projects');
