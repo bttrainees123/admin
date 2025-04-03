@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Tesseract from "tesseract.js";
 import uploadIcon from '../image/upload.png'
 import clearIcon from '../image/clear.png'
@@ -21,6 +21,7 @@ const TextReader = () => {
         }
     }
 
+
     const captureImage = () => {
         console.log("Clicking...");
         const imageSrc = webcamRef.current.getScreenshot();
@@ -37,6 +38,7 @@ const TextReader = () => {
         setHasImage(true);
         recognizeText(newFile);
     }
+
 
     const recognizeText = async (imageFile) => {
         setMessage("Identifying text...")
@@ -58,6 +60,7 @@ const TextReader = () => {
                     }
                 })
                 .value();
+
             console.log("words > ", words);
             if (difference(VALID_WORDS, words)?.length === 0) {
                 setMessage("Text Identified Successfully")

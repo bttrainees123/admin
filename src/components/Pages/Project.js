@@ -46,24 +46,24 @@ const Project = () => {
   // const [value, onChange] = useState(new Date());
   // const pageLimit = 2;
 
-//   if (data?.text) {
-//     const text = chain(data?.text).replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, "").replace(/\./g, "").trim().lowerCase().value();
-//     const str = chain(text)
-//     console.log("Str ", str);
-//     const words = chain(text).split(" ").map((item) => {
-//         if (item) {
-//             return item
-//         }
-//     }).value();
-//     console.log("Words >> ", words);
-//     if (difference(VALID_WORDS, words)?.length === 0) {
-//         setMessage("Image has valid words.")
-//     } else {
-//         setMessage("Could not find required text in the image.");
-//     }
-// } else {
-//     setMessage("Could not find any text in image.");
-// }
+  //   if (data?.text) {
+  //     const text = chain(data?.text).replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, "").replace(/\./g, "").trim().lowerCase().value();
+  //     const str = chain(text)
+  //     console.log("Str ", str);
+  //     const words = chain(text).split(" ").map((item) => {
+  //         if (item) {
+  //             return item
+  //         }
+  //     }).value();
+  //     console.log("Words >> ", words);
+  //     if (difference(VALID_WORDS, words)?.length === 0) {
+  //         setMessage("Image has valid words.")
+  //     } else {
+  //         setMessage("Could not find required text in the image.");
+  //     }
+  // } else {
+  //     setMessage("Could not find any text in image.");
+  // }
 
   const handleShowDelete = (ind) => {
     setShowDelete(true);
@@ -134,7 +134,7 @@ const Project = () => {
     hours = (hours < 10) ? "0" + hours : hours;
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
-    return hours + "h:" + minutes + "m:" + seconds+"s";
+    return hours + "h:" + minutes + "m:" + seconds + "s";
   }
 
   const handleDateClick = async (e) => {
@@ -431,6 +431,7 @@ const Project = () => {
                             <p className="my-2 font-14 body-sub-heading ">ZipCode: <span className="me-2"> {user.address.zipcode}</span></p>
                             <p className="my-2 font-14 body-sub-heading ">Lat. <span>{user.address.geo.lat}</span> </p>
                             <p className="my-2 font-14 body-sub-heading ">Lng. <span>{user.address.geo.lng}</span> </p>
+                            
                           </div>
                         </div>
 
@@ -441,6 +442,7 @@ const Project = () => {
                   )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
 
                 </div>
+                
 
                 {editInd !== null && (
                   <Modal show={show} onHide={handleClose}>

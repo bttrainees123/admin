@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-bootstrap/Toast';
 import { setSuccess } from '../features/successSlice';
 // import { ToastContainer, toast } from 'react-toastify';
-
+import ReactHtmlParser from 'react-html-parser'
 
 const HomePage = () => {
   const dispatch = useDispatch()
@@ -13,7 +13,7 @@ const HomePage = () => {
   const [progressBars, setProgressBars] = useState(0)
   const fileInputRef = useRef(null);
   const success = useSelector((state) => state.success.successMe);
-
+  const htmlString = '<div><h1>Welcome to React</h1><p>This is parsed HTML.</p></div>';
 
   useEffect(() => {
     const storedSuccess = localStorage.getItem('success');
@@ -27,6 +27,7 @@ const HomePage = () => {
         dispatch(setSuccess(false));
       }, 3000); 
     }
+    
   }, [success, dispatch]);
 
   const handleFile = (index, event) => {
@@ -111,7 +112,9 @@ const HomePage = () => {
     const user = JSON.parse(localStorage.getItem('form')) || []
     user.push(...formValues)
     localStorage.setItem('form', JSON.stringify(user))
-    handleClearForm()
+    // handleClearForm()
+    return ReactHtmlParser('<h1>Hello world!</h1>')
+    
   }
   
   function toasterMessage() {
