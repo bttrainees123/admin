@@ -12,6 +12,7 @@ import CartItem from './components/Pages/CartItem';
 import Toast from 'react-bootstrap/Toast';
 import TextReader from './components/ImageTextReader/TextReader';
 import InputParser from './components/Pages/Editor/InputParser';
+import User from './components/Pages/User';
 
 
 export function toasterMessage() {
@@ -36,16 +37,17 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<HandleLoginRoute Component={LoginPage} />} />
-          <Route path='/projects' element={<PrivateRoute Component={Project} />} />
+          <Route path='/dashboard' element={<PrivateRoute Component={Project} />} />
+          <Route path='/users' element={<PrivateRoute Component={User} />} />
           {/* <Route path='/projects' element={isLoggedIn === true ? <Project/> : navigate('/login)}/> */}
-          <Route path='/project-details' element={<PrivateRoute Component={ProjectDetails} />} />
+          <Route path='/company-list' element={<PrivateRoute Component={ProjectDetails} />} />
           {/* <Route path='/project-detail' element={isLoggedIn === true ? <ProjectDetails/> : <LoginPage/>} /> */}
           <Route path='/add-tasks' element={<PrivateRoute Component={AddTasks} />} />
           <Route path='/products' element={<PrivateRoute Component={Product} />} />
           {/* <Route path='/tasks' element={<PrivateRoute Component={Task} />} /> */}
           <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
-          <Route path='/input' element={<PrivateRoute Component={InputParser} />} />
-          <Route path='/textReader' element={<TextReader/>} />
+          <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} />
+          <Route path='/extract-text' element={<TextReader/>} />
           <Route path='/projects/:created_date' element={<PrivateRoute Component={CartItem} />} />
         </Routes>
       </BrowserRouter></>

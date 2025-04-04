@@ -38,41 +38,18 @@
 }
 
 
+/* 10: 00 - 11: 00 ---> NavLink and active property implementation */
 
-/* 10:00 - 10:50 --> Counter app using react redux toolkit */
+/* 11: 00 - 11:30 --->  adding navigating links to sider components with active feature */
 
-/* 1: 30 --> todo app or user add */
+/* 11: 30 - 12: 35 ---> show loggedin user profile using usestate */
 
-/* 5:36 ---> adding redux to priviout practice task */
+/* 12: 35 - 1: 27 ---> change password of logged in user */
 
-/* 7: 00 ---> api integration using redux */
+/* Lunch */
 
+/* 1: 57 - 2: 55 ---> change password with toast message and pop modal */
 
-
-/* 11: 00 ---> api integration with thunk middleware */
-/* 11: 35 --> break down the page in components */
-/* 11: 50 --> show username of updated user using useSelector */
-/* 1 : 30 ----> fetch api data in card */
-/* 2 - 3 ---> UI improvement */
-/* 4 - 45 ---> add avatar and fix delete Modal and show selected file with clear button functanality */
-/* 7 ---> UI improvement */
+/* 2:55 - 3: 25 ---> logout with confirm pop up modal */
 
 
-/* 12 : 00 --> product api integration redux  */
-/* 1 : 30 --> product card design and component rendring */
-/* 3: 12 ---> comment api using redux  */
-/* 7: 00 ---> multiple form append */
-
-
-/* 1:30 ---> image progress bar */
-/* 7: 30 ---> image upload and multiple progress bar and color change when its 100% upload */
-
-/* 1: 00 ---> multiple image upload and drag and drop image feature and for all file there is one progressbar */
-/* 4: 00 ---> UI improvement */
-/* 7: 00 ---> react toastify implementation  */
-
-/* 11: 00 ---> navigate to other page with toast message */
-/* 3: 04 ---> calender custamization */
-/* 7:00 ---> fetch data from api by choosing date from calender */
-
-/* 10:45 ---> working hours calculation and show */

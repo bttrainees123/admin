@@ -198,8 +198,9 @@ const ProjectDetails = () => {
                                     </div>
                                 </div>
                             </div>
+                            {/* <Header/> */}
                             <div className="contact-profile">
-                                {/* <Company/> */}
+                                <Company/>
                                 <div className="row">
                                     <div className="d-flex align-items-center justify-content-between mb-30 mt-30">
                                         <h2 className="body_heading width-left-border mb-0">Comments List</h2>

@@ -236,7 +236,7 @@ const Header = () => {
       <div className="top_header d-flex align-items-center justify-content-between">
 
         <h1 >Projects</h1>
-        <input type="text" id="myInput" onKeyUp={mySearch} placeholder="search" />
+        {/* <input type="text" id="myInput" onKeyUp={mySearch} placeholder="search" /> */}
         <div className="header_notification d-flex align-items-center gap-2">
           <div className="filter-dropdown green-filter dropdown">
             <button className="btn filter-btn green-filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">

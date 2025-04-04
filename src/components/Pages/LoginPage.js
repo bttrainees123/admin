@@ -16,6 +16,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
+
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
@@ -44,13 +45,17 @@ const LoginPage = () => {
           const isUser = {
             username: val.username,
             email,
-            file: val.file
+            file: val.file,
+            gender: val.gender,
+            stream: val.stream,
+            age: val.age,
+            subject: val.subject
           }
           dispatch(isAuthenticated(isUser))
           dispatch(setSuccess(true));
           // localStorage.setItem('isLoggedIn', 'true');
           // localStorage.setItem('user', JSON.stringify(val));
-          navigate('/projects');
+          navigate('/dashboard');
         }
       });
 

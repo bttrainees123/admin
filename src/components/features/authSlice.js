@@ -4,6 +4,11 @@ const initialState = {
     username: '',
     email: '',
     file: null,
+    age: "",
+    password: "",
+    gender: "",
+    subject: [],
+    stream: "",
     isAuth: false
 }
 
