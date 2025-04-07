@@ -174,13 +174,14 @@ const Sideer = () => {
       // validateLocalEmail(editData.email) &&
       validateRequiredFields()
     ) {
-      handleSaveImage()
+      
       // console.log("Successfull2 ", success);
       // handleSaveImage(updateImageInUser(updateFile))
       // loggedInUser.index = loggedInUser.;
       dispatch(updateLoggedInUser(editData));
       dispatch(isAuthenticated(editData))
-      dispatch(setSuccess(true));
+      handleSaveImage()
+      // dispatch(setSuccess(true));
       // localStorage.setItem("success", JSON.stringify(true));
       setCheckEdit(false)
       setShow(false);
@@ -203,6 +204,7 @@ const Sideer = () => {
       console.log("users ", user);
       localStorage.setItem('data', JSON.stringify(users));
       // dispatch(setSuccess(true));
+      dispatch(isAuthenticated(filteredUser))
       handleClearPass()
       handlePassClose()
   }
@@ -236,7 +238,7 @@ const Sideer = () => {
       user.push(filteredUser)
       console.log("users ", users);
       localStorage.setItem('data', JSON.stringify(users));
-      dispatch(setSuccess(true));
+      // dispatch(setSuccess(true));
       handleClearPass()
       handlePassClose()
     }

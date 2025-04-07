@@ -56,7 +56,7 @@ export const userSlice = createSlice({
       filteredUser.subject = action.payload.subject;
       user.push(filteredUser)
       localStorage.setItem('data', JSON.stringify(users));
-      dispatch(isAuthenticated(editData))
+      // dispatch(isAuthenticated(editData))
     },
     updateImageInUser: (state, action) => {
       const users = JSON.parse(localStorage.getItem("data")) || [];
@@ -71,7 +71,6 @@ export const userSlice = createSlice({
       filteredUser.age = action.payload.age;
       filteredUser.gender = action.payload.gender;
       filteredUser.subject = action.payload.subject;
-      // filteredUser.file = action.payload.file
       user.push(filteredUser)
       localStorage.setItem('data', JSON.stringify(users));
     }
