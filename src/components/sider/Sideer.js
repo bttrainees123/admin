@@ -4,14 +4,17 @@ import logo2 from "../image/BT-logo2.png"
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import ProgressBar from 'react-bootstrap/ProgressBar'
 
 
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { setPassChange, setPasswordChange, setSuccess } from '../features/successSlice';
-import { useDispatch, useSelector } from 'react-redux';
+
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+// import { setPassChange, setPasswordChange, setSuccess } from '../features/successSlice';
+import { useDispatch } from 'react-redux';
 import { checkOption, genderOptions, validateAge, validateEmail, validateLocalEmail, validateUserName } from '../utils/validation';
-import { updateImageInUser, updateLoggedInUser, updateUser } from '../features/userSlice';
+import { updateLoggedInUser } from '../features/userSlice';
 import { isAuthenticated } from '../features/authSlice';
+import axios from '../utils/middlewares'
 const Sideer = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -24,17 +27,14 @@ const Sideer = () => {
   const [editData, setEditData] = useState({})
   const [userData, setUserData] = useState([]);
   const [showDelete, setShowDelete] = useState(false)
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [gender, setGender] = useState('')
-  const [age, setAge] = useState('')
-  const [stream, setStream] = useState('')
   const [updateFile, setUpdateFile] = useState(null)
+  const [progressBars, setProgressBars] = useState(0)
+
 
   useEffect(() => {
     // const fetchData = () => {
-      const storedData = JSON.parse(localStorage.getItem("data")) || [];
-        setUserData(storedData);
+    const storedData = JSON.parse(localStorage.getItem("data")) || [];
+    setUserData(storedData);
     // };
 
     // fetchData();
@@ -44,23 +44,47 @@ const Sideer = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     setLoggedInUser(user);
   }, [dispatch, editData])
-  
+
   const handleShowLogout = () => {
     setShowDelete(true);
   }
 
-  
+
   const handleProfilePic = (val) => {
     const file = val.target.files[0]
     if (file) {
-      // document.getElementById('my-icon').style.display = 'block'
       const read = new FileReader()
       read.onloadend = () => {
         setUpdateFile(read.result)
       }
+      const formData = new FormData()
+      console.log('file', file)
+      formData.append('file', file)
+      axios.post('http://localhost:3000/user-update/upload/profilePic', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (val) => {
+          progress(0)
+        }
+      })
       read.readAsDataURL(file)
     }
   };
+
+  const progress = function (sec) {
+    let interval = 200;
+    setTimeout(function () {
+      console.log("sec ", sec);
+      if (sec < 90) {
+        sec = sec + 10;
+      }
+      else {
+        sec = sec + 1;
+      }
+      setProgressBars(sec)
+      if (sec < 100)
+        progress(sec);
+    }, interval)
+  }
 
   const validateRequiredFields = () => {
     let isValid = true;
@@ -97,19 +121,19 @@ const Sideer = () => {
   };
 
   const handleEdit = () => {
-      const user = userData.filter((obj) =>
-        obj.email === loggedInUser.email)
-      const filteredUser = userData.find((u) => u.email === loggedInUser.email);
+    // const user = userData.filter((obj) =>
+    //   obj.email === loggedInUser.email)
+    const filteredUser = userData.find((u) => u.email === loggedInUser.email);
 
-      // filteredUser.password = password
-      console.log("filteredUsers ", filteredUser);
-      
-      setEditData(filteredUser)
-      console.log("editData",editData);
+    // filteredUser.password = password
+    console.log("filteredUsers ", filteredUser);
+
+    setEditData(filteredUser)
+    console.log("editData", editData);
     setCheckEdit(true)
     // handleSave()
     handleShow()
-    
+
   }
 
 
@@ -174,39 +198,40 @@ const Sideer = () => {
       // validateLocalEmail(editData.email) &&
       validateRequiredFields()
     ) {
-      
+
       // console.log("Successfull2 ", success);
       // handleSaveImage(updateImageInUser(updateFile))
       // loggedInUser.index = loggedInUser.;
       dispatch(updateLoggedInUser(editData));
       dispatch(isAuthenticated(editData))
       handleSaveImage()
+      setProgressBars(0)
       // dispatch(setSuccess(true));
       // localStorage.setItem("success", JSON.stringify(true));
       setCheckEdit(false)
       setShow(false);
 
       setEditData({});
-      
+
     }
   }
 
   const handleSaveImage = () => {
-      const users = JSON.parse(localStorage.getItem('data')) || [];
-      const user = users.filter((obj) =>
-        obj.email === loggedInUser.email)
-      const filteredUser = users.find((u) => u.email === loggedInUser.email);
-      console.log("filteredUser.file ", filteredUser.file);
-      
-      filteredUser.file = updateFile
-      console.log("filteredUsers ", filteredUser);
-      user.push(filteredUser)
-      console.log("users ", user);
-      localStorage.setItem('data', JSON.stringify(users));
-      // dispatch(setSuccess(true));
-      dispatch(isAuthenticated(filteredUser))
-      handleClearPass()
-      handlePassClose()
+    const users = JSON.parse(localStorage.getItem('data')) || [];
+    const user = users.filter((obj) =>
+      obj.email === loggedInUser.email)
+    const filteredUser = users.find((u) => u.email === loggedInUser.email);
+    console.log("filteredUser.file ", filteredUser.file);
+
+    filteredUser.file = updateFile
+    console.log("filteredUsers ", filteredUser);
+    user.push(filteredUser)
+    console.log("users ", user);
+    localStorage.setItem('data', JSON.stringify(users));
+    // dispatch(setSuccess(true));
+    dispatch(isAuthenticated(filteredUser))
+    handleClearPass()
+    handlePassClose()
   }
 
 
@@ -217,7 +242,7 @@ const Sideer = () => {
   //     const filteredUser = users.find((u) => u.email === loggedInUser.email);
   //     // filteredUser.password = password
   //     console.log("filteredUsers ", filteredUser);
-      
+
   //     setEditData(filteredUser)
   //     console.log("editData",editData);
   //     // user.push(filteredUser)
@@ -252,12 +277,15 @@ const Sideer = () => {
       <div className="top_menu">
         <div className="brand">
           <div className="dropdown">
-            <button className="dropdown-toggle border-0 w-100 d-flex align-items-center" type="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              <span className="d-flex align-items-center justify-content-center">
-                <img src={logo2} alt="" srcSet="" />
-              </span> Brain Technosys PMS
-            </button>
+            <NavLink exact activeClassName="active" to='/'>
+              <button className="dropdown-toggle border-0 w-100 d-flex align-items-center" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <span className="d-flex align-items-center justify-content-center">
+                  <img src={logo2} alt="" srcSet="" />
+                </span> Brain Technosys PMS
+
+              </button>
+            </NavLink>
           </div>
         </div>
         <div className="intersight_home">
@@ -429,123 +457,124 @@ const Sideer = () => {
 
 
 
-                {checkEdit  && (<Modal show={show} onHide={handleClose}>
-                      <Modal.Header closeButton>
-                        <Modal.Title>Modal heading</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <Form className='row'>
-                          <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control
-                              type='text' name="username" value={editData.username} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
-                            />
-                            <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
-                          </Form.Group>
-                          <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Select Gender</Form.Label>
-  
-                            <Form.Select name="gender" value={editData.gender || ""} onChange={handleChange}>
-                              <option value="">Select</option>
-                              {genderOptions.map((val, ind) => (
-                                <option key={ind} value={val}>
-                                  {val}
-                                </option>
-                              ))}
-                            </Form.Select>
-                            <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
-                          </Form.Group>
-                          <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Age</Form.Label>
-                            <Form.Control
-                              type='text' name="age" value={editData.age} onChange={handleChange} onInput={validateAge}
-                            />
-                            <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
-                          </Form.Group>
-  
+                  {checkEdit && (<Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Modal heading</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Form className='row'>
+                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                          <Form.Label>Username</Form.Label>
+                          <Form.Control
+                            type='text' name="username" value={editData.username || ""} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
+                          />
+                          <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
+                        </Form.Group>
+                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                          <Form.Label>Select Gender</Form.Label>
+
+                          <Form.Select name="gender" value={editData.gender || ""} onChange={handleChange}>
+                            <option value="">Select</option>
+                            {genderOptions.map((val, ind) => (
+                              <option key={ind} value={val}>
+                                {val}
+                              </option>
+                            ))}
+                          </Form.Select>
+                          <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
+                        </Form.Group>
+                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                          <Form.Label>Age</Form.Label>
+                          <Form.Control
+                            type='text' name="age" value={editData.age} onChange={handleChange} onInput={validateAge}
+                          />
+                          <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                          <Form.Label>Email</Form.Label>
+                          <Form.Control
+                            type='text' name="email" value={editData.email} onChange={handleChange} onInput={(e) => validateLocalEmail(e.target.value)}
+                          />
+                          <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
+                          <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
+                        </Form.Group>
+                        <div className='row'>
                           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                              type='text' name="email" value={editData.email} onChange={handleChange} onInput={(e) => validateLocalEmail(e.target.value)}
-                            />
-                            <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
-                            <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
+                            <Form.Label>Stream</Form.Label>
+                            <Form.Label>
+                              <input
+                                type="radio"
+                                name="stream"
+                                value="PCM"
+                                checked={editData.stream === "PCM"}
+                                onChange={handleChange}
+                              />
+                              PCM
+                            </Form.Label>
+                            <Form.Label>
+                              <input
+                                type="radio"
+                                name="stream"
+                                value="Commerce"
+                                checked={editData.stream === "Commerce"}
+                                onChange={handleChange}
+                              />
+                              Commerce
+                            </Form.Label>
+                            <Form.Label>
+                              <input
+                                type="radio"
+                                name="stream"
+                                value="Arts"
+                                checked={editData.stream === "Arts"}
+                                onChange={handleChange}
+                              />
+                              Arts
+                            </Form.Label>
+                            <span id='stream-error' style={{ display: 'none', color: 'red' }}>Select a stream</span>
                           </Form.Group>
-                          <div className='row'>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                              <Form.Label>Stream</Form.Label>
-                              <Form.Label>
+                          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                            <Form.Label className='label-me'>Subjects: </Form.Label>
+                            {checkOption.map((it) => (
+                              <label key={it.key}>
+                                {it.label}
                                 <input
-                                  type="radio"
-                                  name="stream"
-                                  value="PCM"
-                                  checked={editData.stream === "PCM"}
+                                  type="checkbox"
+                                  name={it.name}
+                                  value={it.label}
+                                  checked={(editData.subject).includes(it.label)}
                                   onChange={handleChange}
                                 />
-                                PCM
-                              </Form.Label>
-                              <Form.Label>
-                                <input
-                                  type="radio"
-                                  name="stream"
-                                  value="Commerce"
-                                  checked={editData.stream === "Commerce"}
-                                  onChange={handleChange}
-                                />
-                                Commerce
-                              </Form.Label>
-                              <Form.Label>
-                                <input
-                                  type="radio"
-                                  name="stream"
-                                  value="Arts"
-                                  checked={editData.stream === "Arts"}
-                                  onChange={handleChange}
-                                />
-                                Arts
-                              </Form.Label>
-                              <span id='stream-error' style={{ display: 'none', color: 'red' }}>Select a stream</span>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                              <Form.Label className='label-me'>Subjects: </Form.Label>
-                              {checkOption.map((it) => (
-                                <label key={it.key}>
-                                  {it.label}
-                                  <input
-                                    type="checkbox"
-                                    name={it.name}
-                                    value={it.label}
-                                    checked={(editData.subject).includes(it.label)}
-                                    onChange={handleChange}
-                                  />
-                                </label>
-                              ))}
-  
-                              <span id='subject-error' style={{ display: 'none', color: 'red' }}>Select at least one subject</span>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                              </label>
+                            ))}
+
+                            <span id='subject-error' style={{ display: 'none', color: 'red' }}>Select at least one subject</span>
+                          </Form.Group>
+                          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Profile photo</Form.Label>
                             <Form.Control
-                              type='file' 
+                              type='file'
                               onChange={handleProfilePic}
                             />
+                            <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
 
                             <div style={{ position: 'relative' }}>
                               {/* <span onClick={handleImageClose} id='my-icon' className="close AClass" style={{ position: 'absolute', cursor: 'pointer', fontSize: '25px', display: 'none' }} >&times;</span> */}
                               <img alt='' src={updateFile ? updateFile : editData.file} style={{ maxWidth: "154px" }} />
                             </div>
                           </Form.Group>
-                          </div>
-                          {/* <div>
+                        </div>
+                        {/* <div>
                             <Form.Group>
                               <Form.Label className='label-me'>Select Date:</Form.Label>
                               <DatePicker selected={date} onChange={(date) => setDate(date)} />
                             </Form.Group>
                           </div> */}
-  
-                        </Form>
-                      </Modal.Body>
-                      <Modal.Footer>
+
+                      </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
                       <Button variant="secondary" onClick={handleCloseDelete}>
                         Close
                       </Button>
@@ -553,7 +582,7 @@ const Sideer = () => {
                         Update
                       </Button>
                     </Modal.Footer>
-                    </Modal>)}
+                  </Modal>)}
                 </div>
               </div>
             </div>

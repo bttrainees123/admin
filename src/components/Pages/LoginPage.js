@@ -6,15 +6,30 @@ import '../css/media.css'
 
 import logo from '../image/BT-logo.png'
 import correct from '../image/correct.png'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { isAuthenticated } from '../features/authSlice'
 import { setSuccess } from '../features/successSlice'
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Toast from 'react-bootstrap/Toast';
+
 
 const LoginPage = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [oldPassword, setOldPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [passShow, setPassShow] = useState(false)
+  const [confirmNewPassword, setConfirmNewPassword] = useState('')
+  const [passEmail, setPassEmail] = useState('')
+  const [emailShow, setEmailShow] = useState(false)
+  const [checkOldPass, setCheckOldPass] = useState(false)
+  const [userData, setUserData] = useState({})
+  const [checkbox, setCheckbox] = useState()
+  const success = useSelector((state) => state.success.successMe);
 
 
   const navigate = useNavigate()
@@ -25,14 +40,135 @@ const LoginPage = () => {
 
   const validateField = (field, regex, errorId) => { const isValid = regex.test(field); document.getElementById(errorId).style.display = isValid ? 'none' : 'block'; return isValid; };
 
-  const validateEmail = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-error');
+  const validateEmail = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-pass-error');
 
   const validatePassword = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'password-error');
+  const validateNewPassword = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'new-password-error');
+  const validateOldPassword = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'old-password-error');
 
+  const handleEmailPass = (e) => {
+    setPassEmail(e.target.value)
+    document.getElementById('email-pass-error').style.display = 'none'
+  }
+  
+  const handlePassClose = () => setPassShow(false);
+  const handlePassShow = () => setPassShow(true);
+
+  const handleEmailClose = () => setEmailShow(false);
+  const handleEmailShow = () => setEmailShow(true);
+
+  const handleClearPass = () => {
+    setOldPassword("")
+    setNewPassword("")
+    setConfirmNewPassword("")
+  }
+
+
+
+  const handleFindEmail = (e) => {
+    e.preventDefault()
+    if(validateEmail(passEmail)){
+    const users = JSON.parse(localStorage.getItem("data")) || [];
+    
+    console.log("passEmail ", passEmail);
+    const existingUser = users.find((u) => u.email === passEmail)
+    if(existingUser){
+      setUserData(existingUser)
+      console.log("existingUser ", existingUser);
+      setPassShow(true)
+      const pass = existingUser.password;
+      setCheckOldPass(pass)
+      setEmailShow(false)
+    }
+    else{
+      document.getElementById('email-pass-error').style.display = 'block'
+    }
+  }
+  }
+
+  const handleOldPassword = (e) => {
+    setOldPassword(e.target.value)
+    validateOldPassword(e.target.value)
+    if(oldPassword === checkOldPass){
+      document.getElementById('old-password-error').style.display = 'block'
+    }else{
+      document.getElementById('old-password-error').style.display = 'none'
+    }
+  }
+
+  const checkOldPassword = (oldPass, newPass) =>  {
+    let isValid = oldPass === newPass
+    return isValid
+  }
+  
+
+  const handleNewPassword = (e) => {
+    setNewPassword(e.target.value)
+    validateNewPassword(e.target.value)
+    console.log("Old ", newPassword);
+  }
+
+  const handleConfirmNewPassword = (e) => {
+    setConfirmNewPassword(e.target.value)
+    if(newPassword !== confirmNewPassword){
+      document.getElementById('con-password-error').style.display = 'none'
+    }
+    else{
+      document.getElementById('con-password-error').style.display = 'block'
+    }
+    console.log("Old ", confirmNewPassword);
+  }
+
+  const comparePassword = (password, confirmPassword) => {
+    const isValid = password === confirmPassword;
+    document.getElementById('con-password-error').style.display = isValid ? 'none' : 'block';
+    return isValid;
+  };
+  function toasterMessage() {
+    
+    return (
+     
+      <>
+        <Toast style={{ background: '#D0F0C0', marginBottom: '5px', marginLeft: '600px', position: 'absolute' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
+          
+          <Toast.Body>Password Changed Successfully</Toast.Body>
+        </Toast>
+      </>
+    );
+  }
+
+  const handleSavePassword = (e) => {
+    e.preventDefault()
+    const users = JSON.parse(localStorage.getItem('data')) || [];
+    if(checkOldPassword(oldPassword, checkOldPass) && validateOldPassword(oldPassword) && validateNewPassword(newPassword) && comparePassword(newPassword, confirmNewPassword) ){
+      const user = users.filter((obj) =>
+        obj.email === userData.email)
+      console.log("passEmail ",userData.email)
+      const filteredUser = users.find((u) => u.email === userData.email);
+      console.log("filteredUsers ", filteredUser);
+      filteredUser.password = newPassword
+      console.log("filteredUsers ", filteredUser);
+      user.push(filteredUser)
+      console.log("users ", users);
+      dispatch(setSuccess(true))
+      localStorage.setItem('data', JSON.stringify(users));
+      handlePassClose()
+      handleClearPass()
+      setPassEmail("")
+  }
+}
+const handleCheckBox = (e) => {
+  setCheckbox(e.target.checked)
+}
+ 
   const loginHandler = (e) => {
     e.preventDefault(); let emailCheck = false; let passwordCheck = false;
     const users = JSON.parse(localStorage.getItem('data'));
-
+    if (checkbox && email !== "") {
+      localStorage.username = email;
+      localStorage.password = password;
+      localStorage.checkbox = checkbox;
+    }
     if (validateEmail(email) && validatePassword(password)) {
       users?.forEach((val) => {
         if (val.email === email) {
@@ -67,7 +203,7 @@ const LoginPage = () => {
   return (
     <section className="sign_in p-0">
       <div className="container-fluid">
-
+{success && toasterMessage()}
         <div className="row align-items-center">
           <div className="col-lg-7">
             <div className="inner_content_one">
@@ -81,7 +217,9 @@ const LoginPage = () => {
                     <input type="text" className="form-control form-control-custom" id="exampleInputPassword1"
                       placeholder="abc12@gmail.com" onChange={e => setEmail(e.target.value)} />
                   </div>
-                  <span id='email-error' style={{ display: 'none', color: 'red' }}>Enter valid Email</span>
+                  <span id='email-error' style={{ display: 'none', color: 'red' }}>
+                    {/* Enter valid Email */}
+                    </span>
                   <span id='email-check' style={{ display: 'none', color: 'red' }}>Incorrect Email</span>
                   <div className="col-lg-12">
                     <div className="position-relative password_svg">
@@ -108,12 +246,12 @@ const LoginPage = () => {
                     <span id='password-check' style={{ display: "none", color: 'red' }}>Incorrect Password</span>
                     <div className="d-flex align-items-center justify-content-between remember_div mt-30 mb-30">
                       <div className="form-check">
-                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={handleCheckBox}/>
                         <label className="form-check-label" htmlFor="flexCheckDefault">
                           Remember me
                         </label>
                       </div>
-                      <Link to="forget-password.html" className="link_forget">Forgot Password?</Link>
+                      <Link className="link_forget" onClick={handleEmailShow}>Forgot Password?</Link>
                     </div>
                   </div>
                   <div className="col-lg-12 mb-lg-4 mb-md-4 mb-3">
@@ -161,6 +299,71 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
+        <Modal show={emailShow} onHide={handleEmailClose} className='modalSize'
+                    size='md'
+                    centered
+                  >
+                    <Modal.Header closeButton>
+                      <Modal.Title id="contained-modal-title-vcenter">Enter Your Registered Email
+                      </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Form>
+                      <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                          <Form.Label>Email</Form.Label>
+                          <Form.Control
+                            type='text' value={passEmail} onChange={handleEmailPass} onInput={validatePassword}
+                          />
+                          <span id='email-pass-error' style={{ display: "none", color: 'red' }}>User not exist with this email</span>
+                        </Form.Group>
+                      </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="danger" onClick={handleFindEmail}>
+                        Procced
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+
+        <Modal show={passShow} onHide={handlePassClose} className='modalSize'
+                    size='md'
+                    centered
+                  >
+                    <Modal.Header closeButton>
+                      <Modal.Title id="contained-modal-title-vcenter">Change you password here
+                      </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Form>
+                      <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                          <Form.Label>Old Password</Form.Label>
+                          <Form.Control
+                            type='text' value={oldPassword} onChange={handleOldPassword} onInput={validateOldPassword}
+                          />
+                          <span id='old-password-error' style={{ display: "none", color: 'red' }}>Old password is not matched</span>
+                        </Form.Group>
+                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                          <Form.Label>New Password</Form.Label>
+                          <Form.Control
+                            type='text' value={newPassword} onChange={handleNewPassword} onInput={validateNewPassword}
+                          />
+                          <span id='new-password-error' style={{ display: "none", color: 'red' }}>Enter valid password</span>
+                        </Form.Group>
+                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                          <Form.Label>Confirm New Password</Form.Label>
+                          <Form.Control
+                            type='text' name='confirmPassword' value={confirmNewPassword} onChange={handleConfirmNewPassword} onInput={comparePassword}
+                          />
+                          <span id='con-password-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
+                        </Form.Group>
+                      </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="danger" onClick={handleSavePassword}>
+                        Change password
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
 
       </div>
     </section>

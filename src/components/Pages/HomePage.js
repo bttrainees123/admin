@@ -19,15 +19,15 @@ const HomePage = () => {
     const storedSuccess = localStorage.getItem('success');
     if (storedSuccess === 'true') {
       dispatch(setSuccess(true));
-      localStorage.removeItem('success'); 
+      localStorage.removeItem('success');
     }
 
     if (success) {
       setTimeout(() => {
         dispatch(setSuccess(false));
-      }, 3000); 
+      }, 3000);
     }
-    
+
   }, [success, dispatch]);
 
   const handleFile = (index, event) => {
@@ -48,7 +48,7 @@ const HomePage = () => {
     uploadFiles(files)
 
   }
- 
+
   const uploadFiles = (files) => {
     files.forEach((file, i) => {
       const formData = new FormData()
@@ -64,16 +64,22 @@ const HomePage = () => {
       }).catch((err) => console.log('Upload Error:', err))
     })
   }
-  
-  const progress = function(sec){
+
+  const progress = function (sec) {
     let interval = 250;
-    setTimeout(function(){
-    sec = sec+10;
-        setProgressBars(sec)
-        if(sec < 100)
-            progress(sec);
-    },interval)
-}
+    setTimeout(function () {
+      console.log("sec ", sec);
+      if (sec < 90) {
+        sec = sec + 10;
+      }
+      else {
+        sec = sec + 1;
+      }
+      setProgressBars(sec)
+      if (sec < 100)
+        progress(sec);
+    }, interval)
+  }
 
 
   const handleChange = (i, e) => {
@@ -114,11 +120,11 @@ const HomePage = () => {
     localStorage.setItem('form', JSON.stringify(user))
     // handleClearForm()
     return ReactHtmlParser('<h1>Hello world!</h1>')
-    
+
   }
-  
+
   function toasterMessage() {
-    
+
     return (
       <>
         <Toast style={{ background: '#D0F0C0', marginLeft: '1000px', position: 'absolute', zIndex: '1' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
@@ -128,9 +134,9 @@ const HomePage = () => {
     );
   }
   return (
-    <div style={{marginTop: '0px'}}>
-      <div style={{marginTop: '0px'}}>-{success && toasterMessage()}</div>
-    
+    <div style={{ marginTop: '0px' }}>
+      <div style={{ marginTop: '0px' }}>-{success && toasterMessage()}</div>
+
       <form style={{ margin: '70px' }} onSubmit={handleSubmit}>
         {formValues.map((element, index) => (
           <div className="form-inline" key={index}

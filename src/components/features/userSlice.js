@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { isAuthenticated } from "./authSlice";
 
 const initialState = {
   username: "",
@@ -32,7 +31,7 @@ export const userSlice = createSlice({
     },
     updateUser: (state, action) => {
       console.log("action.payload", action.payload);
-      
+
       state.username = action.payload.username;
       state.file = action.payload.file
       state.success = action.payload.success
@@ -79,3 +78,11 @@ export const userSlice = createSlice({
 
 export const { saveUser, updateUser, updateImageInUser, updateLoggedInUser } = userSlice.actions;
 export default userSlice.reducer;
+
+
+// 11: 00 ---- image- update
+// 11: 30 --- progressbar logic correction
+
+//  12: 50 --- implementing progressbar for all input type file
+
+// 1: 24 --> add Floating input 

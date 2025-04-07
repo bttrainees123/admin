@@ -8,6 +8,8 @@ import Form from 'react-bootstrap/Form';
 import { useSelector } from 'react-redux';
 import '../css/custom.css'
 import Toast from 'react-bootstrap/Toast';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+
 
 const Header = () => {
   // const dispatch = useDispatch()
@@ -274,14 +276,24 @@ const Header = () => {
         <Modal.Body>
           <Form className='row'>
             <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-              <Form.Label>Username</Form.Label>
+            <FloatingLabel
+        controlId="floatingInput"
+        label="Username"
+        className="mb-3"
+      >
+
               <Form.Control
-                type='text' value={userName} onChange={(e) => setUserName(e.target.value)} placeholder='Enter Username' minLength={6} maxLength={20}
+                type='text' value={userName} onChange={(e) => setUserName(e.target.value)}  minLength={6} maxLength={20}
               />
               <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
+              </FloatingLabel>
             </Form.Group>
             <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-              <Form.Label>Select Gender</Form.Label>
+            <FloatingLabel
+        controlId="floatingInput"
+        label="Select Gender"
+        className="mb-3"
+      >
 
               <Form.Select ref={genderInputRef} onChange={(e) => handleGenderChange(e.target.value)}>
                 <option value="">Select</option>
@@ -290,38 +302,59 @@ const Header = () => {
                 <option>Other</option>
               </Form.Select>
               <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
+              </FloatingLabel>
             </Form.Group>
             <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-              <Form.Label>Age</Form.Label>
+            <FloatingLabel
+        controlId="floatingInput"
+        label="Age"
+        className="mb-3"
+      >
               <Form.Control
                 type='text' value={age} onChange={(e) => setAge(e.target.value)}
               />
               <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
+              </FloatingLabel>
             </Form.Group>
 
 
             <div className='row'>
               <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                <Form.Label>Email</Form.Label>
+              <FloatingLabel
+        controlId="floatingInput"
+        label="Email address"
+        className="mb-3"
+      >
                 <Form.Control
                   type='text' value={email} onChange={(e) => setEmail(e.target.value)} onInput={(e) => validateLocalEmail(e.target.value)}
                 />
                 <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
                 <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
+                </FloatingLabel>
               </Form.Group>
               <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                <Form.Label>Password</Form.Label>
+              <FloatingLabel
+        controlId="floatingInput"
+        label="Password"
+        className="mb-3"
+      >
                 <Form.Control
                   type='text' value={password} onChange={handlePasswordChange} onInput={validatePassword}
                 />
                 <span id='password-error' style={{ display: "none", color: 'red' }}>Enter valid password</span>
+                </FloatingLabel>
               </Form.Group>
               <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                <Form.Label>Confirm Password</Form.Label>
+              <FloatingLabel
+        controlId="floatingInput"
+        label="Confirm Password"
+        className="mb-3"
+      >
                 <Form.Control
                   type='text' value={confirmPassword} onChange={handleConfirmPasswordChange} onInput={comparePassword}
                 />
                 <span id='cPassword-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
+                </FloatingLabel>
               </Form.Group>
             </div>
             <div className='row'>
