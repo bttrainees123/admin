@@ -7,7 +7,6 @@ import HandleLoginRoute from './components/PrivateRoutes/HandleLoginRoute';
 import AddTasks from './components/Tasks/AddTasks';
 import HomePage from './components/Pages/HomePage';
 import Product from './components/Pages/Product';
-// import Task from './components/Pages/Task';
 import CartItem from './components/Pages/CartItem';
 import Toast from 'react-bootstrap/Toast';
 import TextReader from './components/ImageTextReader/TextReader';
@@ -40,12 +39,9 @@ function App() {
           <Route path='/login' element={<HandleLoginRoute Component={LoginPage} />} />
           <Route path='/dashboard' element={<PrivateRoute Component={Project} />} />
           <Route path='/users' element={<PrivateRoute Component={User} />} />
-          {/* <Route path='/projects' element={isLoggedIn === true ? <Project/> : navigate('/login)}/> */}
           <Route path='/company-list' element={<PrivateRoute Component={ProjectDetails} />} />
-          {/* <Route path='/project-detail' element={isLoggedIn === true ? <ProjectDetails/> : <LoginPage/>} /> */}
           <Route path='/add-tasks' element={<PrivateRoute Component={AddTasks} />} />
           <Route path='/products' element={<PrivateRoute Component={Product} />} />
-          {/* <Route path='/tasks' element={<PrivateRoute Component={Task} />} /> */}
           <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
           <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} />
           <Route path='/home' element={<PrivateRoute Component={Carousal} />} />

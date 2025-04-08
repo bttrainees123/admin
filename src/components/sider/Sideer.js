@@ -5,11 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import ProgressBar from 'react-bootstrap/ProgressBar'
-
-
-
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-// import { setPassChange, setPasswordChange, setSuccess } from '../features/successSlice';
 import { useDispatch } from 'react-redux';
 import { checkOption, genderOptions, validateAge, validateEmail, validateLocalEmail, validateUserName } from '../utils/validation';
 import { updateLoggedInUser } from '../features/userSlice';
@@ -32,12 +28,9 @@ const Sideer = () => {
 
 
   useEffect(() => {
-    // const fetchData = () => {
     const storedData = JSON.parse(localStorage.getItem("data")) || [];
     setUserData(storedData);
-    // };
 
-    // fetchData();
   }, []);
 
   useEffect(() => {
@@ -121,17 +114,13 @@ const Sideer = () => {
   };
 
   const handleEdit = () => {
-    // const user = userData.filter((obj) =>
-    //   obj.email === loggedInUser.email)
     const filteredUser = userData.find((u) => u.email === loggedInUser.email);
 
-    // filteredUser.password = password
     console.log("filteredUsers ", filteredUser);
 
     setEditData(filteredUser)
     console.log("editData", editData);
     setCheckEdit(true)
-    // handleSave()
     handleShow()
 
   }
@@ -170,7 +159,6 @@ const Sideer = () => {
   };
 
   const handleChange = (e) => {
-    // console.log("Successfull ", success);
     const { name, value, type, checked } = e.target
     if (type === "checkbox") {
       setEditData((prevData) => ({
@@ -201,9 +189,6 @@ const Sideer = () => {
         handleSaveImage()
         setProgressBars(0)
       }
-
-      // dispatch(setSuccess(true));
-      // localStorage.setItem("success", JSON.stringify(true));
       setCheckEdit(false)
       setShow(false);
 
@@ -224,30 +209,11 @@ const Sideer = () => {
     user.push(filteredUser)
     console.log("users ", user);
     localStorage.setItem('data', JSON.stringify(users));
-    // dispatch(setSuccess(true));
     dispatch(isAuthenticated(filteredUser))
     handleClearPass()
     handlePassClose()
   }
 
-
-  // const handleSave = () => {
-  //     const users = JSON.parse(localStorage.getItem('data')) || [];
-  //     const user = users.filter((obj) =>
-  //       obj.email === loggedInUser.email)
-  //     const filteredUser = users.find((u) => u.email === loggedInUser.email);
-  //     // filteredUser.password = password
-  //     console.log("filteredUsers ", filteredUser);
-
-  //     setEditData(filteredUser)
-  //     console.log("editData",editData);
-  //     // user.push(filteredUser)
-  //     // console.log("users ", users);
-  //     // localStorage.setItem('data', JSON.stringify(users));
-  //     // dispatch(setSuccess(true));
-  //     // handleClearPass()
-  //     // handlePassClose()
-  // }
   const handleSavePassword = () => {
     if (validatePassword(password) && comparePassword(password, confirmPassword)) {
       const users = JSON.parse(localStorage.getItem('data')) || [];
@@ -259,7 +225,6 @@ const Sideer = () => {
       user.push(filteredUser)
       console.log("users ", users);
       localStorage.setItem('data', JSON.stringify(users));
-      // dispatch(setSuccess(true));
       handleClearPass()
       handlePassClose()
     }
@@ -361,41 +326,7 @@ const Sideer = () => {
                 </div>
               </div>
               <div>
-                {/* <Modal show={show} onHide={handleClose}>
-                  <Modal.Header closeButton>
-                    <Modal.Title style={{ marginLeft: '45%' }}>Profile View</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body><div id='for-search' className="col-lg-6 mb-3" style={{ width: '100%' }} >
-                    <div className="professional_info">
-                      <div className="project-card-top">
-                        <div className="project-card-heading d-flex align-items-center justify-content-between">
-                          <div className="body_heading2 mb-0 ">
-                            <div className='d-flex'>
-                              <h2 className="font-18 mb-0"><span className="me-2"><img src={loggedInUser.file} style={{ maxWidth: "30px", }} alt="" /></span>{loggedInUser.username}</h2>
 
-                            </div>
-                            <p className="mb-0 body-sub-heading font-12">Created by:- <span>{loggedInUser.email}</span></p>
-                          </div>
-                          <p className="mb-0 font-14 body-sub-heading ">Gender: <span> {loggedInUser.gender}</span> </p>
-
-                        </div>
-                        <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
-                          <p className="my-2 font-14 body-sub-heading ">Stream: <span> {loggedInUser.stream}</span></p>
-                          <p className="my-2 font-14 body-sub-heading ">Age: <span>{loggedInUser.age}</span>  </p>
-                          <div className="project-card-heading d-flex align-items-center justify-content-between">
-                            <p className="my-2 font-14 body-sub-heading ">Subjects: <span> {loggedInUser.subject}</span></p>
-
-                          </div>
-                        </div>
-
-
-                      </div>
-
-                    </div>
-                  </div></Modal.Body>
-  
-
-                </Modal> */}
 
                 <div>
 
@@ -556,17 +487,11 @@ const Sideer = () => {
                             <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
 
                             <div style={{ position: 'relative' }}>
-                              {/* <span onClick={handleImageClose} id='my-icon' className="close AClass" style={{ position: 'absolute', cursor: 'pointer', fontSize: '25px', display: 'none' }} >&times;</span> */}
                               <img alt='' src={updateFile ? updateFile : editData.file} style={{ maxWidth: "154px" }} />
                             </div>
                           </Form.Group>
                         </div>
-                        {/* <div>
-                            <Form.Group>
-                              <Form.Label className='label-me'>Select Date:</Form.Label>
-                              <DatePicker selected={date} onChange={(date) => setDate(date)} />
-                            </Form.Group>
-                          </div> */}
+
 
                       </Form>
                     </Modal.Body>
