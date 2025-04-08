@@ -13,7 +13,7 @@ const HomePage = () => {
   const [progressBars, setProgressBars] = useState(0)
   const fileInputRef = useRef(null);
   const success = useSelector((state) => state.success.successMe);
-  const htmlString = '<div><h1>Welcome to React</h1><p>This is parsed HTML.</p></div>';
+  // const htmlString = '<div><h1>Welcome to React</h1><p>This is parsed HTML.</p></div>';
 
   useEffect(() => {
     const storedSuccess = localStorage.getItem('success');
@@ -108,11 +108,11 @@ const HomePage = () => {
     }
     console.log("newFormValues.....", formValues[index].images.length);
   }
-  const handleClearForm = () => {
-    setFormValues([{ name: '', email: '', password: '', age: '', images: [] }])
-    setProgressBars(0)
-    fileInputRef.current.value = null
-  }
+  // const handleClearForm = () => {
+  //   setFormValues([{ name: '', email: '', password: '', age: '', images: [] }])
+  //   setProgressBars(0)
+  //   fileInputRef.current.value = null
+  // }
   const handleSubmit = (event) => {
     event.preventDefault()
     const user = JSON.parse(localStorage.getItem('form')) || []
@@ -209,3 +209,45 @@ const HomePage = () => {
 }
 
 export default HomePage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 11: 00 ---> complete remember me implementation
+// 11: 17 ---> correcting in remember me checkbox logic
+// 1: 00 ---> bar graph custamizations

@@ -6,13 +6,12 @@ import '../css/media.css'
 
 import logo from '../image/BT-logo.png'
 import correct from '../image/correct.png'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { isAuthenticated } from '../features/authSlice'
 import { setSuccess } from '../features/successSlice'
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Toast from 'react-bootstrap/Toast';
 
 
 const LoginPage = () => {
@@ -29,7 +28,7 @@ const LoginPage = () => {
   const [checkOldPass, setCheckOldPass] = useState(false)
   const [userData, setUserData] = useState({})
   const [isChecked, setIsChecked] = useState(false)
-  const success = useSelector((state) => state.success.successMe);
+  // const success = useSelector((state) => state.success.successMe);
 
 
   const navigate = useNavigate()
@@ -76,7 +75,7 @@ const LoginPage = () => {
   }
 
   const handlePassClose = () => setPassShow(false);
-  const handlePassShow = () => setPassShow(true);
+  // const handlePassShow = () => setPassShow(true);
 
   const handleEmailClose = () => setEmailShow(false);
   const handleEmailShow = () => setEmailShow(true);

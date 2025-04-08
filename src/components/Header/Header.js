@@ -5,9 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useSelector } from 'react-redux';
 import '../css/custom.css'
-import Toast from 'react-bootstrap/Toast';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 
@@ -28,33 +26,33 @@ const Header = () => {
   const fileInputRef = useRef(null);
   const genderInputRef = useRef()
   const [success, setSuccess] = useState(false)
-  const { username, ImgFile } = useSelector((state) => state.users)
+  // const { username, ImgFile } = useSelector((state) => state.users)
 
-  const mySearch = () => {
-    let input = document.getElementById("myInput");
-    let filter = input.value.toLowerCase();
-    let cards = document.querySelectorAll("#for-search");
-    cards.forEach((card) => {
-      let textVal = card.innerText.toLowerCase();
+  // const mySearch = () => {
+  //   let input = document.getElementById("myInput");
+  //   let filter = input.value.toLowerCase();
+  //   let cards = document.querySelectorAll("#for-search");
+  //   cards.forEach((card) => {
+  //     let textVal = card.innerText.toLowerCase();
 
-      if (textVal.indexOf(filter) > -1) {
-        card.style.display = "";
-      } else {
-        card.style.display = "none";
-      }
-    });
-  }
+  //     if (textVal.indexOf(filter) > -1) {
+  //       card.style.display = "";
+  //     } else {
+  //       card.style.display = "none";
+  //     }
+  //   });
+  // }
 
-  function toasterMessage() {
-    return (
-      <Toast style={{ background: '#D0F0C0', marginBottom: '5px' }} onClose={() => setSuccess(false)} delay={3000} autohide>
-        <Toast.Header>
-          <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" />
-          <strong className="me-auto">{username}</strong>
-        </Toast.Header>
-        <Toast.Body>User added Successfully</Toast.Body>
-      </Toast>);
-  }
+  // function toasterMessage() {
+  //   return (
+  //     <Toast style={{ background: '#D0F0C0', marginBottom: '5px' }} onClose={() => setSuccess(false)} delay={3000} autohide>
+  //       <Toast.Header>
+  //         <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" />
+  //         <strong className="me-auto">{username}</strong>
+  //       </Toast.Header>
+  //       <Toast.Body>User added Successfully</Toast.Body>
+  //     </Toast>);
+  // }
 
   const validateField = (field, regex, errorId) => {
     const isValid = regex.test(field);
