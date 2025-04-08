@@ -4,13 +4,8 @@ import { getCartItem } from '../features/cartSlice'
 
 
 const CartItem = () => {
-    // const dispatch = useDispatch()
     const items = useSelector((state) => state.cart.localStorageItems)
 
-    // useEffect(() => {
-    //     // console.log("++++",typeof(items[0]));
-    //     dispatch(getCartItem())
-    // }, [dispatch])
 
     return (
         <div>

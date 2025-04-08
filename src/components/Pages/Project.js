@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import '../css/custom.css'
 import '../css/media.css'
 
-// import Pagination from './Pagination'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSuccess } from '../features/successSlice';
 import { getUsers }
@@ -20,83 +19,12 @@ import BarsDataset from '../chart/BarChart';
 
 const Project = () => {
   const dispatch = useDispatch()
-  // const [userData, setUserData] = useState([]);
-  // const [editInd, setEditInd] = useState(null)
-  // const [editData, setEditData] = useState({})
-  // const [checkEdit, setCheckEdit] = useState(false)
-  // const [loggedInUser, setLoggedInUser] = useState('');
-  // const [show, setShow] = useState(false);
-  // const [showDelete, setShowDelete] = useState(false)
-  // const [deleteInd, setDeleteInd] = useState(null)
-  // const [currPage, setCurrPage] = useState([])
-  // const { data, isLoading, isError } = useSelector((state) => state.api)
-  // const [success, setSuccess] = useState(false)
-  // const [editUser, setEditUser] = useState({})
-  // const { username, ImgFile } = useSelector((state) => state.users)
-  // const [date, setDate] = useState(new Date());
-  // const [value, onChange] = useState(new Date());
+
   const [apiData, setApiData] = useState([])
   const success = useSelector((state) => state.success.successMe);
-  // type ValuePiece = Date | null;
-
-  // const Value = ValuePiece | [ValuePiece, ValuePiece];
-
-  // const [value, onChange] = useState(new Date());
-  // const pageLimit = 2;
-
-  //   if (data?.text) {
-  //     const text = chain(data?.text).replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, "").replace(/\./g, "").trim().lowerCase().value();
-  //     const str = chain(text)
-  //     console.log("Str ", str);
-  //     const words = chain(text).split(" ").map((item) => {
-  //         if (item) {
-  //             return item
-  //         }
-  //     }).value();
-  //     console.log("Words >> ", words);
-  //     if (difference(VALID_WORDS, words)?.length === 0) {
-  //         setMessage("Image has valid words.")
-  //     } else {
-  //         setMessage("Could not find required text in the image.");
-  //     }
-  // } else {
-  //     setMessage("Could not find any text in image.");
-  // }
-
-  // const handleShowDelete = (ind) => {
-  //   setShowDelete(true);
-  //   setDeleteInd(ind)
-  // }
-
-  // function FullCalendarComponent() {
-  // const handleDateClick = (arg) => {
-  //   alert(arg.dateStr);
-  // };
-
-  // const handleCloseDelete = () => setShowDelete(false);
-
-  // const handleClose = () => {
-  //   setShow(false);
-  // }
-  // const handleShow = () => setShow(true);
-
-  // useEffect(() => {
-    // const fetchData = () => {
-      // const storedData = JSON.parse(localStorage.getItem("data")) || [];
-      // const user = JSON.parse(localStorage.getItem("user"));
-
-      // if (user) {
-      //   setLoggedInUser(user);
-        // const filteredUsers = storedData.filter((u) => u.email !== user.email);
-        // setUserData(filteredUsers);
-      // } 
-      // else {
-        // setUserData(storedData);
-      // }
-    // };
-
-  //   fetchData();
-  // }, []);
+ 
+ 
+ 
   useEffect(() => {
     const storedSuccess = localStorage.getItem('success');
     if (storedSuccess === 'true') {
@@ -111,26 +39,13 @@ const Project = () => {
     }
 
   }, [success, dispatch]);
-  // const handleDelete = (ind) => {
-  //   const updatedData = userData.filter((_, i) => i !== ind)
-  //   setUserData(updatedData)
-  //   handleCloseDelete()
-  //   setDeleteInd(null)
-  //   localStorage.setItem("data", JSON.stringify(updatedData))
-  // }
+ 
 
   useEffect(() => {
     dispatch(getUsers())
   }, [dispatch])
 
-  // const validateEmail = (email) =>
-  //   validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,6}$/, 'email-error');
-
-  // const validateAge = (age) => {
-  //   const isValid = parseInt(age, 10) >= 16 && parseInt(age, 10) <= 90
-  //   document.getElementById('age-error').style.display = isValid ? 'none' : 'block';
-  //   return isValid;
-  // };
+  
 
   function calculateTotalTime(now, then) {
     if (then === null) {
@@ -157,107 +72,13 @@ const Project = () => {
     e.dayEl.onmouseover = 'pointer'
   };
 
-  // const validateRequiredFields = () => {
-  //   let isValid = true;
-  //   if (!editData.gender) {
-  //     document.getElementById('gender-error').style.display = 'block';
-  //     isValid = false;
-  //   }
-  //   if (!editData.stream) {
-  //     document.getElementById('stream-error').style.display = 'block';
-  //     isValid = false;
-  //   }
-  //   if (editData.subject.length === 0) {
-  //     document.getElementById('subject-error').style.display = 'block';
-  //     isValid = false;
-  //   }
-  //   return isValid;
-  // };
-
-  // const handleStatusChange = (ind, val) => {
-  //   const updatedData = [...userData];
-  //   updatedData[ind].status = val;
-  //   setUserData(updatedData)
-  //   localStorage.setItem("data", JSON.stringify(updatedData))
-  // }
-
-  // const handleEdit = (ind) => {
-  //   handleShow()
-  //   setCheckEdit(!checkEdit)
-  //   setEditInd(ind)
-  //   setEditData({ ...userData[ind] })
-  // }
-
-  // const handleChange = (e) => {
-  //   // console.log("Successfull ", success);
-  //   const { name, value, type, checked } = e.target
-  //   if (type === "checkbox") {
-  //     setEditData((prevData) => ({
-  //       ...prevData,
-  //       subject: checked
-  //         ? [...(prevData.subject), value]
-  //         : (prevData.subject).filter((sub) => sub !== value),
-  //     }));
-  //   }
-  //   else {
-  //     setEditData((prevData) => ({
-  //       ...prevData,
-  //       [name]: value,
-  //     }))
-  //   }
-  // }
-
-  // const handleSave = (e) => {
-  //   e.preventDefault()
-  //   if (validateUserName(editData.username) &&
-  //     validateEmail(editData.email) &&
-  //     validateAge(editData.age) &&
-  //     // validateLocalEmail(editData.email) &&
-  //     validateRequiredFields()
-  //   ) {
-  //     // console.log("Successfull2 ", success);
-  //     editData.index = editInd;
-  //     dispatch(updateUser(editData));
-  //     dispatch(setSuccess(true));
-  //     // localStorage.setItem("success", JSON.stringify(true));
-  //     navigate("/");
-  //     setShow(false);
-  //     setEditInd(null);
-  //     setEditData({});
-  //   }
-  // }
-
-  // const validateLocalEmail = (email) => {
-  //   const duplicateEmailCheck = document.getElementById('duplicate-error');
-  //   const user = JSON.parse(localStorage.getItem('data')) || [];
-  //   const emailExist = user.some((obj) => obj.email === email);
-  //   duplicateEmailCheck.style.display = emailExist ? 'block' : 'none';
-  //   return emailExist;
-  // };
-
-  // const genderOptions = ["Male", "Female", "Other"]
-
-  // const checkOption = [
-  //   { name: 'Physics ', key: 'physics', label: 'Physics ' },
-  //   { name: 'Chemistry ', key: 'chemistry', label: 'Chemistry ' },
-  //   { name: 'Math ', key: 'math', label: 'Math ' },
-  //   { name: 'Biology ', key: 'bio', label: 'Biology ' },
-  // ];
-
-  // const validateField = (field, regex, errorId) => {
-  //   const isValid = regex.test(field);
-  //   document.getElementById(errorId).style.display = isValid ? 'none' : 'block';
-  //   return isValid;
-  // };
+ 
+ 
 
   function toasterMessage() {
 
     return (
-      // <>
-      //   <Toast style={{ background: '#D0F0C0', marginLeft: '1000px', position: 'absolute', zIndex: '1' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
-      //     <Toast.Body>You have Successfully LoggedIn.</Toast.Body>
-      //   </Toast>
-      // </>
+    
       <>
         <Toast style={{ background: '#D0F0C0', marginBottom: '5px', marginLeft: '600px', position: 'absolute' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
 
@@ -267,36 +88,8 @@ const Project = () => {
     );
   }
 
-  // const validateUserName = (username) =>
-  //   validateField(username, /^[a-z0-9]+$/i, 'username-error');
-
-  // const comparePassword = (password, confirmPassword) => {
-  //   const isValid = password === confirmPassword;
-  //   document.getElementById('cPassword-error').style.display = isValid ? 'none' : 'block';
-  //   return isValid;
-  // };
-
-  // const validatePassword = (password) =>
-  //   validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'password-error');
-
-  // const handleClear = () => {
-  //   setUserName('');
-  //   setAge('');
-  //   setEmail('');
-  //   setPassword('');
-  //   setConfirmPassword('');
-  //   setSubject(new Map());
-  //   setFile(null);
-  //   setSelectedValue('');
-  //   setGender('');
-  //   if (genderInputRef.current) {
-  //     genderInputRef.current.value = '';
-  //   }
-  // if (fileInputRef.current) {
-  //   fileInputRef.current.value = '';
-  // }
-  // };
-
+ 
+  
   return (
     <>
       <div className="main_container" style={{ position: 'relative' }}>
@@ -332,7 +125,6 @@ const Project = () => {
                   }}
                 />
               </div>
-              {/* {success && (<Alert onClose={() => setSuccess(false)} dismissible variant='success'><Alert.Heading>Successfully updated</Alert.Heading><p>You have Successfully change your data</p></Alert>)} */}
               <div className="contact-profile" style={{ marginTop: '350px' }}>
                 <div className="row">
                   {apiData.length > 0 ? (apiData.map((user, ind) => (
@@ -364,21 +156,12 @@ const Project = () => {
 
                 </div >
 
-                {/* <div style={{ marginBottom: '20px', marginLeft: '430px' }}>
-                  <Calendar onChange={onChange} value={value} />
-                </div> */}
-
-
+                
 
                 <div style={{ marginLeft: '300px', marginTop: '50px'}}>
 
 
-                  {/* <BarChart
-                    xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
-                    series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
-                    width={500}
-                    height={300}
-                  /> */}
+                
 
                   {BarsDataset()}
                 </div>
@@ -387,7 +170,6 @@ const Project = () => {
 
               </div>
             </div>
-            {/* <Pagination items={userData} pageLimit={pageLimit} setPageItems={setCurrPage} /> */}
           </div>
         </div>
 

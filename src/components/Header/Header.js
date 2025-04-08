@@ -10,7 +10,6 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 
 const Header = () => {
-  // const dispatch = useDispatch()
   const navigate = useNavigate()
   const [showForm, setShowForm] = useState(false);
   const [selectedValue, setSelectedValue] = useState('');
@@ -26,34 +25,7 @@ const Header = () => {
   const fileInputRef = useRef(null);
   const genderInputRef = useRef()
   const [success, setSuccess] = useState(false)
-  // const { username, ImgFile } = useSelector((state) => state.users)
-
-  // const mySearch = () => {
-  //   let input = document.getElementById("myInput");
-  //   let filter = input.value.toLowerCase();
-  //   let cards = document.querySelectorAll("#for-search");
-  //   cards.forEach((card) => {
-  //     let textVal = card.innerText.toLowerCase();
-
-  //     if (textVal.indexOf(filter) > -1) {
-  //       card.style.display = "";
-  //     } else {
-  //       card.style.display = "none";
-  //     }
-  //   });
-  // }
-
-  // function toasterMessage() {
-  //   return (
-  //     <Toast style={{ background: '#D0F0C0', marginBottom: '5px' }} onClose={() => setSuccess(false)} delay={3000} autohide>
-  //       <Toast.Header>
-  //         <img src={ImgFile} style={{ maxWidth: "30px", }} className="rounded me-2" alt="" />
-  //         <strong className="me-auto">{username}</strong>
-  //       </Toast.Header>
-  //       <Toast.Body>User added Successfully</Toast.Body>
-  //     </Toast>);
-  // }
-
+ 
   const validateField = (field, regex, errorId) => {
     const isValid = regex.test(field);
     document.getElementById(errorId).style.display = isValid ? 'none' : 'block';
@@ -207,7 +179,6 @@ const Header = () => {
       validateAge(age) &&
       validatePassword(password) &&
       comparePassword(password, confirmPassword) &&
-      // validateLocalEmail(email) &&
       validateRequiredFieldsForm()
     ) {
       const userData = {
@@ -220,7 +191,6 @@ const Header = () => {
         subject: [...subject],
         password
       };
-      // dispatch(saveUser(userData))
       const user = JSON.parse(localStorage.getItem('data')) || [];
       user.push(userData);
       setaddedUser(userData)
@@ -235,7 +205,6 @@ const Header = () => {
     <>
       <div className="top_header d-flex align-items-center justify-content-between">
         <h1 >Projects</h1>
-        {/* <input type="text" id="myInput" onKeyUp={mySearch} placeholder="search" /> */}
         <div className="header_notification d-flex align-items-center gap-2">
           <div className="filter-dropdown green-filter dropdown">
             <button className="btn filter-btn green-filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -250,11 +219,10 @@ const Header = () => {
                 here</Link></li>
             </ul>
           </div>
-          {/* {success && toasterMessage()} */}
           <div className="header_icon position-relative notification d-flex align-items-center justify-content-center">
-            {/* <img src={notification} alt='' /> */}
-            {/* <span className="notification_alert"></span> */}
-            {/* <p>02</p> */}
+          
+
+        
             <h6 onClick={handleForm} style={{ cursor: 'pointer' }}>Add</h6>
           </div>
           <div className="header_icon position-relative notification d-flex align-items-center justify-content-center">
@@ -273,84 +241,84 @@ const Header = () => {
         <Modal.Body>
           <Form className='row'>
             <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-            <FloatingLabel
-        controlId="floatingInput"
-        label="Username"
-        className="mb-3"
-      >
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Username"
+                className="mb-3"
+              >
 
-              <Form.Control
-                type='text' value={userName} onChange={(e) => setUserName(e.target.value)}  minLength={6} maxLength={20}
-              />
-              <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
+                <Form.Control
+                  type='text' value={userName} onChange={(e) => setUserName(e.target.value)} minLength={6} maxLength={20}
+                />
+                <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
               </FloatingLabel>
             </Form.Group>
             <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-            <FloatingLabel
-        controlId="floatingInput"
-        label="Select Gender"
-        className="mb-3"
-      >
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Select Gender"
+                className="mb-3"
+              >
 
-              <Form.Select ref={genderInputRef} onChange={(e) => handleGenderChange(e.target.value)}>
-                <option value="">Select</option>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
-              </Form.Select>
-              <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
+                <Form.Select ref={genderInputRef} onChange={(e) => handleGenderChange(e.target.value)}>
+                  <option value="">Select</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </Form.Select>
+                <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
               </FloatingLabel>
             </Form.Group>
             <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-            <FloatingLabel
-        controlId="floatingInput"
-        label="Age"
-        className="mb-3"
-      >
-              <Form.Control
-                type='text' value={age} onChange={(e) => setAge(e.target.value)}
-              />
-              <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Age"
+                className="mb-3"
+              >
+                <Form.Control
+                  type='text' value={age} onChange={(e) => setAge(e.target.value)}
+                />
+                <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
               </FloatingLabel>
             </Form.Group>
 
 
             <div className='row'>
               <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-              <FloatingLabel
-        controlId="floatingInput"
-        label="Email address"
-        className="mb-3"
-      >
-                <Form.Control
-                  type='text' value={email} onChange={(e) => setEmail(e.target.value)} onInput={(e) => validateLocalEmail(e.target.value)}
-                />
-                <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
-                <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Email address"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' value={email} onChange={(e) => setEmail(e.target.value)} onInput={(e) => validateLocalEmail(e.target.value)}
+                  />
+                  <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
+                  <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
                 </FloatingLabel>
               </Form.Group>
               <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-              <FloatingLabel
-        controlId="floatingInput"
-        label="Password"
-        className="mb-3"
-      >
-                <Form.Control
-                  type='text' value={password} onChange={handlePasswordChange} onInput={validatePassword}
-                />
-                <span id='password-error' style={{ display: "none", color: 'red' }}>Enter valid password</span>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Password"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' value={password} onChange={handlePasswordChange} onInput={validatePassword}
+                  />
+                  <span id='password-error' style={{ display: "none", color: 'red' }}>Enter valid password</span>
                 </FloatingLabel>
               </Form.Group>
               <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-              <FloatingLabel
-        controlId="floatingInput"
-        label="Confirm Password"
-        className="mb-3"
-      >
-                <Form.Control
-                  type='text' value={confirmPassword} onChange={handleConfirmPasswordChange} onInput={comparePassword}
-                />
-                <span id='cPassword-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Confirm Password"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' value={confirmPassword} onChange={handleConfirmPasswordChange} onInput={comparePassword}
+                  />
+                  <span id='cPassword-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
                 </FloatingLabel>
               </Form.Group>
             </div>
@@ -401,7 +369,6 @@ const Header = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      {/* {success && (<Alert onClose={() => setSuccess(false)} dismissible variant='success'><Alert.Heading>Successfully added</Alert.Heading><p>You have Successfully added a data</p></Alert>)} */}
 
     </>
   )

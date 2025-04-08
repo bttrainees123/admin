@@ -4,7 +4,6 @@ import ProgressBar from 'react-bootstrap/ProgressBar'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-bootstrap/Toast';
 import { setSuccess } from '../features/successSlice';
-// import { ToastContainer, toast } from 'react-toastify';
 import ReactHtmlParser from 'react-html-parser'
 
 const HomePage = () => {
@@ -13,7 +12,6 @@ const HomePage = () => {
   const [progressBars, setProgressBars] = useState(0)
   const fileInputRef = useRef(null);
   const success = useSelector((state) => state.success.successMe);
-  // const htmlString = '<div><h1>Welcome to React</h1><p>This is parsed HTML.</p></div>';
 
   useEffect(() => {
     const storedSuccess = localStorage.getItem('success');
@@ -57,8 +55,7 @@ const HomePage = () => {
       axios.post('http://localhost:3000/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (val) => {
-          // const percent = Math.round((100 * val.loaded) / val.total)
-          // setProgressBars(percent)
+        
           progress(0)
         },
       }).catch((err) => console.log('Upload Error:', err))
@@ -88,10 +85,7 @@ const HomePage = () => {
     setFormValues(newFormValues)
   }
 
-  // const addFormFields = () => {
-  //   setFormValues([...formValues, { name: '', email: '', password: '', age: '', images: [] }])
-  // }
-
+ 
   const removeFormFields = (i) => {
     let newFormValues = [...formValues]
     newFormValues.splice(i, 1)
@@ -108,17 +102,12 @@ const HomePage = () => {
     }
     console.log("newFormValues.....", formValues[index].images.length);
   }
-  // const handleClearForm = () => {
-  //   setFormValues([{ name: '', email: '', password: '', age: '', images: [] }])
-  //   setProgressBars(0)
-  //   fileInputRef.current.value = null
-  // }
+
   const handleSubmit = (event) => {
     event.preventDefault()
     const user = JSON.parse(localStorage.getItem('form')) || []
     user.push(...formValues)
     localStorage.setItem('form', JSON.stringify(user))
-    // handleClearForm()
     return ReactHtmlParser('<h1>Hello world!</h1>')
 
   }
@@ -134,9 +123,10 @@ const HomePage = () => {
     );
   }
   return (
+    <>
     <div style={{ marginTop: '0px' }}>
       <div style={{ marginTop: '0px' }}>-{success && toasterMessage()}</div>
-
+      
       <form style={{ margin: '70px' }} onSubmit={handleSubmit}>
         {formValues.map((element, index) => (
           <div className="form-inline" key={index}
@@ -176,7 +166,6 @@ const HomePage = () => {
               <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 {element.images.map((img, i) => (
                   <div>
-                    {/* <span onClick={(e) => handleImageClose(e, i)} id='my-icon' className="close AClass" style={{ position: 'absolute', cursor: 'pointer', fontSize: '25px' }} ></span> */}
                     <img key={i} src={URL.createObjectURL(img)} alt="preview" style={{ width: '80px', height: '80px', margin: '5px' }} /><span onClick={(e) => handleImageClose(e, i, index)} id='my-icon' className="close AClass" style={{ cursor: 'pointer', fontSize: '25px', marginBottom: '25px' }}>&times;</span>
                     <p style={{ width: '80px', height: '80px', marginLeft: '5px' }}>{img.name.slice(0, 10)}</p>
                   </div>
@@ -189,7 +178,6 @@ const HomePage = () => {
           </div>
         ))}
         <div className="button-section">
-          {/* <button className="btn btn-success" style={{ margin: '5px' }} type="button" onClick={() => addFormFields()}>Add</button> */}
           <button className="btn btn-primary" style={{ marginLeft: '560px', marginTop: '12px' }} type="submit">Submit</button>
         </div>
         <>
@@ -205,6 +193,7 @@ const HomePage = () => {
         </>
       </form>
     </div>
+    </>
   )
 }
 
@@ -251,3 +240,5 @@ export default HomePage
 // 11: 00 ---> complete remember me implementation
 // 11: 17 ---> correcting in remember me checkbox logic
 // 1: 00 ---> bar graph custamizations
+
+// 1:30 - 5:30 ---> User registration Modal 

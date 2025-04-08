@@ -9,7 +9,7 @@ export const validateEmail = (email) =>
 
 export const validateAge = (age) => {
     const isValid = parseInt(age, 10) >= 16 && parseInt(age, 10) <= 90
-    document.getElementById('age-error').style.display = isValid ? 'none' : 'block';
+    document.getElementById('age-error').style.display = isValid ? 'block' : 'none';
     return isValid;
 };
 

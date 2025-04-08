@@ -96,7 +96,7 @@ const Sideer = () => {
       document.getElementById('stream-error').style.display = 'block';
       isValid = false;
     }
-    if (editData.subject.length === 0) {
+    if (editData.subject && editData.subject.length === 0) {
       document.getElementById('subject-error').style.display = 'block';
       isValid = false;
     }
@@ -135,8 +135,6 @@ const Sideer = () => {
     handleShow()
 
   }
-
-
 
   const handleLogout = () => {
     localStorage.setItem("isLoggedIn", false);
@@ -195,17 +193,15 @@ const Sideer = () => {
     if (validateUserName(editData.username) &&
       validateEmail(editData.email) &&
       validateAge(editData.age) &&
-      // validateLocalEmail(editData.email) &&
       validateRequiredFields()
     ) {
-
-      // console.log("Successfull2 ", success);
-      // handleSaveImage(updateImageInUser(updateFile))
-      // loggedInUser.index = loggedInUser.;
       dispatch(updateLoggedInUser(editData));
       dispatch(isAuthenticated(editData))
-      handleSaveImage()
-      setProgressBars(0)
+      if (updateFile) {
+        handleSaveImage()
+        setProgressBars(0)
+      }
+
       // dispatch(setSuccess(true));
       // localStorage.setItem("success", JSON.stringify(true));
       setCheckEdit(false)
@@ -543,7 +539,7 @@ const Sideer = () => {
                                   type="checkbox"
                                   name={it.name}
                                   value={it.label}
-                                  checked={(editData.subject).includes(it.label)}
+                                  checked={(editData.subject) ? (editData.subject).includes(it.label) : ''}
                                   onChange={handleChange}
                                 />
                               </label>

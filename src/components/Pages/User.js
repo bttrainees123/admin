@@ -4,7 +4,6 @@ import '../css/media.css'
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-// import Pagination from './Pagination'
 import { useDispatch, useSelector } from 'react-redux'
 import { setPassChange, setSuccess } from '../features/successSlice';
 import { updateUser } from '../features/userSlice'
@@ -12,7 +11,6 @@ import { getUsers }
   from '../features/apiSlice'
 import Sideer from '../sider/Sideer'
 import Header from '../Header/Header'
-import { useNavigate } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import axios from '../utils/middlewares';
 import Toast from 'react-bootstrap/Toast';
@@ -26,12 +24,10 @@ const User = () => {
   const [editInd, setEditInd] = useState(null)
   const [editData, setEditData] = useState({})
   const [checkEdit, setCheckEdit] = useState(false)
-  const [loggedInUser, setLoggedInUser] = useState('');
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false)
   const [deleteInd, setDeleteInd] = useState(null)
   const { data, isLoading, isError } = useSelector((state) => state.api)
-  const [apiData, setApiData] = useState([])
   const fileUpdateRef = useRef(null);
   const [progressBars, setProgressBars] = useState(0)
   const [updateFile, setUpdateFile] = useState(null)
@@ -56,7 +52,6 @@ const User = () => {
       const user = JSON.parse(localStorage.getItem("user"));
 
       if (user) {
-        setLoggedInUser(user);
         const filteredUsers = storedData.filter((u) => u.email !== user.email);
         setUserData(filteredUsers);
       } else {
@@ -123,32 +118,8 @@ const User = () => {
     return isValid;
   };
 
-  function calculateTotalTime(now, then) {
-    if (then === null) {
-      then = "04/09/2013 15:00:00"
-    }
-    let start = new Date(now.replace(" ", "T"))
-    let end = new Date(then.replace(" ", "T"))
-    const timeDifferenceMS = end.getTime() - start.getTime();
-    let milliseconds = parseInt((timeDifferenceMS % 1000) / 100)
-      , seconds = parseInt((timeDifferenceMS / 1000) % 60)
-      , minutes = parseInt((timeDifferenceMS / (1000 * 60)) % 60)
-      , hours = parseInt((timeDifferenceMS / (1000 * 60 * 60)) % 24);
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-    return hours + "h:" + minutes + "m:" + seconds + "s";
-  }
-
-  const handleDateClick = async (e) => {
-    const created_date = e.dateStr
-    const token = '255|AU2GCstU1ycrHapE29Z9D8lLeI85BzGPC70xru3W'
-    const response = await axios(`https://laravel9.etrueconcept.com/btpms/api/activity-log?created_date=${created_date}&user_id=27`, { headers: { "Authorization": `Bearer ${token}` } })
-    setApiData(response.data.data)
-    console.log("event ", e);
-    e.dayEl.onmouseover = 'pointer'
-  };
-
+  
+ 
   const validateRequiredFields = () => {
     let isValid = true;
     if (!editData.gender) {
@@ -315,7 +286,6 @@ const User = () => {
   return (
     <>
       <div className="main_container">
-        {/* <div style={{marginTop: '0px'}}>-{successPass && toasterPassMessage()}</div> */}
         <div style={{ marginTop: '0px', zIndex: '1' }}>-{success && toasterMessage()}</div>
 
         <div className="limani_body">
@@ -325,7 +295,6 @@ const User = () => {
             <div className="body_content">
               <Header />
 
-              {/* {success && (<Alert onClose={() => setSuccess(false)} dismissible variant='success'><Alert.Heading>Successfully updated</Alert.Heading><p>You have Successfully change your data</p></Alert>)} */}
               <div className="contact-profile" >
 
                 <div className="row">
@@ -424,59 +393,59 @@ const User = () => {
                     <Modal.Body>
                       <Form className='row'>
                         <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                        <FloatingLabel
-        controlId="floatingInput"
-        label="Username"
-        className="mb-3"
-      >
-                          <Form.Control
-                            type='text' name="username" value={editData.username} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
-                          />
-                          <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
+                          <FloatingLabel
+                            controlId="floatingInput"
+                            label="Username"
+                            className="mb-3"
+                          >
+                            <Form.Control
+                              type='text' name="username" value={editData.username} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
+                            />
+                            <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
                           </FloatingLabel>
                         </Form.Group>
                         <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                        <FloatingLabel
-        controlId="floatingInput"
-        label="Select Gender"
-        className="mb-3"
-      >
+                          <FloatingLabel
+                            controlId="floatingInput"
+                            label="Select Gender"
+                            className="mb-3"
+                          >
 
-                          <Form.Select name="gender" value={editData.gender || ""} onChange={handleChange}>
-                            <option value="">Select</option>
-                            {genderOptions.map((val, ind) => (
-                              <option key={ind} value={val}>
-                                {val}
-                              </option>
-                            ))}
-                          </Form.Select>
-                          <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
+                            <Form.Select name="gender" value={editData.gender || ""} onChange={handleChange}>
+                              <option value="">Select</option>
+                              {genderOptions.map((val, ind) => (
+                                <option key={ind} value={val}>
+                                  {val}
+                                </option>
+                              ))}
+                            </Form.Select>
+                            <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
                           </FloatingLabel>
                         </Form.Group>
                         <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                        <FloatingLabel
-        controlId="floatingInput"
-        label="Age"
-        className="mb-3"
-      >
-                          <Form.Control
-                            type='text' name="age" value={editData.age} onChange={handleChange} onInput={validateAge}
-                          />
-                          <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
+                          <FloatingLabel
+                            controlId="floatingInput"
+                            label="Age"
+                            className="mb-3"
+                          >
+                            <Form.Control
+                              type='text' name="age" value={editData.age} onChange={handleChange} onInput={validateAge}
+                            />
+                            <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
                           </FloatingLabel>
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                        <FloatingLabel
-        controlId="floatingInput"
-        label="Email address"
-        className="mb-3"
-      >
-                          <Form.Control
-                            type='text' name="email" value={editData.email} onChange={handleChange} onInput={(e) => validateLocalEmail(e.target.value)}
-                          />
-                          <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
-                          <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
+                          <FloatingLabel
+                            controlId="floatingInput"
+                            label="Email address"
+                            className="mb-3"
+                          >
+                            <Form.Control
+                              type='text' name="email" value={editData.email} onChange={handleChange} onInput={(e) => validateLocalEmail(e.target.value)}
+                            />
+                            <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
+                            <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
                           </FloatingLabel>
                         </Form.Group>
                         <div className='row'>
@@ -580,7 +549,6 @@ const User = () => {
 
               </div>
             </div>
-            {/* <Pagination items={userData} pageLimit={pageLimit} setPageItems={setCurrPage} /> */}
           </div>
         </div>
 

@@ -52,6 +52,7 @@ export const userSlice = createSlice({
       filteredUser.password = action.payload.password;
       filteredUser.age = action.payload.age;
       filteredUser.gender = action.payload.gender;
+      filteredUser.stream = action.payload.stream;
       filteredUser.subject = action.payload.subject;
       user.push(filteredUser)
       localStorage.setItem('data', JSON.stringify(users));

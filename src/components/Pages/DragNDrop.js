@@ -74,7 +74,6 @@ const DragNDrop = ({
                   <div className="file-info">
                     <p>{file.name}</p>
                     <img src={file} alt=''/>
-                    {/* <p>{file.type}</p> */}
                   </div>
                   <div className="file-actions">
                     <MdClear onClick={() => handleRemoveFile(index)} />

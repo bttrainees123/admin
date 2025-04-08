@@ -6,15 +6,11 @@ import '../css/custom.css'
 import '../css/media.css'
 import Sideer from '../sider/Sideer';
 import Header from '../Header/Header';
-import CartItem from './CartItem';
 
 const Product = () => {
     const dispatch = useDispatch()
     const [showButton, setShowButton] = useState(true)
     const { data, isLoading, isError } = useSelector((state) => state.products)
-    const [index, setIndex] = useState(null)
-    // const [isShowMore, setShowMore] = useState(false)
-    const items = useSelector((state) => state.cart.localStorageItems)
 
     const addToCart = (val) => {
         dispatch(addTCart(val))
@@ -44,7 +40,6 @@ const Product = () => {
                                             </div>
                                             <h6>{product.title.slice(0, 20)}</h6>
                                             <p className="price">${product.price}</p>
-                                            {/* <p>{isShowMore ? product.description : product.description.slice(0, 50)}<span onClick={() => setShowMore(!isShowMore)} style={{ backgroundColor: '#2ecc71', cursor: 'pointer' }}>{isShowMore ? "Show less" : "...Show more"}</span></p> */}
                                             <div className='project-card-heading'>
                                                 <p>{product.description.slice(0, 40)}</p>
                                             </div>
