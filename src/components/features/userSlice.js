@@ -86,3 +86,7 @@ export default userSlice.reducer;
 //  12: 50 --- implementing progressbar for all input type file
 
 // 1: 24 --> add Floating input 
+
+// 6:00 ---> forgot password
+
+//remember me --- 7: 00

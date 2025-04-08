@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import '../css/custom.css'
@@ -28,7 +28,7 @@ const LoginPage = () => {
   const [emailShow, setEmailShow] = useState(false)
   const [checkOldPass, setCheckOldPass] = useState(false)
   const [userData, setUserData] = useState({})
-  const [checkbox, setCheckbox] = useState()
+  const [isChecked, setIsChecked] = useState(false)
   const success = useSelector((state) => state.success.successMe);
 
 
@@ -36,11 +36,35 @@ const LoginPage = () => {
 
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('rememberedEmail');
+    const storedPassword = localStorage.getItem('rememberedPassword');
+    const storedIsChecked = localStorage.getItem('isChecked')
+
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+    if (storedPassword) {
+      setPassword(storedPassword);
+    }
+    if (storedIsChecked) {
+      setIsChecked(storedIsChecked);
+    }
+    if (!isChecked) {
+      // localStorage.removeItem('rememberedEmail')
+      // localStorage.removeItem('rememberedPassword')
+      // localStorage.removeItem('isChecked')
+      setEmail('')
+      setPassword('')
+      setIsChecked(false)
+    }
+  }, [isChecked]);
+
   // console.log("User", JSON.parse(localStorage.getItem('isLoggedIn'))); // console.log("set", typeof(localStorage.getItem('isLoggedIn')));
 
   const validateField = (field, regex, errorId) => { const isValid = regex.test(field); document.getElementById(errorId).style.display = isValid ? 'none' : 'block'; return isValid; };
 
-  const validateEmail = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-pass-error');
+  const validateEmail = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-error');
 
   const validatePassword = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'password-error');
   const validateNewPassword = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'new-password-error');
@@ -50,7 +74,7 @@ const LoginPage = () => {
     setPassEmail(e.target.value)
     document.getElementById('email-pass-error').style.display = 'none'
   }
-  
+
   const handlePassClose = () => setPassShow(false);
   const handlePassShow = () => setPassShow(true);
 
@@ -63,44 +87,41 @@ const LoginPage = () => {
     setConfirmNewPassword("")
   }
 
-
-
   const handleFindEmail = (e) => {
     e.preventDefault()
-    if(validateEmail(passEmail)){
-    const users = JSON.parse(localStorage.getItem("data")) || [];
-    
-    console.log("passEmail ", passEmail);
-    const existingUser = users.find((u) => u.email === passEmail)
-    if(existingUser){
-      setUserData(existingUser)
-      console.log("existingUser ", existingUser);
-      setPassShow(true)
-      const pass = existingUser.password;
-      setCheckOldPass(pass)
-      setEmailShow(false)
+    if (validateEmail(passEmail)) {
+      const users = JSON.parse(localStorage.getItem("data")) || [];
+
+      console.log("passEmail ", passEmail);
+      const existingUser = users.find((u) => u.email === passEmail)
+      if (existingUser) {
+        setUserData(existingUser)
+        console.log("existingUser ", existingUser);
+        setPassShow(true)
+        const pass = existingUser.password;
+        setCheckOldPass(pass)
+        setEmailShow(false)
+      }
+      else {
+        document.getElementById('email-pass-error').style.display = 'block'
+      }
     }
-    else{
-      document.getElementById('email-pass-error').style.display = 'block'
-    }
-  }
   }
 
   const handleOldPassword = (e) => {
     setOldPassword(e.target.value)
     validateOldPassword(e.target.value)
-    if(oldPassword === checkOldPass){
+    if (oldPassword === checkOldPass) {
       document.getElementById('old-password-error').style.display = 'block'
-    }else{
+    } else {
       document.getElementById('old-password-error').style.display = 'none'
     }
   }
 
-  const checkOldPassword = (oldPass, newPass) =>  {
+  const checkOldPassword = (oldPass, newPass) => {
     let isValid = oldPass === newPass
     return isValid
   }
-  
 
   const handleNewPassword = (e) => {
     setNewPassword(e.target.value)
@@ -110,10 +131,10 @@ const LoginPage = () => {
 
   const handleConfirmNewPassword = (e) => {
     setConfirmNewPassword(e.target.value)
-    if(newPassword !== confirmNewPassword){
+    if (newPassword !== confirmNewPassword) {
       document.getElementById('con-password-error').style.display = 'none'
     }
-    else{
+    else {
       document.getElementById('con-password-error').style.display = 'block'
     }
     console.log("Old ", confirmNewPassword);
@@ -124,26 +145,26 @@ const LoginPage = () => {
     document.getElementById('con-password-error').style.display = isValid ? 'none' : 'block';
     return isValid;
   };
-  function toasterMessage() {
-    
-    return (
-     
-      <>
-        <Toast style={{ background: '#D0F0C0', marginBottom: '5px', marginLeft: '600px', position: 'absolute' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
-          
-          <Toast.Body>Password Changed Successfully</Toast.Body>
-        </Toast>
-      </>
-    );
-  }
+  // function toasterMessage() {
+
+  //   return (
+
+  //     <>
+  //       <Toast style={{ background: '#D0F0C0', marginBottom: '5px', marginLeft: '600px', position: 'absolute' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
+
+  //         <Toast.Body>Password Changed Successfully</Toast.Body>
+  //       </Toast>
+  //     </>
+  //   );
+  // }
 
   const handleSavePassword = (e) => {
     e.preventDefault()
     const users = JSON.parse(localStorage.getItem('data')) || [];
-    if(checkOldPassword(oldPassword, checkOldPass) && validateOldPassword(oldPassword) && validateNewPassword(newPassword) && comparePassword(newPassword, confirmNewPassword) ){
+    if (checkOldPassword(oldPassword, checkOldPass) && validateOldPassword(oldPassword) && validateNewPassword(newPassword) && comparePassword(newPassword, confirmNewPassword)) {
       const user = users.filter((obj) =>
         obj.email === userData.email)
-      console.log("passEmail ",userData.email)
+      console.log("passEmail ", userData.email)
       const filteredUser = users.find((u) => u.email === userData.email);
       console.log("filteredUsers ", filteredUser);
       filteredUser.password = newPassword
@@ -155,20 +176,15 @@ const LoginPage = () => {
       handlePassClose()
       handleClearPass()
       setPassEmail("")
-  }
-}
-const handleCheckBox = (e) => {
-  setCheckbox(e.target.checked)
-}
- 
-  const loginHandler = (e) => {
-    e.preventDefault(); let emailCheck = false; let passwordCheck = false;
-    const users = JSON.parse(localStorage.getItem('data'));
-    if (checkbox && email !== "") {
-      localStorage.username = email;
-      localStorage.password = password;
-      localStorage.checkbox = checkbox;
     }
+  }
+
+  const loginHandler = (e) => {
+    e.preventDefault();
+    let emailCheck = false;
+    let passwordCheck = false;
+    const users = JSON.parse(localStorage.getItem('data'));
+
     if (validateEmail(email) && validatePassword(password)) {
       users?.forEach((val) => {
         if (val.email === email) {
@@ -187,6 +203,16 @@ const handleCheckBox = (e) => {
             age: val.age,
             subject: val.subject
           }
+          if (isChecked) {
+            localStorage.setItem('rememberedEmail', email)
+            localStorage.setItem('rememberedPassword', password)
+            localStorage.setItem('isChecked', isChecked)
+          }
+          else {
+            localStorage.removeItem('rememberedEmail')
+            localStorage.removeItem('rememberedPassword')
+            localStorage.removeItem('isChecked')
+          }
           dispatch(isAuthenticated(isUser))
           dispatch(setSuccess(true));
           // localStorage.setItem('isLoggedIn', 'true');
@@ -203,7 +229,7 @@ const handleCheckBox = (e) => {
   return (
     <section className="sign_in p-0">
       <div className="container-fluid">
-{success && toasterMessage()}
+        {/* {success && toasterMessage()} */}
         <div className="row align-items-center">
           <div className="col-lg-7">
             <div className="inner_content_one">
@@ -214,17 +240,17 @@ const handleCheckBox = (e) => {
                 <div className="row">
                   <div className="col-lg-12 mb-lg-4 mb-md-4 mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label form-label-custom">Email</label>
-                    <input type="text" className="form-control form-control-custom" id="exampleInputPassword1"
+                    <input type="text" value={email} className="form-control form-control-custom" id="exampleInputPassword1"
                       placeholder="abc12@gmail.com" onChange={e => setEmail(e.target.value)} />
                   </div>
                   <span id='email-error' style={{ display: 'none', color: 'red' }}>
                     {/* Enter valid Email */}
-                    </span>
+                  </span>
                   <span id='email-check' style={{ display: 'none', color: 'red' }}>Incorrect Email</span>
                   <div className="col-lg-12">
                     <div className="position-relative password_svg">
                       <label htmlFor="exampleInputPassword1" className="form-label form-label-custom">Password</label>
-                      <input type={showPassword ? "text" : "password"} className="form-control form-control-custom" id="exampleInputPassword1"
+                      <input type={showPassword ? "text" : "password"} value={password || ""} className="form-control form-control-custom" id="exampleInputPassword1"
                         placeholder="********" onChange={e => setPassword(e.target.value)} />
                       {showPassword ? (<svg onClick={() => setShowPassword((prev) => !prev)} xmlns="http://www.w3.org/2000/svg" width="23" height="20" viewBox="0 0 24 24" fill="none">
                         <g clipPath="url(#clip0_2056_26496)">
@@ -246,7 +272,7 @@ const handleCheckBox = (e) => {
                     <span id='password-check' style={{ display: "none", color: 'red' }}>Incorrect Password</span>
                     <div className="d-flex align-items-center justify-content-between remember_div mt-30 mb-30">
                       <div className="form-check">
-                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={handleCheckBox}/>
+                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked={isChecked} onChange={() => setIsChecked(!isChecked)} />
                         <label className="form-check-label" htmlFor="flexCheckDefault">
                           Remember me
                         </label>
@@ -300,71 +326,70 @@ const handleCheckBox = (e) => {
           </div>
         </div>
         <Modal show={emailShow} onHide={handleEmailClose} className='modalSize'
-                    size='md'
-                    centered
-                  >
-                    <Modal.Header closeButton>
-                      <Modal.Title id="contained-modal-title-vcenter">Enter Your Registered Email
-                      </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Form>
-                      <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <Form.Label>Email</Form.Label>
-                          <Form.Control
-                            type='text' value={passEmail} onChange={handleEmailPass} onInput={validatePassword}
-                          />
-                          <span id='email-pass-error' style={{ display: "none", color: 'red' }}>User not exist with this email</span>
-                        </Form.Group>
-                      </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button variant="danger" onClick={handleFindEmail}>
-                        Procced
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
+          size='md'
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">Enter Your Registered Email
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type='text' value={passEmail} onChange={handleEmailPass} onInput={validatePassword}
+                />
+                <span id='email-pass-error' style={{ display: "none", color: 'red' }}>User not exist with this email</span>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleFindEmail}>
+              Procced
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         <Modal show={passShow} onHide={handlePassClose} className='modalSize'
-                    size='md'
-                    centered
-                  >
-                    <Modal.Header closeButton>
-                      <Modal.Title id="contained-modal-title-vcenter">Change you password here
-                      </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Form>
-                      <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <Form.Label>Old Password</Form.Label>
-                          <Form.Control
-                            type='text' value={oldPassword} onChange={handleOldPassword} onInput={validateOldPassword}
-                          />
-                          <span id='old-password-error' style={{ display: "none", color: 'red' }}>Old password is not matched</span>
-                        </Form.Group>
-                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <Form.Label>New Password</Form.Label>
-                          <Form.Control
-                            type='text' value={newPassword} onChange={handleNewPassword} onInput={validateNewPassword}
-                          />
-                          <span id='new-password-error' style={{ display: "none", color: 'red' }}>Enter valid password</span>
-                        </Form.Group>
-                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <Form.Label>Confirm New Password</Form.Label>
-                          <Form.Control
-                            type='text' name='confirmPassword' value={confirmNewPassword} onChange={handleConfirmNewPassword} onInput={comparePassword}
-                          />
-                          <span id='con-password-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
-                        </Form.Group>
-                      </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button variant="danger" onClick={handleSavePassword}>
-                        Change password
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
-
+          size='md'
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">Change you password here
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <Form.Label>Old Password</Form.Label>
+                <Form.Control
+                  type='text' value={oldPassword} onChange={handleOldPassword} onInput={validateOldPassword}
+                />
+                <span id='old-password-error' style={{ display: "none", color: 'red' }}>Old password is not matched</span>
+              </Form.Group>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <Form.Label>New Password</Form.Label>
+                <Form.Control
+                  type='text' value={newPassword} onChange={handleNewPassword} onInput={validateNewPassword}
+                />
+                <span id='new-password-error' style={{ display: "none", color: 'red' }}>Enter valid password</span>
+              </Form.Group>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <Form.Label>Confirm New Password</Form.Label>
+                <Form.Control
+                  type='text' name='confirmPassword' value={confirmNewPassword} onChange={handleConfirmNewPassword} onInput={comparePassword}
+                />
+                <span id='con-password-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleSavePassword}>
+              Change password
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </section>
   )

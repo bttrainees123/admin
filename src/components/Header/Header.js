@@ -236,7 +236,6 @@ const Header = () => {
   return (
     <>
       <div className="top_header d-flex align-items-center justify-content-between">
-
         <h1 >Projects</h1>
         {/* <input type="text" id="myInput" onKeyUp={mySearch} placeholder="search" /> */}
         <div className="header_notification d-flex align-items-center gap-2">
@@ -253,7 +252,7 @@ const Header = () => {
                 here</Link></li>
             </ul>
           </div>
-          {success && toasterMessage()}
+          {/* {success && toasterMessage()} */}
           <div className="header_icon position-relative notification d-flex align-items-center justify-content-center">
             {/* <img src={notification} alt='' /> */}
             {/* <span className="notification_alert"></span> */}
