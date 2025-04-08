@@ -45,7 +45,7 @@ function App() {
           <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
           <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} />
           <Route path='/home' element={<PrivateRoute Component={Carousal} />} />
-          <Route path='/extract-text' element={<TextReader/>} />
+          <Route path='/extract-text' element={<PrivateRoute Component={TextReader}/>} />
           <Route path='/projects/:created_date' element={<PrivateRoute Component={CartItem} />} />
         </Routes>
       </BrowserRouter></>

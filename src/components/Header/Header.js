@@ -20,11 +20,11 @@ const Header = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [subject, setSubject] = useState([]);
-  const [addedUser, setaddedUser] = useState({})
+  // const [addedUser, setaddedUser] = useState({})
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const genderInputRef = useRef()
-  const [success, setSuccess] = useState(false)
+  // const [success, setSuccess] = useState(false)
  
   const validateField = (field, regex, errorId) => {
     const isValid = regex.test(field);
@@ -193,11 +193,11 @@ const Header = () => {
       };
       const user = JSON.parse(localStorage.getItem('data')) || [];
       user.push(userData);
-      setaddedUser(userData)
+      // setaddedUser(userData)
       localStorage.setItem('data', JSON.stringify(user));
       handleClear();
       handleFormClose()
-      setSuccess(true)
+      // setSuccess(true)
     }
   };
 

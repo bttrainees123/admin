@@ -94,7 +94,7 @@ const User = () => {
       }, 3000);
     }
 
-  }, [success, dispatch]);
+  }, [success, successPass, dispatch]);
 
 
   const handleDelete = (ind) => {
@@ -198,6 +198,7 @@ const User = () => {
       read.readAsDataURL(file)
     }
   };
+  
   const handleSaveImage = () => {
     const users = JSON.parse(localStorage.getItem('data')) || [];
     const user = users.filter((obj) =>
