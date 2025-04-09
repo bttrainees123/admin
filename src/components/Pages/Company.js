@@ -14,7 +14,7 @@ const Company = () => {
         <div className="row">
             <div className="col-lg-12">
                 {res.length ? (res.map((company, ind) => (
-                    <div key={ind} className="professional_info " style={{marginBottom: '10px'}}>
+                    <div key={ind} className="professional_info " style={{ marginBottom: '10px' }}>
                         <div className="project-card-top row ">
                             <div className="col-lg-12">
                                 <div
@@ -56,7 +56,7 @@ const Company = () => {
                                     <div>
                                         <p className="font-14 mb-0">Company Address: </p>
                                         <p className="font-14 color-para mb-0">{company.address}</p>
-                                         </div>
+                                    </div>
                                 </div>
                                 <div className="d-flex gap-3">
                                     <div>
@@ -77,7 +77,7 @@ const Company = () => {
                     </div>
                 ))) : loading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || error}</h5>}
             </div>
-            <CompanyForm/>
+            <CompanyForm />
         </div>
     )
 }
