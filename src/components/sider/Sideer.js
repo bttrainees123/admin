@@ -382,8 +382,6 @@ const Sideer = () => {
                     </Modal.Footer>
                   </Modal>
 
-
-
                   {checkEdit && (<Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
                       <Modal.Title>Modal heading</Modal.Title>

@@ -96,7 +96,6 @@ const User = () => {
 
   }, [success, successPass, dispatch]);
 
-
   const handleDelete = (ind) => {
     const updatedData = userData.filter((_, i) => i !== ind)
     setUserData(updatedData)
@@ -118,8 +117,6 @@ const User = () => {
     return isValid;
   };
 
-  
- 
   const validateRequiredFields = () => {
     let isValid = true;
     if (!editData.gender) {
@@ -198,21 +195,19 @@ const User = () => {
       read.readAsDataURL(file)
     }
   };
-  
+
   const handleSaveImage = () => {
     const users = JSON.parse(localStorage.getItem('data')) || [];
     const user = users.filter((obj) =>
       obj.email === editData.email)
     const filteredUser = users.find((u) => u.email === editData.email);
     console.log("filteredUser.file ", filteredUser.file);
-
     filteredUser.file = updateFile
     console.log("filteredUsers ", filteredUser);
     user.push(filteredUser)
     console.log("users ", user);
     localStorage.setItem('data', JSON.stringify(users));
   }
-
 
   const progress = function (sec) {
     let interval = 200;
@@ -239,8 +234,10 @@ const User = () => {
     ) {
       editData.index = editInd;
       dispatch(updateUser(editData));
-      handleSaveImage()
-      setProgressBars(0)
+      if (updateFile) {
+        handleSaveImage()
+        setProgressBars(0)
+      }
       setShow(false);
       setEditInd(null);
       setEditData({});
@@ -288,16 +285,12 @@ const User = () => {
     <>
       <div className="main_container">
         <div style={{ marginTop: '0px', zIndex: '1' }}>-{success && toasterMessage()}</div>
-
         <div className="limani_body">
           <Sideer />
           <div className="intersight_content">
-
             <div className="body_content">
               <Header />
-
               <div className="contact-profile" >
-
                 <div className="row">
                   {userData.length > 0 ? (userData.map((user, ind) => (
                     <div key={ind} id='for-search' className="col-lg-6 mb-3" >
@@ -321,7 +314,6 @@ const User = () => {
                               <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
                             </div>
                             <p className="mb-0 font-14 body-sub-heading ">Gender: <span> {user.gender}</span> </p>
-
                           </div>
                           <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
                             <p className="my-2 font-14 body-sub-heading ">Stream: <span> {user.stream}</span></p>
@@ -343,7 +335,6 @@ const User = () => {
                     </div>
                   )
                   )) : (<h1>No data found</h1>)}
-
                 </div >
                 <div className="row">
                   {data.length > 0 ? (data.map((user, ind) => (
@@ -376,8 +367,6 @@ const User = () => {
 
                           </div>
                         </div>
-
-
                       </div>
                     </div>
                   )
