@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCompany } from '../features/companySlice'
 import globe from "../image/globe.png"
-import CompanyForm from './CompanyForm'
+import CompanyForm from './Forms/CompanyForm'
 const Company = () => {
     const dispatch = useDispatch()
     const { loading, error, res } = useSelector((state) => state.company)
@@ -14,8 +14,8 @@ const Company = () => {
         <div className="row">
             <div className="col-lg-12">
                 {res.length ? (res.map((company, ind) => (
-                    <div key={ind} className="professional_info">
-                        <div className="project-card-top row">
+                    <div key={ind} className="professional_info " style={{marginBottom: '10px'}}>
+                        <div className="project-card-top row ">
                             <div className="col-lg-12">
                                 <div
                                     className="project-card-heading d-flex align-items-center justify-content-between">

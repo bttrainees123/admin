@@ -16,7 +16,7 @@ import axios from '../utils/middlewares';
 import Toast from 'react-bootstrap/Toast';
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import UserForm from './UserForm';
+import UserForm from './Forms/UserForm';
 
 
 const User = () => {

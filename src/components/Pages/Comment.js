@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { getComments } from '../features/commentSlice'
 import eye from "../image/eye.svg"
 import deletePic from "../image/delete1.svg"
-import CommentForm from './CommentForm'
+import CommentForm from './Forms/CommentForm'
 
 const Comment = () => {
     const dispatch = useDispatch()
