@@ -40,29 +40,17 @@ const CommentForm = () => {
             <form style={{ margin: '70px' }}>
               <div className="form-inline" >
                 <div className="form-group">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Username"
-                    className="mb-3"
-                  >
+                  <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
                     <input type="text" value={username || ""} className="form-control" name="name" onChange={(e) => setUsername(e.target.value)} placeholder="Enter username" />
                   </FloatingLabel>
                 </div>
                 <div className="form-group">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Comment"
-                    className="mb-3"
-                  >
+                  <FloatingLabel controlId="floatingInput" label="Comment" className="mb-3">
                     <textarea className="form-control" value={comment || ""} name="comment" onChange={(e) => setComment(e.target.value)} placeholder="Enter your comment here..." />
                   </FloatingLabel>
                 </div>
                 <div className="form-group">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Comment by"
-                    className="mb-3"
-                  >
+                  <FloatingLabel controlId="floatingInput" label="Comment by" className="mb-3">
                     <input type="text" value={commentBy || ""} className="form-control" name="commentBy" onChange={(e) => setCommentBy(e.target.value)} placeholder="Comment by" />
                   </FloatingLabel>
                 </div>
