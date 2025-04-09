@@ -33,7 +33,7 @@ const authUsername = (state) => state.auth.username
 export const selectCurrentUserUsername = createSelector(
     authUsername,
     (username) => username
-  );
+);
 export const authEmail = (state) => state.auth.email
 export const authFile = (state) => state.auth.file
 

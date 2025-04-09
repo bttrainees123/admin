@@ -13,26 +13,25 @@ import TextReader from './components/ImageTextReader/TextReader';
 import InputParser from './components/Pages/Editor/InputParser';
 import User from './components/Pages/User';
 import About from './components/LanguageChanger/About';
+import Post from './components/Pages/Post';
 
 
 export function toasterMessage() {
-    
+
   return (
     <>
-      <Toast  style={{ background: '#D0F0C0', marginTop: '0px', marginLeft: '700px', position: 'absolute', zIndex: '1' }} delay={3000} autohide>
-       
+      <Toast style={{ background: '#D0F0C0', marginTop: '0px', marginLeft: '700px', position: 'absolute', zIndex: '1' }} delay={3000} autohide>
+
         <Toast.Body>You have Successfully change your data.</Toast.Body>
       </Toast>
     </>
   );
-  
+
 }
 function App() {
 
   return (
     <>
-
-
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomePage />} />
@@ -44,8 +43,9 @@ function App() {
           <Route path='/products' element={<PrivateRoute Component={Product} />} />
           <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
           <Route path='/about' element={<PrivateRoute Component={About} />} />
+          <Route path='/post' element={<PrivateRoute Component={Post} />} />
           <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} />
-          <Route path='/extract-text' element={<PrivateRoute Component={TextReader}/>} />
+          <Route path='/extract-text' element={<PrivateRoute Component={TextReader} />} />
           <Route path='/projects/:created_date' element={<PrivateRoute Component={CartItem} />} />
         </Routes>
       </BrowserRouter></>

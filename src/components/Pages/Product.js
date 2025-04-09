@@ -43,7 +43,7 @@ const Product = () => {
                                             <div className='project-card-heading'>
                                                 <p>{product.description.slice(0, 40)}</p>
                                             </div>
-                                            <button key={product.id} className='cart-btn' onClick={(e) => addToCart(product)}>Add To Cart</button> 
+                                            <button key={product.id} className='cart-btn' onClick={(e) => addToCart(product)}>Add To Cart</button>
                                             <button key={product.id} className='cart-btn' onClick={(e) => removeCart(product)}>Remove from Cart</button>
                                         </div>
                                     )

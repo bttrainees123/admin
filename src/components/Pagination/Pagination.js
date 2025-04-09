@@ -13,7 +13,7 @@ const Pagination = (props) => {
 
     return (
         <div>
-            <button style={{cursor: 'pointer'}} disabled={(pageNumber === 1)?true: false} onClick={previousPage }>Prev</button>
+            <button style={{ cursor: 'pointer' }} disabled={(pageNumber === 1) ? true : false} onClick={previousPage}>Prev</button>
             <input
                 value={pageNumber}
                 onChange={(e) => {
@@ -21,7 +21,7 @@ const Pagination = (props) => {
                 }}
                 type="number"
             />
-            <button style={{cursor: 'pointer'}}  disabled={(pageNumber === pageCount)?true: false} onClick={nextPage}>Next</button>
+            <button style={{ cursor: 'pointer' }} disabled={(pageNumber === pageCount) ? true : false} onClick={nextPage}>Next</button>
         </div>
     );
 };

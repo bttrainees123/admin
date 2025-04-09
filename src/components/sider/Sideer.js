@@ -49,16 +49,17 @@ const Sideer = () => {
       const read = new FileReader()
       read.onloadend = () => {
         setUpdateFile(read.result)
+        console.log("UpdateFile ", updateFile);
+
       }
       const formData = new FormData()
       console.log('file', file)
       formData.append('file', file)
-      axios.post('http://localhost:3000/user-update/upload/profilePic', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: (val) => {
-          progress(0)
-        }
-      })
+      // axios.post('http://localhost:3000', formData, {
+      // onUploadProgress: (val) => {
+      progress(0)
+      // }
+      // })
       read.readAsDataURL(file)
     }
   };
@@ -195,6 +196,11 @@ const Sideer = () => {
       setEditData({});
 
     }
+  }
+
+  const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
   }
 
   const handleSaveImage = () => {

@@ -8,10 +8,11 @@ import productSlice from "./components/features/productSlice";
 import commentSlice from "./components/features/commentSlice";
 import companySlice from "./components/features/companySlice";
 import cartSlice from "./components/features/cartSlice";
+import postSlice from "./components/features/postSlice";
 import successSlice from "./components/features/successSlice";
 
 const store = configureStore({
-    reducer:{
+    reducer: {
         counter: counterSlice,
         users: userSlice,
         auth: authSlice,
@@ -21,6 +22,7 @@ const store = configureStore({
         company: companySlice,
         cart: cartSlice,
         success: successSlice,
+        post: postSlice
     }
 })
 

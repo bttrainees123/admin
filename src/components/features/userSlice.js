@@ -56,7 +56,6 @@ export const userSlice = createSlice({
       filteredUser.subject = action.payload.subject;
       user.push(filteredUser)
       localStorage.setItem('data', JSON.stringify(users));
-      // dispatch(isAuthenticated(editData))
     },
     updateImageInUser: (state, action) => {
       const users = JSON.parse(localStorage.getItem("data")) || [];
@@ -86,7 +85,7 @@ export default userSlice.reducer;
 
 //  12: 50 --- implementing progressbar for all input type file
 
-// 1: 24 --> add Floating input 
+// 1: 24 --> add Floating input
 
 // 6:00 ---> forgot password
 

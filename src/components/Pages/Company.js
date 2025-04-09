@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCompany } from '../features/companySlice'
 import globe from "../image/globe.png"
+import CompanyForm from './CompanyForm'
 const Company = () => {
     const dispatch = useDispatch()
     const { loading, error, res } = useSelector((state) => state.company)
@@ -76,6 +77,7 @@ const Company = () => {
                     </div>
                 ))) : loading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || error}</h5>}
             </div>
+            <CompanyForm/>
         </div>
     )
 }

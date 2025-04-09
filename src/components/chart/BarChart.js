@@ -6,7 +6,7 @@ import { dataset, valueFormatter } from './dataset';
 const chartSetting = {
   yAxis: [
     {
-    //   label: 'rainfall (mm)',
+      //   label: 'rainfall (mm)',
     },
   ],
   width: 500,
@@ -28,7 +28,7 @@ export default function BarsDataset() {
         { dataKey: 'pune', label: 'Pune', valueFormatter },
         { dataKey: 'gurugram', label: 'Gurugram', valueFormatter },
       ]}
-    //   loading={true}
+      //   loading={true}
       {...chartSetting}
     />
   );

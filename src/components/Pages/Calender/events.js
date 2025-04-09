@@ -1,6 +1,6 @@
 const now = new Date();
 
-export const events =  [
+export const events = [
   {
     id: 0,
     title: "All Day Event very long title",

@@ -11,11 +11,11 @@ const successSlice = createSlice({
   reducers: {
     setSuccess: (state, action) => {
       state.successMe = action.payload;
-      localStorage.setItem("success", JSON.stringify(action.payload)); 
+      localStorage.setItem("success", JSON.stringify(action.payload));
     },
     setPassChange: (state, action) => {
       state.successPass = action.payload;
-      localStorage.setItem("passChange", JSON.stringify(action.payload)); 
+      localStorage.setItem("passChange", JSON.stringify(action.payload));
     },
   },
 });

@@ -44,7 +44,6 @@ const HomePage = () => {
     newFormValues[index].images.push(...files)
     setFormValues(newFormValues)
     uploadFiles(files)
-
   }
 
   const uploadFiles = (files) => {
@@ -52,13 +51,12 @@ const HomePage = () => {
       const formData = new FormData()
       console.log('file', file)
       formData.append('file', file)
-      axios.post('http://localhost:3000/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: (val) => {
-        
-          progress(0)
-        },
-      }).catch((err) => console.log('Upload Error:', err))
+      // axios.post('http://localhost:3000/upload', formData, {
+      // headers: { 'Content-Type': 'multipart/form-data' },
+      // onUploadProgress: (val) => {
+      progress(0)
+      // },
+      // }).catch((err) => console.log('Upload Error:', err))
     })
   }
 
@@ -85,7 +83,7 @@ const HomePage = () => {
     setFormValues(newFormValues)
   }
 
- 
+
   const removeFormFields = (i) => {
     let newFormValues = [...formValues]
     newFormValues.splice(i, 1)
@@ -124,75 +122,75 @@ const HomePage = () => {
   }
   return (
     <>
-    <div style={{ marginTop: '0px' }}>
-      <div style={{ marginTop: '0px' }}>-{success && toasterMessage()}</div>
-      
-      <form style={{ margin: '70px' }} onSubmit={handleSubmit}>
-        {formValues.map((element, index) => (
-          <div className="form-inline" key={index}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => handleDrop(index, e)}>
-            <div className='row'>
-              <div className="form-group col">
-                <label>UserName: </label><br />
-                <input type="text" className="form-control" name="name" value={element.name || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter username" />
-                <br />
+      <div style={{ marginTop: '0px' }}>
+        <div style={{ marginTop: '0px' }}>-{success && toasterMessage()}</div>
+
+        <form style={{ margin: '70px' }} onSubmit={handleSubmit}>
+          {formValues.map((element, index) => (
+            <div className="form-inline" key={index}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => handleDrop(index, e)}>
+              <div className='row'>
+                <div className="form-group col">
+                  <label>UserName: </label><br />
+                  <input type="text" className="form-control" name="name" value={element.name || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter username" />
+                  <br />
+                </div>
+                <div className="form-group col">
+                  <label>Email: </label><br />
+                  <input type="text" className="form-control" name="email" value={element.email || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter email" />
+                  <br />
+                </div>
               </div>
-              <div className="form-group col">
-                <label>Email: </label><br />
-                <input type="text" className="form-control" name="email" value={element.email || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter email" />
-                <br />
+              <div className='row'>
+                <div className="form-group col">
+                  <label>Password: </label><br />
+                  <input type="text" className="form-control" name="password" value={element.password || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter password" />
+                  <br />
+                </div>
+                <div className="form-group col">
+                  <label>Age: </label><br />
+                  <input type="text" className="form-control" name="age" value={element.age || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter age" />
+                  <br />
+                </div>
               </div>
+              <div className="form-group" style={{ marginLeft: '400px', marginRight: '400px', borderRadius: '5px', border: '1px solid rgb(180, 180, 180)' }}>
+                <label style={{ marginLeft: '130px' }}>Upload and Drop Images </label><br />
+                <input type="file" ref={fileInputRef} accept="image/*" className="form-control" id="fileInput" multiple onChange={(e) => handleFile(index, e)} onClick={(e) => {
+                  e.currentTarget.value = null
+                }} />
+                <br />
+                <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
+                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                  {element.images.map((img, i) => (
+                    <div>
+                      <img key={i} src={URL.createObjectURL(img)} alt="preview" style={{ width: '80px', height: '80px', margin: '5px' }} /><span onClick={(e) => handleImageClose(e, i, index)} id='my-icon' className="close AClass" style={{ cursor: 'pointer', fontSize: '25px', marginBottom: '25px' }}>&times;</span>
+                      <p style={{ width: '80px', height: '80px', marginLeft: '5px' }}>{img.name.slice(0, 10)}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {index ? (
+                <button type="button" className="btn btn-danger" onClick={() => removeFormFields(index)}>Remove</button>
+              ) : null}
             </div>
-            <div className='row'>
-              <div className="form-group col">
-                <label>Password: </label><br />
-                <input type="text" className="form-control" name="password" value={element.password || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter password" />
-                <br />
-              </div>
-              <div className="form-group col">
-                <label>Age: </label><br />
-                <input type="text" className="form-control" name="age" value={element.age || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter age" />
-                <br />
-              </div>
-            </div>
-            <div className="form-group" style={{ marginLeft: '400px', marginRight: '400px', borderRadius: '5px', border: '1px solid rgb(180, 180, 180)' }}>
-              <label style={{ marginLeft: '130px' }}>Upload and Drop Images </label><br />
-              <input type="file" ref={fileInputRef} accept="image/*" className="form-control" id="fileInput" multiple onChange={(e) => handleFile(index, e)} onClick={(e) => {
-                e.currentTarget.value = null
-              }} />
-              <br />
-              <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                {element.images.map((img, i) => (
-                  <div>
-                    <img key={i} src={URL.createObjectURL(img)} alt="preview" style={{ width: '80px', height: '80px', margin: '5px' }} /><span onClick={(e) => handleImageClose(e, i, index)} id='my-icon' className="close AClass" style={{ cursor: 'pointer', fontSize: '25px', marginBottom: '25px' }}>&times;</span>
-                    <p style={{ width: '80px', height: '80px', marginLeft: '5px' }}>{img.name.slice(0, 10)}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {index ? (
-              <button type="button" className="btn btn-danger" onClick={() => removeFormFields(index)}>Remove</button>
-            ) : null}
+          ))}
+          <div className="button-section">
+            <button className="btn btn-primary" style={{ marginLeft: '560px', marginTop: '12px' }} type="submit">Submit</button>
           </div>
-        ))}
-        <div className="button-section">
-          <button className="btn btn-primary" style={{ marginLeft: '560px', marginTop: '12px' }} type="submit">Submit</button>
-        </div>
-        <>
-          <section className="drag-drop" >
-            <div
-              className={`document-uploader ${true ? "upload-box active" : "upload-box"
-                }`}
-              onDrop={handleDrop}
-              onDragOver={(event) => event.preventDefault()}
-            >
-            </div>
-          </section>
-        </>
-      </form>
-    </div>
+          <>
+            <section className="drag-drop" >
+              <div
+                className={`document-uploader ${true ? "upload-box active" : "upload-box"
+                  }`}
+                onDrop={handleDrop}
+                onDragOver={(event) => event.preventDefault()}
+              >
+              </div>
+            </section>
+          </>
+        </form>
+      </div>
     </>
   )
 }
@@ -241,4 +239,5 @@ export default HomePage
 // 11: 17 ---> correcting in remember me checkbox logic
 // 1: 00 ---> bar graph custamizations
 
-// 1:30 - 5:30 ---> User registration Modal 
+// 1:30 - 5:30 ---> User registration Modal
+// 5:30 - 7:00 ---> error solving

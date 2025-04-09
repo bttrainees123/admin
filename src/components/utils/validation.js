@@ -23,22 +23,21 @@ const validateField = (field, regex, errorId) => {
 };
 
 export const genderOptions = ["Male", "Female", "Other"]
-  
+
 export const checkOption = [
-  { name: 'Physics ', key: 'physics', label: 'Physics ' },
-  { name: 'Chemistry ', key: 'chemistry', label: 'Chemistry ' },
-  { name: 'Math ', key: 'math', label: 'Math ' },
-  { name: 'Biology ', key: 'bio', label: 'Biology ' },
+    { name: 'Physics ', key: 'physics', label: 'Physics ' },
+    { name: 'Chemistry ', key: 'chemistry', label: 'Chemistry ' },
+    { name: 'Math ', key: 'math', label: 'Math ' },
+    { name: 'Biology ', key: 'bio', label: 'Biology ' },
 ];
 
 
-  
+
 export const validateLocalEmail = (email) => {
     const duplicateEmailCheck = document.getElementById('duplicate-error');
     const user = JSON.parse(localStorage.getItem('data')) || [];
     const emailExist = user.some((obj) => obj.email === email);
     duplicateEmailCheck.style.display = emailExist ? 'block' : 'none';
     return emailExist;
-  };
+};
 
-  

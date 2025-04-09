@@ -27,12 +27,12 @@ const commentSlice = createSlice({
         builder.addCase(getComments.fulfilled, (state, action) => {
             state.isLoading = false
             state.data = action.payload
-            console.log("fulfilled ",action.payload);
+            console.log("fulfilled ", action.payload);
         })
         builder.addCase(getComments.rejected, (state, action) => {
             state.isLoading = false
             state.isError = action.error.message;
-            console.log("rejected ",action.payload); 
+            console.log("rejected ", action.payload);
         })
     }
 })

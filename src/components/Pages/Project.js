@@ -22,9 +22,9 @@ const Project = () => {
 
   const [apiData, setApiData] = useState([])
   const success = useSelector((state) => state.success.successMe);
- 
- 
- 
+
+
+
   useEffect(() => {
     const storedSuccess = localStorage.getItem('success');
     if (storedSuccess === 'true') {
@@ -39,13 +39,13 @@ const Project = () => {
     }
 
   }, [success, dispatch]);
- 
+
 
   useEffect(() => {
     dispatch(getUsers())
   }, [dispatch])
 
-  
+
 
   function calculateTotalTime(now, then) {
     if (then === null) {
@@ -54,7 +54,7 @@ const Project = () => {
     let start = new Date(now.replace(" ", "T"))
     let end = new Date(then.replace(" ", "T"))
     const timeDifferenceMS = end.getTime() - start.getTime();
-      let seconds = parseInt((timeDifferenceMS / 1000) % 60)
+    let seconds = parseInt((timeDifferenceMS / 1000) % 60)
       , minutes = parseInt((timeDifferenceMS / (1000 * 60)) % 60)
       , hours = parseInt((timeDifferenceMS / (1000 * 60 * 60)) % 24);
     hours = (hours < 10) ? "0" + hours : hours;
@@ -72,13 +72,13 @@ const Project = () => {
     e.dayEl.onmouseover = 'pointer'
   };
 
- 
- 
+
+
 
   function toasterMessage() {
 
     return (
-    
+
       <>
         <Toast style={{ background: '#D0F0C0', marginBottom: '5px', marginLeft: '600px', position: 'absolute' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
 
@@ -88,8 +88,8 @@ const Project = () => {
     );
   }
 
- 
-  
+
+
   return (
     <>
       <div className="main_container" style={{ position: 'relative' }}>
@@ -135,7 +135,6 @@ const Project = () => {
                             <div className="body_heading2 mb-0 ">
                               <div className='d-flex'>
                                 <h2 className="font-18 mb-0"><span className="me-2"><img src={user.assignees[0].image_url} style={{ maxWidth: "30px", }} alt="" /></span>{user.assignees.name}</h2>
-
                               </div>
                               <p className="mb-0 body-sub-heading font-12">Created :- <span>{user.assignees[0].name}</span></p>
                             </div>
@@ -156,12 +155,12 @@ const Project = () => {
 
                 </div >
 
-                
-
-                <div style={{ marginLeft: '300px', marginTop: '50px'}}>
 
 
-                
+                <div style={{ marginLeft: '300px', marginTop: '50px' }}>
+
+
+
 
                   {BarsDataset()}
                 </div>

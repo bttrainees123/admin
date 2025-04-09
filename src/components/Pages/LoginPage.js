@@ -54,7 +54,7 @@ const LoginPage = () => {
       setIsChecked(storedIsChecked);
     }
     if (!isChecked) {
-      
+
       setEmail('')
       setPassword('')
       setIsChecked(false)
@@ -62,9 +62,10 @@ const LoginPage = () => {
   }, [isChecked]);
 
 
-  const validateField = (field, regex, errorId) => { 
-    const isValid = regex.test(field); 
-    document.getElementById(errorId).style.display = isValid ? 'none' : 'block'; return isValid; };
+  const validateField = (field, regex, errorId) => {
+    const isValid = regex.test(field);
+    document.getElementById(errorId).style.display = isValid ? 'none' : 'block'; return isValid;
+  };
 
   const validateEmail = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-err');
   const validateEmailLog = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-error');
@@ -148,7 +149,7 @@ const LoginPage = () => {
     document.getElementById('reg-con-password-error').style.display = isValid ? 'none' : 'block';
     return isValid;
   };
- 
+
 
   const handleNewUser = (e) => {
     e.preventDefault()
@@ -164,7 +165,7 @@ const LoginPage = () => {
       handleClear()
       handleRegClose()
     }
-    
+
   }
   const handleClear = () => {
     setEmail('')
@@ -228,7 +229,7 @@ const LoginPage = () => {
             localStorage.removeItem('isChecked')
           }
           dispatch(isAuthenticated(isUser))
-            navigate('/dashboard');
+          navigate('/dashboard');
         }
       });
 

@@ -27,3 +27,10 @@ export const fetchCompanyData = async () => {
     const response = await axios(COMPANY_API)
     return response;
 }
+
+const POST_API = 'https://jsonplaceholder.typicode.com/posts'
+
+export const fetchPostData = async() => {
+    const response  = await axios(POST_API)
+    return response;
+}

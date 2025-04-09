@@ -16,6 +16,7 @@ import axios from '../utils/middlewares';
 import Toast from 'react-bootstrap/Toast';
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import UserForm from './UserForm';
 
 
 const User = () => {
@@ -185,12 +186,11 @@ const User = () => {
       const formData = new FormData()
       console.log('file', file)
       formData.append('file', file)
-      axios.post('http://localhost:3000/update-profile/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: (val) => {
-          progress(0)
-        }
-      })
+      // axios.post('http://localhost:3000/', formData, {
+      // onUploadProgress: () => {
+      progress(0)
+      // }
+      // })
       read.readAsDataURL(file)
     }
   };
@@ -209,7 +209,7 @@ const User = () => {
   }
 
   const progress = function (sec) {
-    let interval = 200;
+    let interval = 150;
     setTimeout(function () {
       console.log("sec ", sec);
       if (sec < 90) {
@@ -370,7 +370,7 @@ const User = () => {
                     </div>
                   )
                   )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
-
+                  <UserForm/>
                 </div>
 
 
@@ -548,3 +548,5 @@ const User = () => {
 }
 
 export default User
+
+// solve isssues in loggidin user data edit, image upload null error, validation , error checks (span)

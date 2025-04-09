@@ -22,8 +22,8 @@ const ProjectDetails = () => {
         <>
             <div className="main_container">
                 <div className="limani_body">
-                   
-                    <Sideer/>
+
+                    <Sideer />
                     <div className="intersight_content">
                         <div className="body_content">
                             <div className="top_header d-flex align-items-center justify-content-between">
@@ -83,16 +83,16 @@ const ProjectDetails = () => {
                                 </div>
                             </div>
                             <div className="contact-profile">
-                                <Company/>
+                                <Company />
                                 <div className="row">
                                     <div className="d-flex align-items-center justify-content-between mb-30 mt-30">
                                         <h2 className="body_heading width-left-border mb-0">Comments List</h2>
                                         <div className="heading_width_search d-flex align-items-center gap-3">
                                             <Link className="btn blue-btn small_btn" data-bs-toggle="offcanvas" to="/offcanvasMilestone" role="button" aria-controls="offcanvasMilestone">View Milestones</Link>
                                         </div>
-                                    </div>         
-                                 <Comment/>
-                                  
+                                    </div>
+                                    <Comment />
+
                                 </div>
 
                             </div>

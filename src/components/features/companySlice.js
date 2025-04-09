@@ -16,7 +16,11 @@ const initialState = {
 const companySlice = createSlice({
     name: "company",
     initialState,
-    reducers: {},
+    reducers: {
+        addCompany: (state, action) => {
+            state.res.push(action.payload)
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(getCompany.pending, (state, action) => {
             state.loading = true;
@@ -24,14 +28,16 @@ const companySlice = createSlice({
         builder.addCase(getCompany.fulfilled, (state, action) => {
             state.loading = false;
             state.res = action.payload
-            console.log("fulfilled ",action.payload);
+            console.log("fulfilled ", action.payload);
         })
         builder.addCase(getCompany.rejected, (state, action) => {
             state.loading = false
             state.error = action.error.message
-            console.log("rejected ",action.payload); 
+            console.log("rejected ", action.payload);
         })
     }
 })
+
+export const { addCompany } = companySlice.actions;
 
 export default companySlice.reducer

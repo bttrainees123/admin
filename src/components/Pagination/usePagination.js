@@ -9,7 +9,7 @@ function usePagination(items, pageLimit) {
     };
 
     const pageData = () => {
-        const s = (pageNumber-1) * pageLimit;
+        const s = (pageNumber - 1) * pageLimit;
         const e = s + pageLimit;
         return items.slice(s, e);
     };
