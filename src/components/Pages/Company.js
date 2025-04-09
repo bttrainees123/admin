@@ -56,7 +56,7 @@ const Company = () => {
                                     <div>
                                         <p className="font-14 mb-0">Company Address: </p>
                                         <p className="font-14 color-para mb-0">{company.address}</p>
-                                    </div>
+                                         </div>
                                 </div>
                                 <div className="d-flex gap-3">
                                     <div>
