@@ -93,7 +93,6 @@ const User = () => {
         dispatch(setPassChange(false));
       }, 3000);
     }
-
   }, [success, successPass, dispatch]);
 
   const handleDelete = (ind) => {

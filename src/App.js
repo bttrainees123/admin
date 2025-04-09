@@ -12,7 +12,7 @@ import Toast from 'react-bootstrap/Toast';
 import TextReader from './components/ImageTextReader/TextReader';
 import InputParser from './components/Pages/Editor/InputParser';
 import User from './components/Pages/User';
-import Carousal from './components/Pages/Home';
+import About from './components/LanguageChanger/About';
 
 
 export function toasterMessage() {
@@ -43,8 +43,8 @@ function App() {
           <Route path='/add-tasks' element={<PrivateRoute Component={AddTasks} />} />
           <Route path='/products' element={<PrivateRoute Component={Product} />} />
           <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
+          <Route path='/about' element={<PrivateRoute Component={About} />} />
           <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} />
-          <Route path='/home' element={<PrivateRoute Component={Carousal} />} />
           <Route path='/extract-text' element={<PrivateRoute Component={TextReader}/>} />
           <Route path='/projects/:created_date' element={<PrivateRoute Component={CartItem} />} />
         </Routes>
