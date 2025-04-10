@@ -10,7 +10,6 @@ import { useDispatch } from 'react-redux';
 import { checkOption, genderOptions, validateAge, validateEmail, validateLocalEmail, validateUserName } from '../utils/validation';
 import { updateLoggedInUser } from '../features/userSlice';
 import { isAuthenticated } from '../features/authSlice';
-import axios from '../utils/middlewares'
 const Sideer = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -198,10 +197,7 @@ const Sideer = () => {
     }
   }
 
-  const openInNewTab = (url) => {
-    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-    if (newWindow) newWindow.opener = null
-  }
+
 
   const handleSaveImage = () => {
     const users = JSON.parse(localStorage.getItem('data')) || [];

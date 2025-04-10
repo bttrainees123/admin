@@ -1,4 +1,3 @@
-import axios from '../utils/middlewares'
 import React, { useEffect, useRef, useState } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import { useDispatch, useSelector } from 'react-redux'

@@ -32,5 +32,6 @@ const POST_API = 'https://jsonplaceholder.typicode.com/posts'
 
 export const fetchPostData = async() => {
     const response  = await axios(POST_API)
+    console.log("fetchPostData", response.data);
     return response;
 }

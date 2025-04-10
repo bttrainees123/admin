@@ -61,48 +61,48 @@ const UserForm = () => {
                         <form style={{ margin: '70px' }}>
                             <div className="form-inline" >
                                 <div className="form-group">
-                                    <FloatingLabel controlId="floatingInput" label="UserName" className="mb-3" >
-                                        <input type="text" value={username || ""} className="form-control" name="username" onChange={(e) => setUsername(e.target.value)} />
+                                    <FloatingLabel controlId="floatingInput" label="Username" className="mb-3" >
+                                        <input type="text" value={username || ""} className="form-control" name="username" onChange={(e) => setUsername(e.target.value)} placeholder="Enter username"/>
                                     </FloatingLabel>
                                 </div>
                                 <div className="form-group">
                                     <FloatingLabel controlId="floatingInput" label="Name" className="mb-3" >
-                                        <input className="form-control" value={name || ""} name="name" onChange={(e) => setName(e.target.value)} />
+                                        <input className="form-control" value={name || ""} name="name" onChange={(e) => setName(e.target.value)} placeholder="name"/>
                                     </FloatingLabel>
                                 </div>
                                 <div className="form-group">
                                     <FloatingLabel controlId="floatingInput" label="Email" className="mb-3" >
-                                        <input className="form-control" value={email || ""} name="email" onChange={(e) => setEmail(e.target.value)} />
+                                        <input className="form-control" value={email || ""} name="email" onChange={(e) => setEmail(e.target.value)} placeholder=""/>
                                     </FloatingLabel>
                                 </div>
                                 <div className="form-group">
                                     <FloatingLabel controlId="floatingInput" label="Suite" className="mb-3" >
-                                        <input type="text" value={suite || ""} className="form-control" name="suite" onChange={(e) => setSuite(e.target.value)} />
+                                        <input type="text" value={suite || ""} className="form-control" name="suite" onChange={(e) => setSuite(e.target.value)} placeholder=""/>
                                     </FloatingLabel>
                                 </div>
                                 <div className="form-group">
                                     <FloatingLabel controlId="floatingInput" label="City" className="mb-3" >
-                                        <input type="text" value={city || ""} className="form-control" name="city" onChange={(e) => setCity(e.target.value)} />
+                                        <input type="text" value={city || ""} className="form-control" name="city" onChange={(e) => setCity(e.target.value)} placeholder=""/>
                                     </FloatingLabel>
                                 </div>
                                 <div className="form-group">
                                     <FloatingLabel controlId="floatingInput" label="Street" className="mb-3">
-                                        <input type="text" value={street || ""} className="form-control" name="street" onChange={(e) => setStreet(e.target.value)} />
+                                        <input type="text" value={street || ""} className="form-control" name="street" onChange={(e) => setStreet(e.target.value)} placeholder=""/>
                                     </FloatingLabel>
                                 </div>
                                 <div className="form-group">
                                     <FloatingLabel controlId="floatingInput" label="ZipCode" className="mb-3" >
-                                        <input type="text" value={zipcode || ""} className="form-control" name="street" onChange={(e) => setZipcode(e.target.value)} />
+                                        <input type="text" value={zipcode || ""} className="form-control" name="street" onChange={(e) => setZipcode(e.target.value)} placeholder=""/>
                                     </FloatingLabel>
                                 </div>
                                 <div className="form-group">
                                     <FloatingLabel controlId="floatingInput" label="Lng." className="mb-3" >
-                                        <input type="text" value={lng || ""} className="form-control" name="lng" onChange={(e) => setLng(e.target.value)} />
+                                        <input type="text" value={lng || ""} className="form-control" name="lng" onChange={(e) => setLng(e.target.value)} placeholder=""/>
                                     </FloatingLabel>
                                 </div>
                                 <div className="form-group">
                                     <FloatingLabel controlId="floatingInput" label="Lat." className="mb-3" >
-                                        <input type="text" value={lat || ""} className="form-control" name="lat" onChange={(e) => setLat(e.target.value)} />
+                                        <input type="text" value={lat || ""} className="form-control" name="lat" onChange={(e) => setLat(e.target.value)} placeholder=""/>
                                     </FloatingLabel>
                                 </div>
                             </div>

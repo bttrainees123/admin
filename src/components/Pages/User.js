@@ -12,11 +12,11 @@ import { getUsers }
 import Sideer from '../sider/Sideer'
 import Header from '../Header/Header'
 import 'react-calendar/dist/Calendar.css';
-import axios from '../utils/middlewares';
 import Toast from 'react-bootstrap/Toast';
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import UserForm from './Forms/UserForm';
+import { Accordion } from 'react-bootstrap';
 
 
 const User = () => {
@@ -335,11 +335,15 @@ const User = () => {
                   )
                   )) : (<h1>No data found</h1>)}
                 </div >
-                <div className="row">
+                <div>
+                <Accordion defaultActiveKey="0" className="row">
                   {data.length > 0 ? (data.map((user, ind) => (
-                    <div key={ind} id='for-search' className="col-lg-6 mb-3" >
+
+                    <Accordion.Item eventKey={ind} key={ind} id='for-search' className="col-lg-6 mb-3" >
+                      
                       <div className="professional_info">
                         <div className="project-card-top">
+                        <Accordion.Header>
                           <div className="project-card-heading d-flex align-items-center justify-content-between">
                             <div className="body_heading2 mb-0 ">
                               <div className='d-flex'>
@@ -351,26 +355,28 @@ const User = () => {
                             <p className="mb-0 font-14 body-sub-heading ">Name: <span> {user.name}</span> </p>
 
                           </div>
+                          </Accordion.Header>
+                          <Accordion.Body>
                           <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
                             <p className="my-2 font-14 body-sub-heading ">Suite: <span className="me-2">{user.address.suite}
                             </span></p>
                             <p className="my-2 font-14 body-sub-heading ">City: <span> {user.address.city}</span></p>
                             <p className="my-2 font-14 body-sub-heading ">Street: <span>{user.address.street}</span>  </p>
                           </div>
-
-
                           <div className="project-card-heading d-flex align-items-center justify-content-between">
                             <p className="my-2 font-14 body-sub-heading ">ZipCode: <span className="me-2"> {user.address.zipcode}</span></p>
                             <p className="my-2 font-14 body-sub-heading ">Lat. <span>{user.address.geo.lat}</span> </p>
                             <p className="my-2 font-14 body-sub-heading ">Lng. <span>{user.address.geo.lng}</span> </p>
 
                           </div>
+                          </Accordion.Body>
                         </div>
                       </div>
-                    </div>
+                    </Accordion.Item>
                   )
                   )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
-                  <UserForm/>
+                  </Accordion>
+                  <UserForm />
                 </div>
 
 
