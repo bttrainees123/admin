@@ -31,7 +31,15 @@ const User = () => {
   const { data, isLoading, isError } = useSelector((state) => state.api)
   const fileUpdateRef = useRef(null);
   const [progressBars, setProgressBars] = useState(0)
+  const [loggedInUser, setLoggedInUser] = useState('')
   const [updateFile, setUpdateFile] = useState(null)
+  const [checkView, setCheckView] = useState(false)
+  const [checkEditor, setCheckEditor] = useState(false)
+  const [checkAdd, setCheckAdd] = useState(false)
+  const [checkDelete, setCheckDelete] = useState(false)
+  const [viewEdit, setViewEdit] = useState(false)
+  const [viewAdd, setViewAdd] = useState(false)
+
   const success = useSelector((state) => state.success.successMe);
   const successPass = useSelector((state) => state.success.successPass);
 
@@ -51,8 +59,10 @@ const User = () => {
     const fetchData = () => {
       const storedData = JSON.parse(localStorage.getItem("data")) || [];
       const user = JSON.parse(localStorage.getItem("user"));
+      
 
       if (user) {
+        setLoggedInUser(user)
         const filteredUsers = storedData.filter((u) => u.email !== user.email);
         setUserData(filteredUsers);
       } else {
@@ -117,6 +127,34 @@ const User = () => {
     return isValid;
   };
 
+  const handleRoles = (role) => {
+    let len = role.length
+ 
+    for(let i = 0; i < len; i++){
+      if(role[i] === 'View '){
+        setCheckView(true)
+      }
+      if(role[i] === 'Edit '){
+        setCheckEditor(true)
+      }
+      if(role[i] === 'Delete '){
+        setCheckDelete(true)
+      }
+      if(role[i] === 'Add '){
+        setCheckAdd(true)
+      }
+    }
+  }
+
+  const checkedRoleValue = () => {
+    if(checkView && checkEditor){
+      setViewEdit(true)
+    }
+    if(checkAdd && checkView){
+      setViewAdd(true)
+    }
+  }
+
   const validateRequiredFields = () => {
     let isValid = true;
     if (!editData.gender) {
@@ -134,6 +172,7 @@ const User = () => {
     return isValid;
   };
 
+  
   const handleStatusChange = (ind, val) => {
     const updatedData = [...userData];
     updatedData[ind].status = val;
@@ -186,11 +225,7 @@ const User = () => {
       const formData = new FormData()
       console.log('file', file)
       formData.append('file', file)
-      // axios.post('http://localhost:3000/', formData, {
-      // onUploadProgress: () => {
       progress(0)
-      // }
-      // })
       read.readAsDataURL(file)
     }
   };
@@ -299,16 +334,18 @@ const User = () => {
                             <div className="body_heading2 mb-0 ">
                               <div className='d-flex'>
                                 <h2 className="font-18 mb-0"><span className="me-2"><img src={user.file} style={{ maxWidth: "30px", }} alt="" /></span>{user.username}</h2>
-                                <span className=''>
-                                  <button className="dropdown-toggle border-0 w-0 d-flex align-items-center" type="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                  </button>
-                                  <ul className="dropdown-menu w-100">
-                                    <li>
-                                      <span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleEdit(ind)}>Update</span></li>
-                                    <li><span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleShowDelete(ind)}>Delete</span></li>
-                                  </ul>
-                                </span>
+                                {loggedInUser.role === 'Editor' &&
+                                  (<span className=''>
+                                    <button className="dropdown-toggle border-0 w-0 d-flex align-items-center" type="button"
+                                      data-bs-toggle="dropdown" aria-expanded="false">
+                                    </button>
+                                    <ul className="dropdown-menu w-100">
+                                      <li>
+                                        <span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleEdit(ind)}>Update</span></li>
+                                      <li><span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleShowDelete(ind)}>Delete</span></li>
+                                    </ul>
+                                  </span>)
+                                }
                               </div>
                               <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
                             </div>
@@ -320,14 +357,15 @@ const User = () => {
                           </div>
 
                           <div className="project-card-heading d-flex align-items-center justify-content-between">
-                            <p className="my-2 font-14 body-sub-heading ">Subjects: <span> {user.subject.join(", ")}</span></p>
-                            <p className="my-2 font-14 body-sub-heading ">Status <span><select
+                            <p className="my-2 font-14 body-sub-heading ">Subjects: <span> {user.subject}</span></p>
+                            {loggedInUser.role === 'Editor' ? (<p className="my-2 font-14 body-sub-heading ">Status <span><select
                               value={user.status || "Active"}
                               onChange={(e) => handleStatusChange(ind, e.target.value)}
                             >
                               <option value="Active">Active</option>
                               <option value="Inactive">Inactive</option>
-                            </select> </span> </p>
+                            </select> </span> </p>): (<p className="my-2 font-14 body-sub-heading ">Status: {user.status}</p>)}
+                            
                           </div>
                         </div>
                       </div>
@@ -336,47 +374,46 @@ const User = () => {
                   )) : (<h1>No data found</h1>)}
                 </div >
                 <div>
-                <Accordion defaultActiveKey="0" className="row">
-                  {data.length > 0 ? (data.map((user, ind) => (
+                  <Accordion defaultActiveKey="0" className="row">
+                    {data.length > 0 ? loggedInUser.role === 'Viewer' && (data.map((user, ind) => (
 
-                    <Accordion.Item eventKey={ind} key={ind} id='for-search' className="col-lg-6 mb-3" >
-                      
-                      <div className="professional_info">
-                        <div className="project-card-top">
-                        <Accordion.Header>
-                          <div className="project-card-heading d-flex align-items-center justify-content-between">
-                            <div className="body_heading2 mb-0 ">
-                              <div className='d-flex'>
+                      <Accordion.Item eventKey={ind} key={ind} id='for-search' className="col-lg-6 mb-3" >
 
-                                <h2 className="font-18 mb-0"><span className="me-2"><img src='https://avatar.iran.liara.run/public' style={{ maxWidth: "30px", }} alt="" /></span>{user.username}</h2>
+                        <div className="professional_info">
+                          <div className="project-card-top">
+                            <Accordion.Header>
+                              <div className="project-card-heading d-flex align-items-center justify-content-between">
+                                <div className="body_heading2 mb-0 ">
+                                  <div className='d-flex'>
+
+                                    <h2 className="font-18 mb-0"><span className="me-2"><img src='https://avatar.iran.liara.run/public' style={{ maxWidth: "30px", }} alt="" /></span>{user.username}</h2>
+                                  </div>
+                                  <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
+                                </div>
+                                <p className="mb-0 font-14 body-sub-heading" style={{margin: '30px'}}>Name: <span> {user.name}</span> </p>
                               </div>
-                              <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
-                            </div>
-                            <p className="mb-0 font-14 body-sub-heading ">Name: <span> {user.name}</span> </p>
+                            </Accordion.Header>
+                            <Accordion.Body>
+                              <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
+                                <p className="my-2 font-14 body-sub-heading ">Suite: <span className="me-2">{user.address.suite}
+                                </span></p>
+                                <p className="my-2 font-14 body-sub-heading ">City: <span> {user.address.city}</span></p>
+                                <p className="my-2 font-14 body-sub-heading ">Street: <span>{user.address.street}</span>  </p>
+                              </div>
+                              <div className="project-card-heading d-flex align-items-center justify-content-between">
+                                <p className="my-2 font-14 body-sub-heading ">ZipCode: <span className="me-2"> {user.address.zipcode}</span></p>
+                                <p className="my-2 font-14 body-sub-heading ">Lat. <span>{user.address.geo.lat}</span> </p>
+                                <p className="my-2 font-14 body-sub-heading ">Lng. <span>{user.address.geo.lng}</span> </p>
 
+                              </div>
+                            </Accordion.Body>
                           </div>
-                          </Accordion.Header>
-                          <Accordion.Body>
-                          <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
-                            <p className="my-2 font-14 body-sub-heading ">Suite: <span className="me-2">{user.address.suite}
-                            </span></p>
-                            <p className="my-2 font-14 body-sub-heading ">City: <span> {user.address.city}</span></p>
-                            <p className="my-2 font-14 body-sub-heading ">Street: <span>{user.address.street}</span>  </p>
-                          </div>
-                          <div className="project-card-heading d-flex align-items-center justify-content-between">
-                            <p className="my-2 font-14 body-sub-heading ">ZipCode: <span className="me-2"> {user.address.zipcode}</span></p>
-                            <p className="my-2 font-14 body-sub-heading ">Lat. <span>{user.address.geo.lat}</span> </p>
-                            <p className="my-2 font-14 body-sub-heading ">Lng. <span>{user.address.geo.lng}</span> </p>
-
-                          </div>
-                          </Accordion.Body>
                         </div>
-                      </div>
-                    </Accordion.Item>
-                  )
-                  )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
+                      </Accordion.Item>
+                    )
+                    )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
                   </Accordion>
-                  <UserForm />
+                  {loggedInUser.role === 'Editor' && <UserForm />}
                 </div>
 
 

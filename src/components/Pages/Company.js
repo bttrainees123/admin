@@ -1,11 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCompany } from '../features/companySlice'
 import globe from "../image/globe.png"
 import CompanyForm from './Forms/CompanyForm'
 const Company = () => {
     const dispatch = useDispatch()
+    const [loggedInUser, setLoggedInUser] = useState('')
     const { loading, error, res } = useSelector((state) => state.company)
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'))
+        console.log("Loggedin ", user);
+        
+        if(user){
+          setLoggedInUser(user)
+          console.log('Logged ', loggedInUser);
+          
+        }
+      }, [])
 
     useEffect(() => {
         dispatch(getCompany())
@@ -77,7 +89,8 @@ const Company = () => {
                     </div>
                 ))) : loading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || error}</h5>}
             </div>
-            <CompanyForm />
+            {loggedInUser.role === 'Editor' && <CompanyForm />}
+            
         </div>
     )
 }

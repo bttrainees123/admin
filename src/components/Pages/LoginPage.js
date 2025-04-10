@@ -31,6 +31,8 @@ const LoginPage = () => {
   const [userData, setUserData] = useState({})
   const [isChecked, setIsChecked] = useState(false)
   const [regShow, setRegShow] = useState(false)
+  const [role, setRole] = useState('');
+
 
   const navigate = useNavigate()
 
@@ -64,7 +66,7 @@ const LoginPage = () => {
 
   const validateField = (field, regex, errorId) => {
     const isValid = regex.test(field);
-    document.getElementById(errorId).style.display = isValid ? 'none' : 'block'; return isValid;
+    document.getElementById(errorId).style.display = isValid ? 'block' : 'none'; return isValid;
   };
 
   const validateEmail = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-err');
@@ -78,6 +80,21 @@ const LoginPage = () => {
   const handleEmailPass = (e) => {
     setPassEmail(e.target.value)
     document.getElementById('email-pass-error').style.display = 'none'
+  }
+
+  const validateRadioField = () => {
+    let isValid = false
+    if (!role) {
+      document.getElementById('role-error').style.display = 'block';
+      isValid = false;
+    }
+    return isValid;
+  }
+
+  const handleRadioChange = (val) => {
+    console.log("Role ", val);
+    setRole(val);
+    document.getElementById('role-error').style.display = 'none';
   }
 
   const handlePassClose = () => setPassShow(false);
@@ -153,11 +170,12 @@ const LoginPage = () => {
 
   const handleNewUser = (e) => {
     e.preventDefault()
-    if (validateEmail(email) && validatePassword(password) && comparePassword(password, confirmNewPassword)) {
+    if (validateEmail(email) && validateRadioField() && validatePassword(password) && comparePassword(password, confirmNewPassword)) {
       const userData = {
         email,
         password,
-        subject: ' '
+        subject: ['Math '],
+        role
       }
       const user = JSON.parse(localStorage.getItem('data')) || [];
       user.push(userData);
@@ -215,6 +233,7 @@ const LoginPage = () => {
             file: val.file,
             gender: val.gender,
             stream: val.stream,
+            role: val.role,
             age: val.age,
             subject: val.subject
           }
@@ -223,11 +242,7 @@ const LoginPage = () => {
             localStorage.setItem('rememberedPassword', password)
             localStorage.setItem('isChecked', isChecked)
           }
-          else {
-            localStorage.removeItem('rememberedEmail')
-            localStorage.removeItem('rememberedPassword')
-            localStorage.removeItem('isChecked')
-          }
+
           dispatch(isAuthenticated(isUser))
           navigate('/dashboard');
         }
@@ -287,7 +302,7 @@ const LoginPage = () => {
                         </svg>)}
                       </FloatingLabel>
                     </div>
-                    <span id='password-error' style={{ display: "none", color: 'red' }}>Enter valid password</span>
+                    <span id='password-error' style={{ display: "none", color: 'red' }}></span>
                     <span id='password-check' style={{ display: "none", color: 'red' }}>Incorrect Password</span>
                     <div className="d-flex align-items-center justify-content-between remember_div mt-30 mb-30">
                       <div className="form-check">
@@ -482,10 +497,19 @@ const LoginPage = () => {
                   className="mb-3"
                 >
                   <Form.Control
-                    type='text' name='confirmPassword' value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} onInput={comparePassword}
+                    type='text' name='confirmPassword' value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)}
                   />
                   <span id='reg-con-password-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
                 </FloatingLabel>
+              </Form.Group>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+
+                <Form.Label>Role: </Form.Label>
+                <input type='radio' checked={role === 'Editor'} onChange={() => handleRadioChange('Editor')} />Editor
+                <input type='radio' checked={role === 'Viewer'} onChange={() => handleRadioChange('Viewer')} />Viewer
+                {/* <input type='radio' checked={role === 'Delete'} onChange={() => handleRadioChange('Delete')} />Delete
+                <input type='radio' checked={role === 'Add'} onChange={() => handleRadioChange('Add')} />Add */}
+                <span id='role-error' style={{ display: 'none', color: 'red' }}>Select your role</span>
               </Form.Group>
             </Form>
           </Modal.Body>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { getComments } from '../features/commentSlice'
@@ -8,7 +8,19 @@ import CommentForm from './Forms/CommentForm'
 
 const Comment = () => {
     const dispatch = useDispatch()
+    const [loggedInUser, setLoggedInUser] = useState('')
     const { isLoading, isError, data } = useSelector((state) => state.comments)
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'))
+        console.log("Loggedin ", user);
+        
+        if(user){
+          setLoggedInUser(user)
+          console.log('Logged ', loggedInUser);
+          
+        }
+      }, [])
 
     useEffect(() => {
         dispatch(getComments())
@@ -56,7 +68,8 @@ const Comment = () => {
                         </li>))) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
                 </ul>
             </div>
-            <CommentForm />
+            {loggedInUser.role === 'Editor' &&  <CommentForm />}
+           
 
         </div>
     )

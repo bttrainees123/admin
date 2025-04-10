@@ -20,9 +20,12 @@ import { lazy, Suspense } from 'react'
 import Loader from './components/Pages/Loader';
 
 const User = lazy(() => import('./components/Pages/User'))
-const Project = lazy(() => import('./components/Pages/Project'))
-const ProjectDetails = lazy(() => import('./components/Pages/ProjectDetails'))
-const HomePage = lazy(() => import('./components/Pages/HomePage'))
+const Project = lazy(() => 
+    import('./components/Pages/Project'))
+const ProjectDetails = lazy(() =>
+  import('./components/Pages/ProjectDetails'))
+const HomePage = lazy(() => import('./components/Pages/HomePage'));
+ 
 const Product = lazy(() => import('./components/Pages/Product'))
 const TextReader = lazy(() => import('./components/ImageTextReader/TextReader'))
 const InputParser = lazy(() => import('./components/Pages/Editor/InputParser'))
@@ -32,21 +35,23 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Suspense fallback={<Loader />}><HomePage /></Suspense>} />
-          <Route path='/login' element={<HandleLoginRoute Component={LoginPage} />} />
-          <Route path='/dashboard' element={<Suspense fallback={<Loader />}> <PrivateRoute Component={Project} /></Suspense>} />
-          <Route path='/users' element={<Suspense fallback={<Loader />}><PrivateRoute Component={User} /></Suspense>} />
-          <Route path='/company-list' element={<Suspense fallback={<Loader />}><PrivateRoute Component={ProjectDetails} /> </Suspense>} />
-          <Route path='/add-tasks' element={<PrivateRoute Component={AddTasks} />} />
-          <Route path='/products' element={<Suspense fallback={<Loader />}><PrivateRoute Component={Product} /></Suspense>} />
-          <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
-          <Route path='/about' element={<PrivateRoute Component={About} />} />
-          <Route path='/post' element={<PrivateRoute Component={Post} />} />
-          <Route path='/html-react' element={<Suspense fallback={<Loader />}><PrivateRoute Component={InputParser} /></Suspense>} />
-          <Route path='/extract-text' element={<Suspense fallback={<Loader />}><PrivateRoute Component={TextReader} /></Suspense>} />
-          <Route path='/loading' element={<Suspense fallback={<Loader />}><PrivateRoute Component={Loader} /></Suspense>} />
-        </Routes>
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/login' element={<HandleLoginRoute Component={LoginPage} />} />
+            <Route path='/dashboard' element={<PrivateRoute Component={Project} />} />
+            <Route path='/users' element={<PrivateRoute Component={User} />} />
+            <Route path='/company-list' element={<PrivateRoute Component={ProjectDetails} />} />
+            <Route path='/add-tasks' element={<PrivateRoute Component={AddTasks} />} />
+            <Route path='/products' element={<PrivateRoute Component={Product} />} />
+            <Route path='/cart-items' element={<PrivateRoute Component={CartItem} />} />
+            <Route path='/about' element={<PrivateRoute Component={About} />} />
+            <Route path='/post' element={<PrivateRoute Component={Post} />} />
+            <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} />
+            <Route path='/extract-text' element={<PrivateRoute Component={TextReader} />} />
+            <Route path='/loading' element={<PrivateRoute Component={Loader} />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter></>
 
   );
