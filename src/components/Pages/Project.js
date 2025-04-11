@@ -19,10 +19,14 @@ import BarsDataset from '../chart/BarChart';
 
 const Project = () => {
   const dispatch = useDispatch()
-
+  let checkView = false
+  let checkEditor = false
+  let checkAdd = false
+  let checkDelete = false
+  const [viewEdit, setViewEdit] = useState(false)
+  const [viewAdd, setViewAdd] = useState(false)
   const [apiData, setApiData] = useState([])
   const success = useSelector((state) => state.success.successMe);
-
 
 
   useEffect(() => {
@@ -39,6 +43,53 @@ const Project = () => {
     }
 
   }, [success, dispatch]);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    console.log("Loggedin ", user);
+
+    if (user) {
+      handleRoles(user.access)
+    }
+  }, [])
+
+  const handleRoles = (access) => {
+    console.log('role.length ', ...access);
+    const accessRole = [...access]
+
+    let len = accessRole.length
+
+    for (let i = 0; i < len; i++) {
+      if (accessRole[i] === 'View ' && checkView === false) {
+        checkView = true
+        console.log('heckView', checkView);
+      }
+      if (accessRole[i] === 'Edit ' && checkEditor === false) {
+        checkEditor = true
+        console.log('heckEditor', checkEditor);
+      }
+      if (accessRole[i] === 'Delete ' && checkDelete === false) {
+        checkDelete = true
+        console.log('heckDelete', checkDelete);
+      }
+      if (accessRole[i] === 'Add ' && checkAdd === false) {
+        checkAdd = true
+        console.log('heckAdd', checkAdd);
+      }
+    }
+    // console.log("checkView", checkView, "checkEditor", checkEditor, "checkDelete", checkDelete, "checkAdd", checkAdd);
+    handleAccessChange()
+  }
+
+  const handleAccessChange = () => {
+    if (checkView && checkEditor) {
+      setViewEdit(true)
+      return;
+    }
+    if (checkView) {
+      setViewAdd(true)
+    }
+  }
 
 
   useEffect(() => {
@@ -100,74 +151,78 @@ const Project = () => {
 
             <div className="body_content" >
               <Header />
-              <div style={{ textAlign: 'center', marginLeft: '200px', marginBottom: '100px', height: '250px', width: '700px' }}>
-                <FullCalendar
-                  plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
-                  initialView="dayGridMonth"
-                  dayCellDidMount={(e) => {
-                    e.el.style.cursor = 'pointer'
-                    if (e.date.getDate() === new Date().getDate() && e.date.getMonth() === new Date().getMonth()) {
+              {(viewEdit || viewAdd) &&
+                (<div>
+                  <div style={{ textAlign: 'center', marginLeft: '200px', marginBottom: '100px', height: '250px', width: '700px' }}>
+                    <FullCalendar
+                      plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
+                      initialView="dayGridMonth"
+                      dayCellDidMount={(e) => {
+                        e.el.style.cursor = 'pointer'
+                        if (e.date.getDate() === new Date().getDate() && e.date.getMonth() === new Date().getMonth()) {
 
-                      e.el.style.backgroundColor = 'purple'
-                      e.el.style.color = 'white'
-                    }
-                  }}
-                  selectable={true}
-                  headerToolbar={{
-                    start: "prev prevYear",
-                    center: "title",
-                    end: 'today nextYear next',
+                          e.el.style.backgroundColor = 'purple'
+                          e.el.style.color = 'white'
+                        }
+                      }}
+                      selectable={true}
+                      headerToolbar={{
+                        start: "prev prevYear",
+                        center: "title",
+                        end: 'today nextYear next',
 
-                  }}
-                  weekends={true}
-                  dateClick={(e) => {
-                    handleDateClick(e)
-                  }}
-                />
-              </div>
-              <div className="contact-profile" style={{ marginTop: '350px' }}>
-                <div className="row">
-                  {apiData.length > 0 ? (apiData.map((user, ind) => (
-                    <div key={ind} id='for-search' className="col-lg-6 mb-3" >
-                      <div className="professional_info">
-                        <div className="project-card-top">
-                          <div className="project-card-heading d-flex align-items-center justify-content-between">
-                            <div className="body_heading2 mb-0 ">
-                              <div className='d-flex'>
-                                <h2 className="font-18 mb-0"><span className="me-2"><img src={user.assignees[0].image_url} style={{ maxWidth: "30px", }} alt="" /></span>{user.assignees.name}</h2>
+                      }}
+                      weekends={true}
+                      dateClick={(e) => {
+                        handleDateClick(e)
+                      }}
+                    />
+                  </div>
+                  <div className="contact-profile" style={{ marginTop: '350px' }}>
+                    <div className="row">
+                      {apiData.length > 0 ? (apiData.map((user, ind) => (
+                        <div key={ind} id='for-search' className="col-lg-6 mb-3" >
+                          <div className="professional_info">
+                            <div className="project-card-top">
+                              <div className="project-card-heading d-flex align-items-center justify-content-between">
+                                <div className="body_heading2 mb-0 ">
+                                  <div className='d-flex'>
+                                    <h2 className="font-18 mb-0"><span className="me-2"><img src={user.assignees[0].image_url} style={{ maxWidth: "30px", }} alt="" /></span>{user.assignees.name}</h2>
+                                  </div>
+                                  <p className="mb-0 body-sub-heading font-12">Created :- <span>{user.assignees[0].name}</span></p>
+                                </div>
+                                <p className="mb-0 font-14 body-sub-heading ">Project Name: <span> {user.project.name}</span> </p>
                               </div>
-                              <p className="mb-0 body-sub-heading font-12">Created :- <span>{user.assignees[0].name}</span></p>
+                              <div className='row'>
+                                <p className="mb-0 font-14 body-sub-heading col">Start Time: <span> {user.track_times[0].start_time}</span> </p>
+                                <p className="mb-0 font-14 body-sub-heading col">working hours: <span> {calculateTotalTime(user.track_times[0].start_time, user.track_times[0].end_time)}</span> </p>
+                              </div>
+                              <p className="mb-0 font-14 body-sub-heading ">End Time: <span> {user.track_times[0].end_time}</span> </p>
+
                             </div>
-                            <p className="mb-0 font-14 body-sub-heading ">Project Name: <span> {user.project.name}</span> </p>
-                          </div>
-                          <div className='row'>
-                            <p className="mb-0 font-14 body-sub-heading col">Start Time: <span> {user.track_times[0].start_time}</span> </p>
-                            <p className="mb-0 font-14 body-sub-heading col">working hours: <span> {calculateTotalTime(user.track_times[0].start_time, user.track_times[0].end_time)}</span> </p>
-                          </div>
-                          <p className="mb-0 font-14 body-sub-heading ">End Time: <span> {user.track_times[0].end_time}</span> </p>
 
+                          </div>
                         </div>
+                      )
+                      )) : (<p style={{ textAlign: 'center' }}>No data found</p>)}
 
-                      </div>
+                    </div >
+
+
+
+                    <div style={{ marginLeft: '300px', marginTop: '50px' }}>
+
+
+
+
+                      {BarsDataset()}
                     </div>
-                  )
-                  )) : (<p style={{ textAlign: 'center' }}>No data found</p>)}
-
-                </div >
 
 
 
-                <div style={{ marginLeft: '300px', marginTop: '50px' }}>
-
-
-
-
-                  {BarsDataset()}
-                </div>
-
-
-
-              </div>
+                  </div>
+                </div>)
+              }
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import clock from "../image/clock.png"
 import angleDown from "../image/angle-down.png"
@@ -14,6 +14,60 @@ import Company from './Company'
 const ProjectDetails = () => {
 
     const navigate = useNavigate()
+    let checkView = false
+    let checkEditor = false
+    let checkAdd = false
+    let checkDelete = false
+    const [viewEdit, setViewEdit] = useState(false)
+    const [viewAdd, setViewAdd] = useState(false)
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'))
+        console.log("Loggedin ", user);
+
+        if (user) {
+            handleRoles(user.access)
+        }
+    }, [])
+
+    const handleRoles = (access) => {
+        console.log('role.length ', ...access);
+        const accessRole = [...access]
+    
+        let len = accessRole.length
+    
+        for (let i = 0; i < len; i++) {
+          if (accessRole[i] === 'View ' && checkView === false) {
+            checkView = true
+            console.log('heckView', checkView);
+          }
+          if (accessRole[i] === 'Edit ' && checkEditor === false) {
+            checkEditor = true
+            console.log('heckEditor', checkEditor);
+          }
+          if (accessRole[i] === 'Delete ' && checkDelete === false) {
+            checkDelete = true
+            console.log('heckDelete', checkDelete);
+          }
+          if (accessRole[i] === 'Add ' && checkAdd === false) {
+            checkAdd = true
+            console.log('heckAdd', checkAdd);
+          }
+        }
+        // console.log("checkView", checkView, "checkEditor", checkEditor, "checkDelete", checkDelete, "checkAdd", checkAdd);
+        handleAccessChange()
+      }
+    
+      const handleAccessChange = () => {
+        if (checkView && checkEditor) {
+          setViewEdit(true)
+          return;
+        }
+        if (checkView) {
+          setViewAdd(true)
+        }
+      }
+
     const handleLogout = () => {
         localStorage.setItem("isLoggedIn", false)
         navigate("/login")
@@ -83,8 +137,9 @@ const ProjectDetails = () => {
                                 </div>
                             </div>
                             <div className="contact-profile">
-                                <Company />
-                                <div className="row">
+                                {(viewAdd || viewEdit) && <Company />}
+                                {(viewAdd || viewEdit) && (
+                                    <div className="row">
                                     <div className="d-flex align-items-center justify-content-between mb-30 mt-30">
                                         <h2 className="body_heading width-left-border mb-0">Comments List</h2>
                                         <div className="heading_width_search d-flex align-items-center gap-3">
@@ -93,7 +148,7 @@ const ProjectDetails = () => {
                                     </div>
                                     <Comment />
 
-                                </div>
+                                </div>)}
 
                             </div>
                         </div>

@@ -25,8 +25,14 @@ const Header = () => {
   const [loggedInUser, setLoggedInUser] = useState('')
   const fileInputRef = useRef(null);
   const genderInputRef = useRef()
+  let checkView = false
+  let checkEditor = false
+  let checkAdd = false
+  let checkDelete = false
+  const [viewEdit, setViewEdit] = useState(false)
+  const [viewAdd, setViewAdd] = useState(false)
   // const [success, setSuccess] = useState(false)
- 
+
   const validateField = (field, regex, errorId) => {
     const isValid = regex.test(field);
     document.getElementById(errorId).style.display = isValid ? 'none' : 'block';
@@ -36,13 +42,52 @@ const Header = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
     console.log("Loggedin ", user);
-    
-    if(user){
+
+    if (user) {
+      handleRoles(user.access)
       setLoggedInUser(user)
       console.log('Logged ', loggedInUser);
-      
+
     }
   }, [])
+
+  const handleRoles = (access) => {
+    console.log('role.length ', ...access);
+    const accessRole = [...access]
+
+    let len = accessRole.length
+
+    for (let i = 0; i < len; i++) {
+      if (accessRole[i] === 'View ' && checkView === false) {
+        checkView = true
+        console.log('heckView', checkView);
+      }
+      if (accessRole[i] === 'Edit ' && checkEditor === false) {
+        checkEditor = true
+        console.log('heckEditor', checkEditor);
+      }
+      if (accessRole[i] === 'Delete ' && checkDelete === false) {
+        checkDelete = true
+        console.log('heckDelete', checkDelete);
+      }
+      if (accessRole[i] === 'Add ' && checkAdd === false) {
+        checkAdd = true
+        console.log('heckAdd', checkAdd);
+      }
+    }
+    // console.log("checkView", checkView, "checkEditor", checkEditor, "checkDelete", checkDelete, "checkAdd", checkAdd);
+    handleAccessChange()
+  }
+
+  const handleAccessChange = () => {
+    if (checkView && checkEditor) {
+      setViewEdit(true)
+      return;
+    }
+    if (checkView) {
+      setViewAdd(true)
+    }
+  }
 
   const validateUserName = (username) =>
     validateField(username, /^[a-z0-9]+$/i, 'username-error');
@@ -231,10 +276,10 @@ const Header = () => {
                 here</Link></li>
             </ul>
           </div>
-          {loggedInUser.role === 'Editor' ? (<div className="header_icon position-relative notification d-flex align-items-center justify-content-center">
+          {viewEdit ? (<div className="header_icon position-relative notification d-flex align-items-center justify-content-center">
             <h6 onClick={handleForm} style={{ cursor: 'pointer' }}>Add</h6>
-          </div>): ""}
-          
+          </div>) : ""}
+
 
           <div className="header_icon position-relative notification d-flex align-items-center justify-content-center">
             <svg onClick={handleLogout} style={{ cursor: 'pointer' }} width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">

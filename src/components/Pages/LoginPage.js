@@ -275,8 +275,8 @@ const LoginPage = () => {
   const checkRoleOption = [
     { name: 'Edit ', key: 'edit', label: 'Edit ' },
     { name: 'View ', key: 'view', label: 'View ' },
-    { name: 'Add ', key: 'add', label: 'Add ' },
-    { name: 'Delete ', key: 'delete', label: 'Delete ' },
+    // { name: 'Add ', key: 'add', label: 'Add ' },
+    // { name: 'Delete ', key: 'delete', label: 'Delete ' },
   ];
 
   return (
@@ -528,17 +528,17 @@ const LoginPage = () => {
                   <span id='reg-con-password-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
                 </FloatingLabel>
               </Form.Group>
-              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+              {/* <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1"> */}
 
-                <Form.Label>Role: </Form.Label>
+                {/* <Form.Label>Role: </Form.Label>
                 <input type='radio' checked={role === 'Editor'} onChange={() => handleRadioChange('Editor')} />Editor
-                <input type='radio' checked={role === 'Viewer'} onChange={() => handleRadioChange('Viewer')} />Viewer
+                <input type='radio' checked={role === 'Viewer'} onChange={() => handleRadioChange('Viewer')} />Viewer */}
                 {/* <input type='radio' checked={role === 'Delete'} onChange={() => handleRadioChange('Delete')} />Delete
                 <input type='radio' checked={role === 'Add'} onChange={() => handleRadioChange('Add')} />Add */}
-                <span id='role-error' style={{ display: 'none', color: 'red' }}>Select your role</span>
-              </Form.Group>
+                {/* <span id='role-error' style={{ display: 'none', color: 'red' }}>Select your role</span> */}
+              {/* </Form.Group> */}
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label className='label-me'>Subjects: </Form.Label>
+                <Form.Label className='label-me'>Access: </Form.Label>
                 {checkRoleOption.map((it) => (
                   <label key={it.key}>
                     {it.label}

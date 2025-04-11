@@ -9,6 +9,12 @@ import CommentForm from './Forms/CommentForm'
 const Comment = () => {
     const dispatch = useDispatch()
     const [loggedInUser, setLoggedInUser] = useState('')
+    let checkView = false
+    let checkEditor = false
+    let checkAdd = false
+    let checkDelete = false
+    const [viewEdit, setViewEdit] = useState(false)
+    const [viewAdd, setViewAdd] = useState(false)
     const { isLoading, isError, data } = useSelector((state) => state.comments)
 
     useEffect(() => {
@@ -16,11 +22,50 @@ const Comment = () => {
         console.log("Loggedin ", user);
         
         if(user){
+          handleRoles(user.access)
           setLoggedInUser(user)
           console.log('Logged ', loggedInUser);
           
         }
       }, [])
+
+      const handleRoles = (access) => {
+        console.log('role.length ', ...access);
+        const accessRole = [...access]
+    
+        let len = accessRole.length
+    
+        for (let i = 0; i < len; i++) {
+          if (accessRole[i] === 'View ' && checkView === false) {
+            checkView = true
+            console.log('heckView', checkView);
+          }
+          if (accessRole[i] === 'Edit ' && checkEditor === false) {
+            checkEditor = true
+            console.log('heckEditor', checkEditor);
+          }
+          if (accessRole[i] === 'Delete ' && checkDelete === false) {
+            checkDelete = true
+            console.log('heckDelete', checkDelete);
+          }
+          if (accessRole[i] === 'Add ' && checkAdd === false) {
+            checkAdd = true
+            console.log('heckAdd', checkAdd);
+          }
+        }
+        // console.log("checkView", checkView, "checkEditor", checkEditor, "checkDelete", checkDelete, "checkAdd", checkAdd);
+        handleAccessChange()
+      }
+    
+      const handleAccessChange = () => {
+        if (checkView && checkEditor) {
+          setViewEdit(true)
+          return;
+        }
+        if (checkView) {
+          setViewAdd(true)
+        }
+      }
 
     useEffect(() => {
         dispatch(getComments())
@@ -68,7 +113,7 @@ const Comment = () => {
                         </li>))) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
                 </ul>
             </div>
-            {loggedInUser.role === 'Editor' &&  <CommentForm />}
+            {viewEdit &&  <CommentForm />}
            
 
         </div>

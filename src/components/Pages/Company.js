@@ -7,17 +7,63 @@ const Company = () => {
     const dispatch = useDispatch()
     const [loggedInUser, setLoggedInUser] = useState('')
     const { loading, error, res } = useSelector((state) => state.company)
+    let checkView = false
+    let checkEditor = false
+    let checkAdd = false
+    let checkDelete = false
+    const [viewEdit, setViewEdit] = useState(false)
+    const [viewAdd, setViewAdd] = useState(false)
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'))
         console.log("Loggedin ", user);
         
         if(user){
+            handleRoles(user.access)
           setLoggedInUser(user)
           console.log('Logged ', loggedInUser);
           
         }
       }, [])
+
+      const handleRoles = (access) => {
+        console.log('role.length ', ...access);
+        const accessRole = [...access]
+    
+        let len = accessRole.length
+    
+        for (let i = 0; i < len; i++) {
+          if (accessRole[i] === 'View ' && checkView === false) {
+            checkView = true
+            console.log('heckView', checkView);
+          }
+          if (accessRole[i] === 'Edit ' && checkEditor === false) {
+            checkEditor = true
+            console.log('heckEditor', checkEditor);
+          }
+          if (accessRole[i] === 'Delete ' && checkDelete === false) {
+            checkDelete = true
+            console.log('heckDelete', checkDelete);
+          }
+          if (accessRole[i] === 'Add ' && checkAdd === false) {
+            checkAdd = true
+            console.log('heckAdd', checkAdd);
+          }
+        }
+        // console.log("checkView", checkView, "checkEditor", checkEditor, "checkDelete", checkDelete, "checkAdd", checkAdd);
+        handleAccessChange()
+      }
+    
+      const handleAccessChange = () => {
+        if (checkView && checkEditor) {
+          setViewEdit(true)
+          return;
+        }
+        if (checkView) {
+          setViewAdd(true)
+        }
+      }
+    
 
     useEffect(() => {
         dispatch(getCompany())
@@ -89,7 +135,7 @@ const Company = () => {
                     </div>
                 ))) : loading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || error}</h5>}
             </div>
-            {loggedInUser.role === 'Editor' && <CompanyForm />}
+            {viewEdit && <CompanyForm />}
             
         </div>
     )
