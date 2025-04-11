@@ -9,7 +9,8 @@ const initialState = {
     gender: "",
     subject: [],
     stream: "",
-    role: [],
+    role: '',
+    access: [],
     isAuth: false
 }
 

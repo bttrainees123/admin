@@ -61,10 +61,13 @@ const User = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       
 
-      if (user) {
-        setLoggedInUser(user)
+      if (user) {        
+        handleRoles(user.access)
         const filteredUsers = storedData.filter((u) => u.email !== user.email);
         setUserData(filteredUsers);
+        setLoggedInUser(user)
+        console.log('LoggedInUser---------->', user.access);
+
       } else {
         setUserData(storedData);
       }
@@ -127,26 +130,33 @@ const User = () => {
     return isValid;
   };
 
-  const handleRoles = (role) => {
-    let len = role.length
+  const handleRoles = (access) => {
+    console.log('role.length ', ...access);
+    const accessRole = [...access]
+    
+    let len = accessRole.length
  
     for(let i = 0; i < len; i++){
-      if(role[i] === 'View '){
+      console.log(accessRole[i] === 'View ', accessRole[i]);
+      
+      if(accessRole[i] === 'View '){
         setCheckView(true)
       }
-      if(role[i] === 'Edit '){
+      if(accessRole[i] === 'Edit '){
         setCheckEditor(true)
       }
-      if(role[i] === 'Delete '){
+      if(accessRole[i] === 'Delete '){
         setCheckDelete(true)
       }
-      if(role[i] === 'Add '){
+      if(accessRole[i] === 'Add '){
         setCheckAdd(true)
       }
     }
+    console.log("checkView", checkView, "checkEditor", checkEditor, "checkDelete", checkDelete, "checkAdd", checkAdd);
+    handleAccessChange()
   }
 
-  const checkedRoleValue = () => {
+  const handleAccessChange = () => {
     if(checkView && checkEditor){
       setViewEdit(true)
     }
@@ -333,7 +343,7 @@ const User = () => {
                           <div className="project-card-heading d-flex align-items-center justify-content-between">
                             <div className="body_heading2 mb-0 ">
                               <div className='d-flex'>
-                                <h2 className="font-18 mb-0"><span className="me-2"><img src={user.file} style={{ maxWidth: "30px", }} alt="" /></span>{user.username}</h2>
+                                <h2 className="font-18 mb-0"><span className="me-2"><img src={user.file} style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
                                 {loggedInUser.role === 'Editor' &&
                                   (<span className=''>
                                     <button className="dropdown-toggle border-0 w-0 d-flex align-items-center" type="button"
@@ -386,7 +396,7 @@ const User = () => {
                                 <div className="body_heading2 mb-0 ">
                                   <div className='d-flex'>
 
-                                    <h2 className="font-18 mb-0"><span className="me-2"><img src='https://avatar.iran.liara.run/public' style={{ maxWidth: "30px", }} alt="" /></span>{user.username}</h2>
+                                    <h2 className="font-18 mb-0"><span className="me-2"><img src='https://avatar.iran.liara.run/public' style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
                                   </div>
                                   <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
                                 </div>
@@ -431,7 +441,7 @@ const User = () => {
                             className="mb-3"
                           >
                             <Form.Control
-                              type='text' name="username" value={editData.username} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
+                              type='text' name="username" value={editData.username || ''} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
                             />
                             <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
                           </FloatingLabel>

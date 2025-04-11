@@ -32,6 +32,7 @@ const LoginPage = () => {
   const [isChecked, setIsChecked] = useState(false)
   const [regShow, setRegShow] = useState(false)
   const [role, setRole] = useState('');
+  const [access, setAccess] = useState([]);
 
   const navigate = useNavigate()
 
@@ -68,7 +69,7 @@ const LoginPage = () => {
     document.getElementById(errorId).style.display = isValid ? 'block' : 'none'; return isValid;
   };
 
-  const validateEmail = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-err');
+  const validateEmail = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-error');
   const validateEmailLog = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-error');
 
   const validatePassword = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'reg-password-error');
@@ -169,12 +170,18 @@ const LoginPage = () => {
 
   const handleNewUser = (e) => {
     e.preventDefault()
-    if (validateEmail(email) && validateRadioField() && validatePassword(password) && comparePassword(password, confirmNewPassword)) {
+    console.log('validateEmail(email)', validateEmail(email));
+    // console.log('validateRadioField()', validateRadioField());
+    console.log('validatePassword(password)', validatePassword(password));
+    console.log('comparePassword(password, confirmNewPassword)', comparePassword(password, confirmNewPassword));
+    
+    if (validateEmail(email) && validatePassword(password) && comparePassword(password, confirmNewPassword)) {
       const userData = {
         email,
         password,
         subject: ['Math '],
-        role
+        role,
+        access,
       }
       const user = JSON.parse(localStorage.getItem('data')) || [];
       user.push(userData);
@@ -233,6 +240,7 @@ const LoginPage = () => {
             gender: val.gender,
             stream: val.stream,
             role: val.role,
+            access: val.access,
             age: val.age,
             subject: val.subject
           }
@@ -251,6 +259,25 @@ const LoginPage = () => {
       document.getElementById('password-check').style.display = passwordCheck ? 'none' : 'block';
     }
   };
+
+  const handleAccessChange = (val) => {
+    console.log(val.target.name, "     ", val.target.checked);
+    const newArr = [...access];
+    if (val.target.checked) {
+      newArr.push(val.target.name)
+    }
+    else {
+      newArr.pop(newArr.indexOf(val.target.key))
+    }
+    setAccess(newArr)
+  };
+
+  const checkRoleOption = [
+    { name: 'Edit ', key: 'edit', label: 'Edit ' },
+    { name: 'View ', key: 'view', label: 'View ' },
+    { name: 'Add ', key: 'add', label: 'Add ' },
+    { name: 'Delete ', key: 'delete', label: 'Delete ' },
+  ];
 
   return (
     <section className="sign_in p-0">
@@ -509,6 +536,17 @@ const LoginPage = () => {
                 {/* <input type='radio' checked={role === 'Delete'} onChange={() => handleRadioChange('Delete')} />Delete
                 <input type='radio' checked={role === 'Add'} onChange={() => handleRadioChange('Add')} />Add */}
                 <span id='role-error' style={{ display: 'none', color: 'red' }}>Select your role</span>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label className='label-me'>Subjects: </Form.Label>
+                {checkRoleOption.map((it) => (
+                  <label key={it.key}>
+                    {it.label}
+                    <input type='checkbox' name={it.name} checked={access.includes(it.name)} onChange={handleAccessChange} />
+                  </label>
+                ))}
+
+                <span id='access-error' style={{ display: 'none', color: 'red' }}>Select at least one role</span>
               </Form.Group>
             </Form>
           </Modal.Body>
