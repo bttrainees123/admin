@@ -33,7 +33,6 @@ const LoginPage = () => {
   const [regShow, setRegShow] = useState(false)
   const [role, setRole] = useState('');
 
-
   const navigate = useNavigate()
 
   const dispatch = useDispatch()

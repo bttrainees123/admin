@@ -50,12 +50,7 @@ const HomePage = () => {
       const formData = new FormData()
       console.log('file', file)
       formData.append('file', file)
-      // axios.post('http://localhost:3000/upload', formData, {
-      // headers: { 'Content-Type': 'multipart/form-data' },
-      // onUploadProgress: (val) => {
       progress(0)
-      // },
-      // }).catch((err) => console.log('Upload Error:', err))
     })
   }
 
