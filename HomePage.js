@@ -94,6 +94,17 @@ const HomePage = () => {
     }
   }
 
+  const isBase64 = (str) => {
+    try {
+      if (str === '' || str.trim() === '') {
+        return false;
+      }
+      return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(str);
+    } catch (err) {
+      return false;
+    }
+  };
+
   const recognizeText = async (imageFile) => {
     setMessage("Identifying text...")
     const response = await Tesseract.recognize(imageFile, "eng")
@@ -115,13 +126,15 @@ const HomePage = () => {
         })
         .value();
       if (difference(inv1, words)?.length === 0 || difference(inv2, words)?.length === 0 || difference(inv3, words)?.length === 0 || difference(inv4, words)?.length === 0 || difference(inv5, words)?.length === 0 || difference(inv6, words)?.length === 0) {
-        if(typeof imageFile !== 'string'){
-          PostImage(imageFile, data.text)
-          setMessage("Text Identified Successfully PostImage")
+        if(typeof imageFile === 'string'){
+          uploadBase64(imageFile, data.text)
+          let isCheck = isBase64(imageFile)
+          setMessage(`Text Identified Successfully uploadBase64 ${isCheck}`)
         }
         else{
-          uploadBase64(imageFile, data.text)
-          setMessage("Text Identified Successfully uploadBase64")
+          PostImage(imageFile, data.text)
+          let isCheck = isBase64(imageFile)
+          setMessage(`Text Identified Successfully PostImage ${isCheck}`)
         }
       } else {
         setMessage("Could not find required text in the image.");
