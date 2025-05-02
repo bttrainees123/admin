@@ -1,0 +1,554 @@
+import React, { useEffect, useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+
+import '../css/custom.css'
+import '../css/media.css'
+
+import logo from '../image/BT-logo.png'
+import correct from '../image/correct.png'
+import { useDispatch } from 'react-redux'
+import { isAuthenticated } from '../features/authSlice'
+import { setSuccess } from '../features/successSlice'
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import { FloatingLabel } from 'react-bootstrap'
+import { validateLocalEmail } from '../utils/validation'
+
+
+const LoginPage = () => {
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [oldPassword, setOldPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [passShow, setPassShow] = useState(false)
+  const [confirmNewPassword, setConfirmNewPassword] = useState('')
+  const [passEmail, setPassEmail] = useState('')
+  const [emailShow, setEmailShow] = useState(false)
+  const [checkOldPass, setCheckOldPass] = useState(false)
+  const [userData, setUserData] = useState({})
+  const [isChecked, setIsChecked] = useState(false)
+  const [regShow, setRegShow] = useState(false)
+  const [role, setRole] = useState('');
+  const [access, setAccess] = useState([]);
+
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
+
+  const handleRegClose = () => setRegShow(false)
+  const handleRegOpen = () => setRegShow(true)
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('rememberedEmail');
+    const storedPassword = localStorage.getItem('rememberedPassword');
+    const storedIsChecked = localStorage.getItem('isChecked')
+
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+    if (storedPassword) {
+      setPassword(storedPassword);
+    }
+    if (storedIsChecked) {
+      setIsChecked(storedIsChecked);
+    }
+    if (!isChecked) {
+
+      setEmail('')
+      setPassword('')
+      setIsChecked(false)
+    }
+  }, [isChecked]);
+
+
+  const validateField = (field, regex, errorId) => {
+    const isValid = regex.test(field);
+    document.getElementById(errorId).style.display = isValid ? 'block' : 'none'; return isValid;
+  };
+
+  const validateEmail = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-error');
+  const validateEmailLog = (email) => validateField(email, /^[a-z0-9._-]+@[a-z0-9.-]+.[a-z]{2,6}$/, 'email-error');
+
+  const validatePassword = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'reg-password-error');
+  const validatePasswordLog = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'password-error');
+  const validateNewPassword = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'new-password-error');
+  const validateOldPassword = (password) => validateField(password, /^[a-zA-Z0-9!@#$%^&*]{6,16}$/, 'old-password-error');
+
+  const handleEmailPass = (e) => {
+    setPassEmail(e.target.value)
+    document.getElementById('email-pass-error').style.display = 'none'
+  }
+
+  const validateRadioField = () => {
+    let isValid = false
+    if (!role) {
+      document.getElementById('role-error').style.display = 'block';
+      isValid = false;
+    }
+    return isValid;
+  }
+
+  const handleRadioChange = (val) => {
+    console.log("Role ", val);
+    setRole(val);
+    document.getElementById('role-error').style.display = 'none';
+  }
+
+  const handlePassClose = () => setPassShow(false);
+
+  const handleEmailClose = () => setEmailShow(false);
+  const handleEmailShow = () => setEmailShow(true);
+
+  const handleClearPass = () => {
+    setOldPassword("")
+    setNewPassword("")
+    setConfirmNewPassword("")
+  }
+
+  const handleFindEmail = (e) => {
+    e.preventDefault()
+    if (validateEmail(passEmail)) {
+      const users = JSON.parse(localStorage.getItem("data")) || [];
+
+      console.log("passEmail ", passEmail);
+      const existingUser = users.find((u) => u.email === passEmail)
+      if (existingUser) {
+        setUserData(existingUser)
+        console.log("existingUser ", existingUser);
+        setPassShow(true)
+        const pass = existingUser.password;
+        setCheckOldPass(pass)
+        setEmailShow(false)
+      }
+      else {
+        document.getElementById('email-pass-error').style.display = 'block'
+      }
+    }
+  }
+
+  const handleOldPassword = (e) => {
+    setOldPassword(e.target.value)
+    validateOldPassword(e.target.value)
+    if (oldPassword === checkOldPass) {
+      document.getElementById('old-password-error').style.display = 'block'
+    } else {
+      document.getElementById('old-password-error').style.display = 'none'
+    }
+  }
+
+  const checkOldPassword = (oldPass, newPass) => {
+    let isValid = oldPass === newPass
+    return isValid
+  }
+
+  const handleNewPassword = (e) => {
+    setNewPassword(e.target.value)
+    validateNewPassword(e.target.value)
+    console.log("Old ", newPassword);
+  }
+
+  const handleConfirmNewPassword = (e) => {
+    setConfirmNewPassword(e.target.value)
+    if (newPassword !== confirmNewPassword) {
+      document.getElementById('con-password-error').style.display = 'none'
+    }
+    else {
+      document.getElementById('con-password-error').style.display = 'block'
+    }
+    console.log("Old ", confirmNewPassword);
+  }
+
+  const comparePassword = (password, confirmPassword) => {
+    const isValid = password === confirmPassword;
+    document.getElementById('reg-con-password-error').style.display = isValid ? 'none' : 'block';
+    return isValid;
+  };
+
+
+  const handleNewUser = (e) => {
+    e.preventDefault()
+    console.log('validateEmail(email)', validateEmail(email));
+    console.log('validatePassword(password)', validatePassword(password));
+    console.log('comparePassword(password, confirmNewPassword)', comparePassword(password, confirmNewPassword));
+
+    if (validateEmail(email) && validatePassword(password) && comparePassword(password, confirmNewPassword)) {
+      const userData = {
+        email,
+        password,
+        subject: ['Math '],
+        role,
+        access,
+      }
+      const user = JSON.parse(localStorage.getItem('data')) || [];
+      user.push(userData);
+      localStorage.setItem('data', JSON.stringify(user));
+      handleClear()
+      handleRegClose()
+    }
+
+  }
+  const handleClear = () => {
+    setEmail('')
+    setPassword('')
+    setConfirmNewPassword('')
+  }
+
+  const handleSavePassword = (e) => {
+    e.preventDefault()
+    const users = JSON.parse(localStorage.getItem('data')) || [];
+    if (checkOldPassword(oldPassword, checkOldPass) && validateOldPassword(oldPassword) && validateNewPassword(newPassword) && comparePassword(newPassword, confirmNewPassword)) {
+      const user = users.filter((obj) =>
+        obj.email === userData.email)
+      console.log("passEmail ", userData.email)
+      const filteredUser = users.find((u) => u.email === userData.email);
+      console.log("filteredUsers ", filteredUser);
+      filteredUser.password = newPassword
+      console.log("filteredUsers ", filteredUser);
+      user.push(filteredUser)
+      console.log("users ", users);
+      dispatch(setSuccess(true))
+      localStorage.setItem('data', JSON.stringify(users));
+      handlePassClose()
+      handleClearPass()
+      setPassEmail("")
+    }
+  }
+
+  const loginHandler = (e) => {
+    e.preventDefault();
+    let emailCheck = false;
+    let passwordCheck = false;
+    const users = JSON.parse(localStorage.getItem('data'));
+
+    if (validateEmailLog(email) && validatePasswordLog(password)) {
+      users?.forEach((val) => {
+        if (val.email === email) {
+          emailCheck = true;
+        }
+        if (val.password === password) {
+          passwordCheck = true;
+        }
+        if (val.email === email && val.password === password) {
+          const isUser = {
+            username: val.username,
+            email,
+            file: val.file,
+            gender: val.gender,
+            stream: val.stream,
+            role: val.role,
+            access: val.access,
+            age: val.age,
+            subject: val.subject
+          }
+          if (isChecked) {
+            localStorage.setItem('rememberedEmail', email)
+            localStorage.setItem('rememberedPassword', password)
+            localStorage.setItem('isChecked', isChecked)
+          }
+
+          dispatch(isAuthenticated(isUser))
+          navigate('/dashboard');
+        }
+      });
+
+      document.getElementById('email-check').style.display = emailCheck ? 'none' : 'block';
+      document.getElementById('password-check').style.display = passwordCheck ? 'none' : 'block';
+    }
+  };
+
+  const handleAccessChange = (val) => {
+    console.log(val.target.name, "     ", val.target.checked);
+    const newArr = [...access];
+    if (val.target.checked) {
+      newArr.push(val.target.name)
+    }
+    else {
+      newArr.pop(newArr.indexOf(val.target.key))
+    }
+    setAccess(newArr)
+  };
+
+  const checkRoleOption = [
+    { name: 'Edit ', key: 'edit', label: 'Edit ' },
+    { name: 'View ', key: 'view', label: 'View ' },
+  ];
+
+  return (
+    <section className="sign_in p-0">
+      <div className="container-fluid">
+        <div className="row align-items-center">
+          <div className="col-lg-7">
+            <div className="inner_content_one">
+              <h1>Sign In</h1>
+              <h2>Welcome!</h2>
+
+              <form action="" className="form_sec mt-5" onSubmit={loginHandler}>
+                <div className="row">
+                  <div className="col-lg-12 mb-lg-4 mb-md-4 mb-3">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Email address"
+                      className="mb-3"
+                    >
+                      <input type="text" value={email} className="form-control form-control-custom" id="exampleInputPassword1"
+                        placeholder="abc12@gmail.com" onChange={e => setEmail(e.target.value)} />
+                    </FloatingLabel>
+                  </div>
+                  <span id='email-error' style={{ display: 'none', color: 'red' }}>
+                  </span>
+                  <span id='email-check' style={{ display: 'none', color: 'red' }}>Incorrect Email</span>
+                  <div className="col-lg-12">
+                    <div className="position-relative password_svg">
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label="Password"
+                        className="mb-3"
+                      >
+                        <input type={showPassword ? "text" : "password"} value={password || ""} className="form-control form-control-custom" id="exampleInputPassword1"
+                          placeholder="********" onChange={e => setPassword(e.target.value)} />
+                        {showPassword ? (<svg onClick={() => setShowPassword((prev) => !prev)} xmlns="http://www.w3.org/2000/svg" width="23" height="20" viewBox="0 0 24 24" fill="none">
+                          <g clipPath="url(#clip0_2056_26496)">
+                            <path
+                              d="M12 6C15.79 6 19.17 8.13 20.82 11.5C19.17 14.87 15.79 17 12 17C8.21 17 4.83 14.87 3.18 11.5C4.83 8.13 8.21 6 12 6ZM12 4C7 4 2.73 7.11 1 11.5C2.73 15.89 7 19 12 19C17 19 21.27 15.89 23 11.5C21.27 7.11 17 4 12 4ZM12 9C13.38 9 14.5 10.12 14.5 11.5C14.5 12.88 13.38 14 12 14C10.62 14 9.5 12.88 9.5 11.5C9.5 10.12 10.62 9 12 9ZM12 7C9.52 7 7.5 9.02 7.5 11.5C7.5 13.98 9.52 16 12 16C14.48 16 16.5 13.98 16.5 11.5C16.5 9.02 14.48 7 12 7Z"
+                              fill="#7E7E7E"></path>
+                          </g>
+                          <defs>
+                            <g clipPath="url(#clip0_2056_26496)">
+                              <rect width="24" height="24" fill="white"></rect>
+                            </g>
+                          </defs>
+                        </svg>) : (<svg onClick={() => setShowPassword((prev) => !prev)} xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
+                          <path d="M9.99999 13.0001C7.62968 13.0001 5.71093 11.1654 5.53437 8.84039L2.25624 6.30696C1.82531 6.84758 1.42874 7.41914 1.10874 8.04414C1.03726 8.18555 1.00001 8.34179 1.00001 8.50024C1.00001 8.65869 1.03726 8.81492 1.10874 8.95633C2.80343 12.2629 6.15843 14.5001 9.99999 14.5001C10.8409 14.5001 11.6522 14.3751 12.4341 14.1732L10.8125 12.9185C10.5447 12.9703 10.2727 12.9976 9.99999 13.0001ZM19.8069 14.8157L16.3522 12.1457C17.4016 11.2613 18.2647 10.177 18.8912 8.95602C18.9627 8.81461 19 8.65838 19 8.49993C19 8.34147 18.9627 8.18524 18.8912 8.04383C17.1966 4.73727 13.8416 2.50008 9.99999 2.50008C8.39109 2.50203 6.80831 2.90707 5.39624 3.67821L1.42062 0.605395C1.36878 0.565053 1.30949 0.535323 1.24615 0.517902C1.18282 0.500482 1.11667 0.495713 1.05149 0.503868C0.986304 0.512023 0.923369 0.532942 0.866275 0.56543C0.809182 0.597917 0.75905 0.641337 0.718743 0.693207L0.105306 1.48289C0.0239305 1.58758 -0.0125333 1.7203 0.0039342 1.85186C0.0204017 1.98342 0.088452 2.10306 0.193118 2.18446L18.5794 16.3948C18.6312 16.4351 18.6905 16.4648 18.7538 16.4823C18.8172 16.4997 18.8833 16.5045 18.9485 16.4963C19.0137 16.4881 19.0766 16.4672 19.1337 16.4347C19.1908 16.4022 19.2409 16.3588 19.2812 16.307L19.895 15.5173C19.9763 15.4125 20.0127 15.2798 19.9962 15.1482C19.9797 15.0167 19.9116 14.8971 19.8069 14.8157ZM14.0656 10.3782L12.8375 9.42883C12.9409 9.12992 12.9958 8.81636 13 8.50008C13.0061 8.03704 12.9035 7.57902 12.7005 7.16281C12.4975 6.74661 12.1996 6.38382 11.831 6.10359C11.4623 5.82336 11.0331 5.63349 10.5777 5.54925C10.1223 5.46501 9.65358 5.48873 9.20906 5.61852C9.3975 5.87386 9.49943 6.18273 9.49999 6.50008C9.49533 6.60569 9.47919 6.71047 9.45187 6.81258L7.15156 5.03477C7.95061 4.36702 8.95866 4.00085 9.99999 4.00008C10.591 3.99975 11.1763 4.11592 11.7225 4.34195C12.2686 4.56798 12.7648 4.89944 13.1827 5.31737C13.6006 5.7353 13.9321 6.2315 14.1581 6.77762C14.3841 7.32373 14.5003 7.90904 14.5 8.50008C14.5 9.17602 14.3347 9.80602 14.0656 10.3785V10.3782Z" fill="#828282"></path>
+                        </svg>)}
+                      </FloatingLabel>
+                    </div>
+                    <span id='password-error' style={{ display: "none", color: 'red' }}></span>
+                    <span id='password-check' style={{ display: "none", color: 'red' }}>Incorrect Password</span>
+                    <div className="d-flex align-items-center justify-content-between remember_div mt-30 mb-30">
+                      <div className="form-check">
+                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked={isChecked} onChange={() => setIsChecked(!isChecked)} />
+                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                          Remember me
+                        </label>
+                      </div>
+                      <Link className="link_forget" onClick={handleEmailShow}>Forgot Password?</Link>
+                    </div>
+                  </div>
+                  <div className="col-lg-12 mb-lg-4 mb-md-4 mb-3">
+                    <button type='submit' className="btn blue-btn w-100 text-uppercase">Sign In</button>
+                  </div>
+                  <div>
+                    <p className="mt-10 text-center text-sm/6 text-gray-500">
+                      Don't have an account? {' '}
+                      <NavLink className="font-semibold text-indigo-600 hover:text-indigo-500" onClick={handleRegOpen}>
+                        SignUp now
+                      </NavLink>
+                    </p>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div className="col-lg-5 gradient_bg h_100vh">
+            <div className="inner_content_two">
+              <Link to="/" className="">
+                <img src={logo} className="img-fluid" alt="" />
+              </Link>
+              <div className="line_height_24">
+                <h2 className="login-right-heading  mb_16">
+                  Flexible & Powerful Project Management Tool For BT Team
+                </h2>
+                <p className="para_18 my-3">
+                  Scrum and Kanban boards help agile teams turn large complex projects into manageable pieces of work and
+                  ship faster.
+                </p>
+                <div className="mt-5">
+                  <div className="d-flex gap-3 mb-3">
+                    <span><img src={correct} alt="" /></span>
+                    <p className="para_18">
+                      Powerful agile boards
+                    </p>
+                  </div>
+                  <div className="d-flex gap-3 mb-3">
+                    <span><img src={correct} alt="" /></span>
+                    <p className="para_18">
+                      Reports and insights:
+                    </p>
+                  </div>
+                  <div className="d-flex gap-3 mb-3">
+                    <span><img src={correct} alt="" /></span>
+                    <p className="para_18">
+                      No training or maintenance needed
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <Modal show={emailShow} onHide={handleEmailClose} className='modalSize'
+          size='md'
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">Enter Your Registered Email
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Email"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' value={passEmail} onChange={handleEmailPass} onInput={validatePassword}
+                  />
+                  <span id='email-pass-error' style={{ display: "none", color: 'red' }}>User not exist with this email</span>
+                </FloatingLabel>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleFindEmail}>
+              Procced
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={passShow} onHide={handlePassClose} className='modalSize'
+          size='md'
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">Change you password here
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Old Password"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' value={oldPassword} onChange={handleOldPassword} onInput={validateOldPassword}
+                  />
+                  <span id='old-password-error' style={{ display: "none", color: 'red' }}>Old password is not matched</span>
+                </FloatingLabel>
+              </Form.Group>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="New Password"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' value={newPassword} onChange={handleNewPassword} onInput={validateNewPassword}
+                  />
+                  <span id='new-password-error' style={{ display: "none", color: 'red' }}>Enter valid password</span>
+                </FloatingLabel>
+              </Form.Group>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Confirm new password"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' name='confirmPassword' value={confirmNewPassword} onChange={handleConfirmNewPassword} onInput={comparePassword}
+                  />
+                  <span id='con-password-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
+                </FloatingLabel>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleSavePassword}>
+              Change password
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={regShow} onHide={handleRegClose} className='modalSize'
+          size='md'
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">Register here
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Email"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' value={email} onChange={(e) => setEmail(e.target.value)} onInput={(e) => validateLocalEmail(e.target.value)}
+                  />
+                  <span id='email-err' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
+                  <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
+                </FloatingLabel>
+              </Form.Group>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Password"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' value={password} onChange={(e) => setPassword(e.target.value)} onInput={validatePassword}
+                  />
+                  <span id='reg-password-error' style={{ display: "none", color: 'red' }}>Enter valid password</span>
+
+                </FloatingLabel>
+              </Form.Group>
+              <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Confirm password"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type='text' name='confirmPassword' value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  />
+                  <span id='reg-con-password-error' style={{ display: "none", color: 'red' }}>password and confirm password not matched</span>
+                </FloatingLabel>
+              </Form.Group>
+
+           
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label className='label-me'>Access: </Form.Label>
+                {checkRoleOption.map((it) => (
+                  <label key={it.key}>
+                    {it.label}
+                    <input type='checkbox' name={it.name} checked={access.includes(it.name)} onChange={handleAccessChange} />
+                  </label>
+                ))}
+
+                <span id='access-error' style={{ display: 'none', color: 'red' }}>Select at least one role</span>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleNewUser}>
+              Register
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    </section>
+  )
+}
+
+export default LoginPage
