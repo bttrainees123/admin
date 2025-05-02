@@ -5,12 +5,12 @@ import clearIcon from '../image/clear.png'
 import Webcam from "react-webcam";
 import { chain, difference } from 'lodash';
 
-const inv1 = ['lil', 'reds', 'takeout', 'and', 'c', 'oxtail', 'gravy', 'subtotal', 'taxes', 'tip', 'discount', 'total'] 
-const inv2 = ['order', 'sandwich', 'shop', 'tip', 'total', 'your', 'delivery', 'by', 'view', 'store', 'opens', 'at'] 
-const inv3 = ['coastline', 'burgers', 'redmond', '16244', 'cleveland', 'street', '98052', 'to', 'go', 'ordered', 'subtotal', 'tax'] 
-const inv4 = ['greek', 'and', 'american', '2512', 'colby', 'everett', '98201', 'ordered', 'how', 'was', 'your', 'visit', 'restaurant', 'reach', 'contact'] 
-const inv5 = ['bao', 'boss', 'order', 'details', 'subtotal', 'estimated', 'tax', 'discount', 'total'] 
-const inv6 = ['buffalo', 'wild', 'wing', 'grill', 'bar', '1450', 'ala', 'moana', 'blvd', 'unit', '3326', 'table', 'guests', 'order', 'type', 'subtotal', 'tax', 'total', 'balance', 'due'] 
+const inv1 = ['lil', 'reds', 'takeout', 'and', 'c', 'oxtail', 'gravy', 'subtotal', 'taxes', 'tip', 'discount', 'total']
+const inv2 = ['order', 'sandwich', 'shop', 'tip', 'total', 'your', 'delivery', 'by', 'view', 'store', 'opens', 'at']
+const inv3 = ['coastline', 'burgers', 'redmond', '16244', 'cleveland', 'street', '98052', 'to', 'go', 'ordered', 'subtotal', 'tax']
+const inv4 = ['greek', 'and', 'american', '2512', 'colby', 'everett', '98201', 'ordered', 'how', 'was', 'your', 'visit', 'restaurant', 'reach', 'contact']
+const inv5 = ['bao', 'boss', 'order', 'details', 'subtotal', 'estimated', 'tax', 'discount', 'total']
+const inv6 = ['buffalo', 'wild', 'wing', 'grill', 'bar', '1450', 'ala', 'moana', 'blvd', 'unit', '3326', 'table', 'guests', 'order', 'type', 'subtotal', 'tax', 'total', 'balance', 'due']
 
 
 const VALID_WORDS = inv1 || inv2 || inv3 || inv4 || inv5 || inv6
@@ -30,7 +30,7 @@ const TextReader = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            // captureImage();
+            captureImage();
             console.log("capturing...");
 
         }, 10000);

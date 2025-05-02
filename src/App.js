@@ -9,8 +9,7 @@ import About from './components/LanguageChanger/About';
 import Post from './components/Pages/Post';
 import { lazy, Suspense } from 'react'
 import Loader from './components/Pages/Loader';
-import { ReactKeycloakProvider } from '@react-keycloak/web'
-import cloakAuth from './keycloak'
+import TextHome from './components/ImageTextReader/TextHome';
 
 const User = lazy(() => import('./components/Pages/User'))
 const Project = lazy(() =>
@@ -25,17 +24,10 @@ const InputParser = lazy(() => import('./components/Pages/Editor/InputParser'))
 
 function App() {
 
-  // const { keycloak, initialized } = useKeycloak()
-
-  // if (!initialized) {
-  //   return <div>Loading...</div>
-  // }
+  
   return (
     <>
-      {/* <div>
-        {keycloak.authenticated ? (<div><h1>{keycloak.tokenParsed?.preferred_username}</h1><br /><button onClick={() => keycloak.logout()}>Logout</button></div>) : <button onClick={() => keycloak.login()}>Login</button>}
-      </div> */}
-      <ReactKeycloakProvider authClient={cloakAuth}>
+   
         <BrowserRouter>
           <Suspense fallback={<Loader />}>
             <Routes>
@@ -51,11 +43,11 @@ function App() {
               <Route path='/post' element={<PrivateRoute Component={Post} />} />
               <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} />
               <Route path='/extract-text' element={<TextReader />} />
+              <Route path='/text-home' element={<TextHome />} />
               <Route path='/loading' element={<PrivateRoute Component={Loader} />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
-      </ReactKeycloakProvider>
     </>
   );
 }
