@@ -301,7 +301,7 @@ const HomePage = () => {
           <div>Select Image</div>
         </div>
         ) : (
-          <div className=''  >
+          <div className='' >
             <img className='close-icon' src={clearIcon} onClick={handleClear} />
           </div>
         )}
