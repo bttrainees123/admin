@@ -1,190 +1,361 @@
 import React, { useEffect, useRef, useState } from 'react'
-import ProgressBar from 'react-bootstrap/ProgressBar'
-import { useDispatch, useSelector } from 'react-redux'
-import Toast from 'react-bootstrap/Toast';
-import { setSuccess } from '../features/successSlice';
-import ReactHtmlParser from 'react-html-parser'
+import Tesseract from "tesseract.js";
+// import uploadIcon from '../image/upload.png'
+// import clearIcon from '../image/clear.png'
+import Webcam from "react-webcam";
+import { difference } from 'lodash';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+const inv1 =
+  ['lil',
+    'reds',
+    'takeout',
+    'and',
+    'c',
+    'subtotal',
+    'taxes',
+    'tip',
+    'discount',
+    'total']
+const inv2 =
+  ['order',
+    'sandwich',
+    'shop',
+    'tip',
+    'total',
+    'your',
+    'order',
+    'delivery',
+    'by',
+    'view',
+    'store',
+    'opens',
+    'at']
+const inv3 =
+  ['coastline',
+    'burgers',
+    'redmond',
+    'server',
+    'check',
+    'street',
+    '98052',
+    'ordered',
+    'tax',
+    'tip',
+    'subtotal']
+const inv4 =
+  ['greek',
+    'and',
+    'american',
+    'colby',
+    'everett',
+    '98201',
+    'take',
+    'out',
+    'ordered',
+    'how',
+    'was',
+    'your',
+    'visit',
+    'restaurant',
+    'reach',
+    'contact']
+const inv5 =
+  ['bao',
+    'boss',
+    'order',
+    'details',
+    'subtotal',
+    'estimated',
+    'tax',
+    'review',
+    'store',
+    'discount',
+    'total']
+const inv6 =
+  ['buffalo',
+    'wild',
+    'wings',
+    'grill',
+    'bar',
+    '1450',
+    'ala',
+    'moana',
+    'blvd',
+    'unit',
+    '3326',
+    'server',
+    'table',
+    'guests',
+    'order',
+    'type',
+    'subtotal',
+    'tax',
+    'total',
+    'balance',
+    'due']
 
 const HomePage = () => {
-  const dispatch = useDispatch()
-  const [formValues, setFormValues] = useState([{ name: '', email: '', password: '', age: '', images: [] }])
-  const [progressBars, setProgressBars] = useState(0)
-  const fileInputRef = useRef(null);
-  const success = useSelector((state) => state.success.successMe);
+  const navigate = useNavigate()
+  const webcamRef = useRef(null);
+  // const inputRef = useRef(null);
+  // const [hasImage, setHasImage] = useState(false)
+  const [message, setMessage] = useState("");
+  // const [imgData, setImgData] = useState([])
+  const [isCapture, setIsCapture] = useState(false)
+
+  // const handleFile = () => {
+  //   if (inputRef?.current) {
+  //     inputRef.current.click();
+  //   }
+  // }
 
   useEffect(() => {
-    const storedSuccess = localStorage.getItem('success');
-    if (storedSuccess === 'true') {
-      dispatch(setSuccess(true));
-      localStorage.removeItem('success');
-    }
+    const interval = setInterval(() => {
+      if (!isCapture) {
+        captureImage();
+      }
+    }, 2000);
+    return () => {
+      clearInterval(interval);
+    };
+  })
 
-    if (success) {
-      setTimeout(() => {
-        dispatch(setSuccess(false));
-      }, 3000);
-    }
+  // const handleClear = () => {
+  //   setHasImage(false);
+  //   setMessage("");
+  // };
 
-  }, [success, dispatch]);
-
-  const handleFile = (index, event) => {
-    console.log("event.target.files", event.target.files);
-    const files = Array.from(event.target.files)
-    console.log("Files ", files)
-    const newFormValues = [...formValues]
-    newFormValues[index].images.push(...files)
-    setFormValues(newFormValues)
-    uploadFiles(files)
-  }
-  const handleDrop = (index, event) => {
-    event.preventDefault()
-    const files = Array.from(event.dataTransfer.files)
-    const newFormValues = [...formValues]
-    newFormValues[index].images.push(...files)
-    setFormValues(newFormValues)
-    uploadFiles(files)
-  }
-
-  const uploadFiles = (files) => {
-    files.forEach((file, i) => {
-      const formData = new FormData()
-      console.log('file', file)
-      formData.append('file', file)
-      progress(0)
-    })
-  }
-
-  const progress = function (sec) {
-    let interval = 250;
-    setTimeout(function () {
-      console.log("sec ", sec);
-      if (sec < 90) {
-        sec = sec + 10;
+  const PostImage = async (img, txt) => {
+    try {
+      // console.log('img ', img);
+      const formData = new FormData();
+      formData.append("tempImage", img)
+      const apiResponse = await axios
+        .post(`https://n-again.com/api/uploadImageArr`,
+          formData);
+      // console.log('apiResponse ', apiResponse);
+      if (apiResponse.data.status) {
+        // console.log("URL ", 'https://n-again.com/images/' + apiResponse.data.path);
+        // setImgData((prev) => 
+        // [...prev, { image: img, text: txt, 
+        // path: 'https://n-again.com/images/' + apiResponse.data.path }])
+        return apiResponse.data.path
       }
       else {
-        sec = sec + 1;
+        console.error(apiResponse?.data?.message)
       }
-      setProgressBars(sec)
-      if (sec < 100)
-        progress(sec);
-    }, interval)
-  }
-
-
-  const handleChange = (i, e) => {
-    let newFormValues = [...formValues]
-    newFormValues[i][e.target.name] = e.target.value
-    setFormValues(newFormValues)
-  }
-
-
-  const removeFormFields = (i) => {
-    let newFormValues = [...formValues]
-    newFormValues.splice(i, 1)
-    setFormValues(newFormValues)
-  }
-  const handleImageClose = (e, i, index) => {
-    const newFormValues = [...formValues]
-    newFormValues[index].images.splice(i, 1)
-    console.log("newFormValues[index] ", newFormValues[index]);
-    setFormValues(newFormValues)
-    if (formValues[index].images.length === 0) {
-      setProgressBars(0)
-      fileInputRef.current.value = null
     }
-    console.log("newFormValues.....", formValues[index].images.length);
+    catch (err) {
+      console.error(err?.message);
+    }
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const user = JSON.parse(localStorage.getItem('form')) || []
-    user.push(...formValues)
-    localStorage.setItem('form', JSON.stringify(user))
-    return ReactHtmlParser('<h1>Hello world!</h1>')
-
+  const uploadBase64 = async (imageUrl, txt) => {
+    try {
+      const response = await axios
+        .post(`https://n-again.com/api/uploadbase64`,
+          { image: imageUrl })
+      if (response.data?.status) {
+        // console.log('response ', response);
+        // setImgData((prev) => 
+        // [...prev, { image: imageUrl, text: txt, 
+        // path: 'https://n-again.com/images/' + response?.data?.data }])
+        setMessage('https://n-again.com/images/' + response?.data?.data)
+        navigate('/text-home')
+      }
+      else {
+        setMessage("Image uploaded")
+      }
+    }
+    catch (err) {
+      console.error(err);
+      setMessage("error: ", err)
+    }
   }
 
-  function toasterMessage() {
+  // const handleFileChange = (e) => {
+  //   const newFile = e.target.files[0];
+  //   // console.log("new ", newFile);
+  //   const files = Array.from(e.target.files)
+  //   // console.log("Files ", files)
+  //   files.forEach(file => { recognizeText(file) })
+  //   setHasImage(true);
+  // }
 
-    return (
-      <>
-        <Toast style={{ background: '#D0F0C0', marginLeft: '1000px', position: 'absolute', zIndex: '1' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
-          <Toast.Body>You have Successfully change your data.</Toast.Body>
-        </Toast>
-      </>
-    );
+  const captureImage = () => {
+    if (isCapture) return
+    // console.log("pic clicked...");
+    const imageUrl = webcamRef.current.getScreenshot();
+    if (imageUrl) {
+      // setHasImage(true)
+      recognizeText(imageUrl)
+    }
   }
+
+  // const isBase64 = (str) => {
+  //   try {
+  //     if (str === '' || str.trim() === '') {
+  //       return false;
+  //     }
+  //     return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(str);
+  //   } catch (err) {
+  //     return false;
+  //   }
+  // };
+
+
+
+  // const recognizeText = async (imageFile) => {
+  //   setIsCapture(true)
+  //   setMessage("Identifying text...")
+  //   const response = await Tesseract.recognize(imageFile, "eng")
+  //   const { data } = response;
+  //   if (data?.text) {
+  //     const text = chain(data?.text)
+  //       .replace(/(\r\n|\n|\r)/gm, " ")
+  //       .replace(/,/g, "")
+  //       .replace(/\./g, "")
+  //       .trim()
+  //       .lowerCase()
+  //       .value();
+  //     const words = chain(text)
+  //       .split(" ")
+  //       .map((item) => {
+  //         // if (item) {
+  //         return item;
+  //         // }
+  //       }
+  //       )
+  //       .value();
+  //     if (difference(inv1, words)?.length === 0 ||
+  //       difference(inv2, words)?.length === 0 ||
+  //       difference(inv3, words)?.length === 0 ||
+  //       difference(inv4, words)?.length === 0 ||
+  //       difference(inv5, words)?.length === 0 ||
+  //       difference(inv6, words)?.length === 0) {
+  //       if (typeof imageFile === 'string') {
+  //         if (!isCapture) {
+  //           uploadBase64(imageFile, data.text)
+  //         }
+  //         setMessage(`Text Identified Successfully - Base64`)
+  //       }
+  //       else {
+  //         PostImage(imageFile, data.text)
+  //         setMessage(`Text Identified Successfully - Image`)
+  //       }
+  //     } else {
+  //       setMessage("Could not find required text in the image.");
+  //       setIsCapture(false)
+  //     }
+  //   } else {
+  //     setMessage("Could not find any text in image.");
+  //     setIsCapture(false)
+  //   }
+  // }
+
+  const recognizeText = async (imageFile) => {
+    try {
+      setIsCapture(true);
+      setMessage("Identifying text...");
+      const { data } = await Tesseract.recognize(imageFile, "eng");
+      if (!data?.text) {
+        setMessage("Could not find any text in image.");
+        setIsCapture(false);
+        return;
+      }
+      const cleanText = data.text
+        .replace(/[\r\n,.]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+      const words = cleanText.split(" ");
+      const invLists = [inv1, inv2, inv3, inv4, inv5, inv6];
+      const matched = invLists.some(inv => difference(inv, words).length === 0);
+      if (matched) {
+        if (typeof imageFile === 'string' && !isCapture) {
+          uploadBase64(imageFile, data.text);
+          setMessage("Text Identified Successfully - Base64");
+        } else {
+          PostImage(imageFile, data.text);
+          setMessage("Text Identified Successfully - Image");
+        }
+      } else {
+        setMessage("Could not find required text in the image.");
+        setIsCapture(false);
+      }
+    } catch (error) {
+      console.error("Error recognizing text:", error);
+      setMessage("An error occurred while identifying text.");
+      setIsCapture(false);
+    }
+  };
+
   return (
     <>
-      <div style={{ marginTop: '0px' }}>
-        <div style={{ marginTop: '0px' }}>-{success && toasterMessage()}</div>
-
-        <form style={{ margin: '70px' }} onSubmit={handleSubmit}>
-          {formValues.map((element, index) => (
-            <div className="form-inline" key={index}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => handleDrop(index, e)}>
-              <div className='row'>
-                <div className="form-group col">
-                  <label>UserName: </label><br />
-                  <input type="text" className="form-control" name="name" value={element.name || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter username" />
-                  <br />
-                </div>
-                <div className="form-group col">
-                  <label>Email: </label><br />
-                  <input type="text" className="form-control" name="email" value={element.email || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter email" />
-                  <br />
-                </div>
-              </div>
-              <div className='row'>
-                <div className="form-group col">
-                  <label>Password: </label><br />
-                  <input type="text" className="form-control" name="password" value={element.password || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter password" />
-                  <br />
-                </div>
-                <div className="form-group col">
-                  <label>Age: </label><br />
-                  <input type="text" className="form-control" name="age" value={element.age || ''} onChange={(e) => handleChange(index, e)} placeholder="Enter age" />
-                  <br />
-                </div>
-              </div>
-              <div className="form-group" style={{ marginLeft: '400px', marginRight: '400px', borderRadius: '5px', border: '1px solid rgb(180, 180, 180)' }}>
-                <label style={{ marginLeft: '130px' }}>Upload and Drop Images </label><br />
-                <input type="file" ref={fileInputRef} accept="image/*" className="form-control" id="fileInput" multiple onChange={(e) => handleFile(index, e)} onClick={(e) => {
-                  e.currentTarget.value = null
-                }} />
-                <br />
-                <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
-                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                  {element.images.map((img, i) => (
-                    <div>
-                      <img key={i} src={URL.createObjectURL(img)} alt="preview" style={{ width: '80px', height: '80px', margin: '5px' }} /><span onClick={(e) => handleImageClose(e, i, index)} id='my-icon' className="close AClass" style={{ cursor: 'pointer', fontSize: '25px', marginBottom: '25px' }}>&times;</span>
-                      <p style={{ width: '80px', height: '80px', marginLeft: '5px' }}>{img.name.slice(0, 10)}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {index ? (
-                <button type="button" className="btn btn-danger" onClick={() => removeFormFields(index)}>Remove</button>
-              ) : null}
-            </div>
-          ))}
-          <div className="button-section">
-            <button className="btn btn-primary" style={{ marginLeft: '560px', marginTop: '12px' }} type="submit">Submit</button>
+      {/* <div className='image-container' style={{ border: '2px solid black', width: '154px', marginLeft: '45%', marginTop: '100px' }}>
+        {!hasImage ? (<div className='upload-container' onClick={handleFile}>
+          <input style={{ display: 'none' }} ref={inputRef} type='file' accept='image/*' onChange={handleFileChange} />
+          <img className='upload-icon' src={uploadIcon} />
+          <div>Select Image</div>
+        </div>
+        ) : (
+          <div className=''  >
+            <img className='close-icon' src={clearIcon} onClick={handleClear} />
           </div>
-          <>
-            <section className="drag-drop" >
-              <div
-                className={`document-uploader ${true ? "upload-box active" : "upload-box"
-                  }`}
-                onDrop={handleDrop}
-                onDragOver={(event) => event.preventDefault()}
-              >
-              </div>
-            </section>
-          </>
-        </form>
+        )}
+      </div> */}
+      <div style={{ position: 'fixed', left: '0', top: '0', width: '100vw', height: '100vh', backgroundColor: '#000' }}>
+        <Webcam
+          ref={webcamRef}
+          audio={false}
+          height={100 + '%'}
+          width={100 + '%'}
+          // screenshotFormat="image/jpeg"
+          screenshotQuality={1}
+          forceScreenshotSourceSize={true}
+          videoConstraints={{
+            height: 720,
+            width: 1280, facingMode: 'environment'
+          }}
+          onUserMedia={() => console.log("camera started")}
+          onUserMediaError={(e) => console.warn("camera error: ", e)}
+          style={{
+            border: '1px solid black',
+            objectFit: 'cover'
+          }}
+        />
       </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          color: 'white',
+          fontSize: '24px',
+          textAlign: 'center',
+          textShadow: '4px 4px 8px rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+
+        }}
+      >
+        {message || `Identifying text...`}
+      </div>
+
+      {/* <div className="message" style={{ marginLeft: '45%', marginTop: '10px' }}>{message}</div>
+      {imgData.length > 0 && imgData.map((it, i) =>
+        <div key={i}>
+          <h5 style={{ marginLeft: '16%', marginTop: '20px' }}>Processed Data</h5>
+          <img src={typeof it.image === 'string' ? it.image : URL.createObjectURL(it.image)} style={{ marginLeft: '10%', width: '250px', height: '250px' }} />
+          <p style={{ marginLeft: '10%', marginTop: '20px', fontSize: '20px' }}>Image URL: <a href={it.path} target="_blank">{it.path}</a></p>
+          <pre style={{ marginLeft: '10%', marginTop: '20px', fontSize: '20px' }}>{it.text}</pre>
+        </div>
+      )} */}
     </>
   )
 }
@@ -222,16 +393,14 @@ export default HomePage
 
 
 
+// 10: 30 - 11: 40 ===> project setup
+
+// 11:40 -  1: 30 ===> correction is extractText file (run build)
+
+// 1: 50 -- 3: 40 ===> remove button and valid word array and add time interval of 10 second  from logic error after deploy
+
+// 3: 40 --   ==> webca, not show after deply issue
 
 
 
-
-
-
-
-// 11: 00 ---> complete remember me implementation
-// 11: 17 ---> correcting in remember me checkbox logic
-// 1: 00 ---> bar graph custamizations
-
-// 1:30 - 5:30 ---> User registration Modal
-// 5:30 - 7:00 ---> error solving
+// https://grand-lamington-255712.netlify.app/
