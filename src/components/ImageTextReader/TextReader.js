@@ -1,137 +1,253 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Tesseract from "tesseract.js";
-import uploadIcon from '../image/upload.png'
-import clearIcon from '../image/clear.png'
 import Webcam from "react-webcam";
 import { chain, difference } from 'lodash';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const inv1 = ['lil', 'reds', 'takeout', 'and', 'c', 'oxtail', 'gravy', 'subtotal', 'taxes', 'tip', 'discount', 'total']
-const inv2 = ['order', 'sandwich', 'shop', 'tip', 'total', 'your', 'delivery', 'by', 'view', 'store', 'opens', 'at']
-const inv3 = ['coastline', 'burgers', 'redmond', '16244', 'cleveland', 'street', '98052', 'to', 'go', 'ordered', 'subtotal', 'tax']
-const inv4 = ['greek', 'and', 'american', '2512', 'colby', 'everett', '98201', 'ordered', 'how', 'was', 'your', 'visit', 'restaurant', 'reach', 'contact']
-const inv5 = ['bao', 'boss', 'order', 'details', 'subtotal', 'estimated', 'tax', 'discount', 'total']
-const inv6 = ['buffalo', 'wild', 'wing', 'grill', 'bar', '1450', 'ala', 'moana', 'blvd', 'unit', '3326', 'table', 'guests', 'order', 'type', 'subtotal', 'tax', 'total', 'balance', 'due']
-
-
-const VALID_WORDS = inv1 || inv2 || inv3 || inv4 || inv5 || inv6
+const inv1 =
+  ['lil',
+    'reds',
+    'takeout',
+    'and',
+    'c',
+    'subtotal',
+    'taxes',
+    'tip',
+    'discount',
+    'total']
+const inv2 =
+  ['order',
+    'sandwich',
+    'shop',
+    'tip',
+    'total',
+    'your',
+    'order',
+    'delivery',
+    'by',
+    'view',
+    'store',
+    'opens',
+    'at']
+const inv3 =
+  ['coastline',
+    'burgers',
+    'redmond',
+    'server',
+    'check',
+    'street',
+    '98052',
+    'ordered',
+    'tax',
+    'tip',
+    'subtotal']
+const inv4 =
+  ['greek',
+    'and',
+    'american',
+    'colby',
+    'everett',
+    '98201',
+    'take',
+    'out',
+    'ordered',
+    'how',
+    'was',
+    'your',
+    'visit',
+    'restaurant',
+    'reach',
+    'contact']
+const inv5 =
+  ['bao',
+    'boss',
+    'order',
+    'details',
+    'subtotal',
+    'estimated',
+    'tax',
+    'review',
+    'store',
+    'discount',
+    'total']
+const inv6 =
+  ['buffalo',
+    'wild',
+    'wings',
+    'grill',
+    'bar',
+    '1450',
+    'ala',
+    'moana',
+    'blvd',
+    'unit',
+    '3326',
+    'server',
+    'table',
+    'guests',
+    'order',
+    'type',
+    'subtotal',
+    'tax',
+    'total',
+    'balance',
+    'due']
 
 const TextReader = () => {
-    const webcamRef = useRef(null);
-    const inputRef = useRef(null);
-    const [hasImage, setHasImage] = useState(false)
-    const [message, setMessage] = useState("");
-    const [textData, setTextData] = useState([])
+  const navigate = useNavigate()
+  const webcamRef = useRef(null);
+  const [message, setMessage] = useState("");
+  const [isCapture, setIsCapture] = useState(false)
 
-    const handleFile = () => {
-        if (inputRef?.current) {
-            inputRef.current.click();
-        }
-    }
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            captureImage();
-            console.log("capturing...");
-
-        }, 10000);
-        return () => {
-            clearInterval(interval);
-            console.log("clear");
-        };
-    }, [])
-
-    const captureImage = () => {
-        console.log("Clicking...");
-        const imageSrc = webcamRef.current.getScreenshot();
-        recognizeText(imageSrc)
-        setHasImage(true)
-    }
-
-    const handleClear = () => {
-        setHasImage(false);
-        setMessage("");
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isCapture) {
+        captureImage();
+      }
+    }, 2000);
+    return () => {
+      clearInterval(interval);
     };
+  })
 
-    const handleFileChange = (e) => {
-        const newFile = e.target.files[0];
-        setHasImage(true);
-        recognizeText(newFile);
+  const PostImage = async (img, txt) => {
+    try {
+      const formData = new FormData();
+      formData.append("tempImage", img)
+      const apiResponse = await axios
+        .post(`https://n-again.com/api/uploadImageArr`,
+          formData);
+      if (apiResponse.data.status) {
+        return apiResponse.data.path
+      }
+      else {
+        console.error(apiResponse?.data?.message)
+      }
     }
+    catch (err) {
+      console.error(err?.message);
+    }
+  }
 
-    const recognizeText = async (imageFile) => {
-        setMessage("Identifying text...")
-        const response = await Tesseract.recognize(imageFile, "eng")
-        const { data } = response;
-        if (data?.text) {
-            const text = chain(data?.text)
-                .replace(/(\r\n|\n|\r)/gm, " ")
-                .replace(/,/g, "")
-                .replace(/\./g, "")
-                .trim()
-                .lowerCase()
-                .value();
-            const words = chain(text)
-                .split(" ")
-                .map((item) => {
-                    if (item) {
-                        return item;
-                    }
-                })
-                .value();
+  const uploadBase64 = async (imageUrl, txt) => {
+    try {
+      const response = await axios
+        .post(`https://n-again.com/api/uploadbase64`,
+          { image: imageUrl })
+      if (response.data?.status) {
+        setMessage('https://n-again.com/images/' + response?.data?.data)
+        navigate('/text-home')
+      }
+      else {
+        setMessage("Image uploaded")
+      }
+    }
+    catch (err) {
+      console.error(err);
+      setMessage("error: ",err)
+    }
+  }
 
-            console.log("words > ", words);
-            if (difference(VALID_WORDS, words)?.length === 0) {
-                setMessage("Text Identified Successfully")
-                setTextData([...textData, data.text]);
-            } else {
-                setMessage("Could not find required text in the image.");
-                captureImage()
+  const captureImage = () => {
+    if (isCapture) return
+    const imageUrl = webcamRef.current.getScreenshot();
+    if (imageUrl) {
+      recognizeText(imageUrl)
+    }
+  }
+
+   const recognizeText = async (imageFile) => {
+      setIsCapture(true)
+      setMessage("Identifying text...")
+      const response = await Tesseract.recognize(imageFile, "eng")
+      const { data } = response;
+      if (data?.text) {
+        const text = chain(data?.text)
+          .replace(/(\r\n|\n|\r)/gm, " ")
+          .replace(/,/g, "")
+          .replace(/\./g, "")
+          .trim()
+          .lowerCase()
+          .value();
+        const words = chain(text)
+          .split(" ")
+          .map((item) => {
+            // if (item) {
+            return item;
+            // }
+          }
+          )
+          .value();
+        if (difference(inv1, words)?.length === 0 ||
+          difference(inv2, words)?.length === 0 ||
+          difference(inv3, words)?.length === 0 ||
+          difference(inv4, words)?.length === 0 ||
+          difference(inv5, words)?.length === 0 ||
+          difference(inv6, words)?.length === 0) {
+          if (typeof imageFile === 'string') {
+            if (!isCapture) {
+              uploadBase64(imageFile, data.text)
             }
+            setMessage(`Text Identified Successfully - Base64`)
+          }
+          else {
+            PostImage(imageFile, data.text)
+            setMessage(`Text Identified Successfully - Image`)
+          }
         } else {
-            setMessage("Could not find any text in image.");
+          setMessage("Could not find required text in the image.");
+          setIsCapture(false)
         }
+      } else {
+        setMessage("Could not find any text in image.");
+        setIsCapture(false)
+      }
     }
 
-    return (
-        <>
-            <div className='image-container' style={{ border: '2px solid black', width: '154px', marginLeft: '45%', marginTop: '100px' }}>
-                {!hasImage ? (<div className='upload-container' onClick={handleFile}>
-                    <input style={{ display: 'none' }} ref={inputRef} type='file' accept='image/*' onChange={handleFileChange} />
-                    <img className='upload-icon' src={uploadIcon} />
-                    <div>Select Image</div>
-                </div>
-                ) : (
-                    <div className=''  >
-                        <img className='close-icon' src={clearIcon} onClick={handleClear} />
-                    </div>
-                )}
-            </div>
-            <div style={{ marginLeft: '105px' }}>
-                <Webcam
-                    ref={webcamRef}
-                    height={300}
-                    screenshotFormat="image/png"
-                    width={400}
-                    screenshotQuality={1}
-                    forceScreenshotSourceSize={true}
-                    videoConstraints={{
-                        height: 720,
-                        width: 1280, facingMode: 'environment'
-                    }}
-                    onUserMedia={() => console.log("camera started")}
-                    onUserMediaError={(e) => console.warn("camera error: ", e)}
-                />
-                <button style={{ marginLeft: '235px' }} onClick={captureImage}>Capture photo</button>
-            </div>
-            <div className="message" style={{ marginLeft: '45%', marginTop: '10px' }}>{message}</div>
-            {textData.length > 0 && textData.map((text, i) =>
-                <div key={i}>
-                    <h5 style={{ marginLeft: '10%', marginTop: '20px' }}>Processed Data</h5>
-                    <pre style={{ marginLeft: '10%', marginTop: '20px', fontSize: '20px' }}>{text}</pre>
-                </div>
-            )}
-        </>
-    )
+  return (
+    <>
+      <div style={{ position: 'fixed', left: '0', top: '0', width: '100vw', height: '100vh', backgroundColor: '#000' }}>
+        <Webcam
+          ref={webcamRef}
+          audio={false}
+          height={100 + '%'}
+          width={100 + '%'}
+          screenshotQuality={1}
+          forceScreenshotSourceSize={true}
+          videoConstraints={{
+            height: 720,
+            width: 1280, facingMode: 'environment'
+          }}
+          onUserMedia={() => console.log("camera started")}
+          onUserMediaError={(e) => console.warn("camera error: ", e)}
+          style={{
+            border: '1px solid black',
+            objectFit: 'cover'
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          color: 'white',
+          fontSize: '24px',
+          textAlign: 'center',
+          textShadow: '4px 4px 8px rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+
+        }}
+      >
+        {message || `Identifying text...`}
+      </div>
+    </>
+  )
 }
 
 export default TextReader
@@ -146,41 +262,3 @@ export default TextReader
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 10: 30 - 11: 40 ===> project setup
-
-// 11:40 -  1: 30 ===> correction is extractText file (run build)
-
-// 1: 50 -- 3: 40 ===> remove button and valid word array and add time interval of 10 second  from logic error after deploy
-
-// 3: 40 --   ==> webca, not show after deply issue

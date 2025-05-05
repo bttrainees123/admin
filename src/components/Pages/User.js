@@ -7,8 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux'
 import { setPassChange, setSuccess } from '../features/successSlice';
 import { updateUser } from '../features/userSlice'
-import { getUsers }
-  from '../features/apiSlice'
+import { getUsers } from '../features/apiSlice'
 import Sideer from '../sider/Sideer'
 import Header from '../Header/Header'
 import 'react-calendar/dist/Calendar.css';
@@ -17,7 +16,6 @@ import ProgressBar from 'react-bootstrap/ProgressBar'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import UserForm from './Forms/UserForm';
 import { Accordion } from 'react-bootstrap';
-
 
 const User = () => {
   const dispatch = useDispatch()
@@ -39,7 +37,6 @@ const User = () => {
   let checkDelete = false
   const [viewEdit, setViewEdit] = useState(false)
   const [viewAdd, setViewAdd] = useState(false)
-
   const success = useSelector((state) => state.success.successMe);
   const successPass = useSelector((state) => state.success.successPass);
 
@@ -59,15 +56,12 @@ const User = () => {
     const fetchData = () => {
       const storedData = JSON.parse(localStorage.getItem("data")) || [];
       const user = JSON.parse(localStorage.getItem("user"));
-      
-
-      if (user) {        
+      if (user) {
         handleRoles(user.access)
         const filteredUsers = storedData.filter((u) => u.email !== user.email);
         setUserData(filteredUsers);
         setLoggedInUser(user)
         console.log('LoggedInUser---------->', user.access);
-
       } else {
         setUserData(storedData);
       }
@@ -91,12 +85,10 @@ const User = () => {
       dispatch(setSuccess(true));
       localStorage.removeItem('success');
     }
-
     if (passwordChange === 'true') {
       dispatch(setPassChange(true));
       localStorage.removeItem('passChange');
     }
-
     if (success) {
       setTimeout(() => {
         dispatch(setSuccess(false));
@@ -133,23 +125,21 @@ const User = () => {
   const handleRoles = (access) => {
     console.log('role.length ', ...access);
     const accessRole = [...access]
-    
     let len = accessRole.length
- 
-    for(let i = 0; i < len; i++){
-      if(accessRole[i] === 'View ' && checkView === false){
+    for (let i = 0; i < len; i++) {
+      if (accessRole[i] === 'View ' && checkView === false) {
         checkView = true
         console.log('heckView', checkView);
       }
-      if(accessRole[i] === 'Edit ' && checkEditor === false){
+      if (accessRole[i] === 'Edit ' && checkEditor === false) {
         checkEditor = true
         console.log('heckEditor', checkEditor);
       }
-      if(accessRole[i] === 'Delete ' && checkDelete === false){
+      if (accessRole[i] === 'Delete ' && checkDelete === false) {
         checkDelete = true
         console.log('heckDelete', checkDelete);
       }
-      if(accessRole[i] === 'Add ' && checkAdd === false){
+      if (accessRole[i] === 'Add ' && checkAdd === false) {
         checkAdd = true
         console.log('heckAdd', checkAdd);
       }
@@ -159,11 +149,11 @@ const User = () => {
   }
 
   const handleAccessChange = () => {
-    if(checkView && checkEditor){
+    if (checkView && checkEditor) {
       setViewEdit(true)
       return;
     }
-    if(checkView){
+    if (checkView) {
       setViewAdd(true)
     }
   }
@@ -185,7 +175,7 @@ const User = () => {
     return isValid;
   };
 
-  
+
   const handleStatusChange = (ind, val) => {
     const updatedData = [...userData];
     updatedData[ind].status = val;
@@ -201,9 +191,7 @@ const User = () => {
   }
 
   const handleChange = (e) => {
-
     const { name, value, type, checked } = e.target
-
     if (updateFile !== null) {
       setEditData((prevData) => ({
         ...prevData,
@@ -336,522 +324,502 @@ const User = () => {
           <Sideer />
           <div className="intersight_content">
             <div className="body_content">
-              <Header viewEdit/>
-              {viewEdit && 
-              <div className="contact-profile" >
-                <div className="row">
-                  {userData.length > 0 ? (userData.map((user, ind) => (
-                    <div key={ind} id='for-search' className="col-lg-6 mb-3" >
-                      <div className="professional_info">
-                        <div className="project-card-top">
-                          <div className="project-card-heading d-flex align-items-center justify-content-between">
-                            <div className="body_heading2 mb-0 ">
-                              <div className='d-flex'>
-                                <h2 className="font-18 mb-0"><span className="me-2"><img src={user.file} style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
-                                {viewEdit &&
-                                  (<span className=''>
-                                    <button className="dropdown-toggle border-0 w-0 d-flex align-items-center" type="button"
-                                      data-bs-toggle="dropdown" aria-expanded="false">
-                                    </button>
-                                    <ul className="dropdown-menu w-100">
-                                      <li>
-                                        <span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleEdit(ind)}>Update</span></li>
-                                      <li><span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleShowDelete(ind)}>Delete</span></li>
-                                    </ul>
-                                  </span>)
-                                }
+              <Header viewEdit />
+              {viewEdit &&
+                <div className="contact-profile" >
+                  <div className="row">
+                    {userData.length > 0 ? (userData.map((user, ind) => (
+                      <div key={ind} id='for-search' className="col-lg-6 mb-3" >
+                        <div className="professional_info">
+                          <div className="project-card-top">
+                            <div className="project-card-heading d-flex align-items-center justify-content-between">
+                              <div className="body_heading2 mb-0 ">
+                                <div className='d-flex'>
+                                  <h2 className="font-18 mb-0"><span className="me-2"><img src={user.file} style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
+                                  {viewEdit &&
+                                    (<span className=''>
+                                      <button className="dropdown-toggle border-0 w-0 d-flex align-items-center" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                      </button>
+                                      <ul className="dropdown-menu w-100">
+                                        <li>
+                                          <span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleEdit(ind)}>Update</span></li>
+                                        <li><span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleShowDelete(ind)}>Delete</span></li>
+                                      </ul>
+                                    </span>)
+                                  }
+                                </div>
+                                <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
                               </div>
-                              <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
+                              <p className="mb-0 font-14 body-sub-heading ">Gender: <span> {user.gender}</span> </p>
                             </div>
-                            <p className="mb-0 font-14 body-sub-heading ">Gender: <span> {user.gender}</span> </p>
-                          </div>
-                          <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
-                            <p className="my-2 font-14 body-sub-heading ">Stream: <span> {user.stream}</span></p>
-                            <p className="my-2 font-14 body-sub-heading ">Age: <span>{user.age}</span>  </p>
-                          </div>
+                            <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
+                              <p className="my-2 font-14 body-sub-heading ">Stream: <span> {user.stream}</span></p>
+                              <p className="my-2 font-14 body-sub-heading ">Age: <span>{user.age}</span>  </p>
+                            </div>
 
-                          <div className="project-card-heading d-flex align-items-center justify-content-between">
-                            <p className="my-2 font-14 body-sub-heading ">Subjects: <span> {user.subject}</span></p>
-                            {viewEdit ? (<p className="my-2 font-14 body-sub-heading ">Status <span><select
-                              value={user.status || "Active"}
-                              onChange={(e) => handleStatusChange(ind, e.target.value)}
-                            >
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select> </span> </p>): (<p className="my-2 font-14 body-sub-heading ">Status: {user.status}</p>)}
-                            
+                            <div className="project-card-heading d-flex align-items-center justify-content-between">
+                              <p className="my-2 font-14 body-sub-heading ">Subjects: <span> {user.subject}</span></p>
+                              {viewEdit ? (<p className="my-2 font-14 body-sub-heading ">Status <span><select
+                                value={user.status || "Active"}
+                                onChange={(e) => handleStatusChange(ind, e.target.value)}
+                              >
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                              </select> </span> </p>) : (<p className="my-2 font-14 body-sub-heading ">Status: {user.status}</p>)}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  )
-                  )) : (<h1>No data found</h1>)}
-                </div >
-                <div>
-                  <Accordion defaultActiveKey="0" className="row">
-                    {data.length > 0 ? loggedInUser.role === 'Viewer' && (data.map((user, ind) => (
-
-                      <Accordion.Item eventKey={ind} key={ind} id='for-search' className="col-lg-6 mb-3" >
-
-                        <div className="professional_info">
-                          <div className="project-card-top">
-                            <Accordion.Header>
-                              <div className="project-card-heading d-flex align-items-center justify-content-between">
-                                <div className="body_heading2 mb-0 ">
-                                  <div className='d-flex'>
-
-                                    <h2 className="font-18 mb-0"><span className="me-2"><img src='https://avatar.iran.liara.run/public' style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
-                                  </div>
-                                  <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
-                                </div>
-                                <p className="mb-0 font-14 body-sub-heading" style={{margin: '30px'}}>Name: <span> {user.name}</span> </p>
-                              </div>
-                            </Accordion.Header>
-                            <Accordion.Body>
-                              <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
-                                <p className="my-2 font-14 body-sub-heading ">Suite: <span className="me-2">{user.address.suite}
-                                </span></p>
-                                <p className="my-2 font-14 body-sub-heading ">City: <span> {user.address.city}</span></p>
-                                <p className="my-2 font-14 body-sub-heading ">Street: <span>{user.address.street}</span>  </p>
-                              </div>
-                              <div className="project-card-heading d-flex align-items-center justify-content-between">
-                                <p className="my-2 font-14 body-sub-heading ">ZipCode: <span className="me-2"> {user.address.zipcode}</span></p>
-                                <p className="my-2 font-14 body-sub-heading ">Lat. <span>{user.address.geo.lat}</span> </p>
-                                <p className="my-2 font-14 body-sub-heading ">Lng. <span>{user.address.geo.lng}</span> </p>
-
-                              </div>
-                            </Accordion.Body>
-                          </div>
-                        </div>
-                      </Accordion.Item>
                     )
-                    )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
-                  </Accordion>
-                  {viewEdit && <UserForm />}
-                </div>
-
-
-                {editInd !== null && (
-                  <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Modal heading</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Form className='row'>
-                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <FloatingLabel
-                            controlId="floatingInput"
-                            label="Username"
-                            className="mb-3"
-                          >
-                            <Form.Control
-                              type='text' name="username" value={editData.username || ''} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
-                            />
-                            <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
-                          </FloatingLabel>
-                        </Form.Group>
-                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <FloatingLabel
-                            controlId="floatingInput"
-                            label="Select Gender"
-                            className="mb-3"
-                          >
-
-                            <Form.Select name="gender" value={editData.gender || ""} onChange={handleChange}>
-                              <option value="">Select</option>
-                              {genderOptions.map((val, ind) => (
-                                <option key={ind} value={val}>
-                                  {val}
-                                </option>
-                              ))}
-                            </Form.Select>
-                            <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
-                          </FloatingLabel>
-                        </Form.Group>
-                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <FloatingLabel
-                            controlId="floatingInput"
-                            label="Age"
-                            className="mb-3"
-                          >
-                            <Form.Control
-                              type='text' name="age" value={editData.age} onChange={handleChange} onInput={validateAge}
-                            />
-                            <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
-                          </FloatingLabel>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                          <FloatingLabel
-                            controlId="floatingInput"
-                            label="Email address"
-                            className="mb-3"
-                          >
-                            <Form.Control
-                              type='text' name="email" value={editData.email} onChange={handleChange} onInput={(e) => validateLocalEmail(e.target.value)}
-                            />
-                            <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
-                            <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
-                          </FloatingLabel>
-                        </Form.Group>
-                        <div className='row'>
-                          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Stream</Form.Label>
-                            <Form.Label>
-                              <input
-                                type="radio"
-                                name="stream"
-                                value="PCM"
-                                checked={editData.stream === "PCM"}
-                                onChange={handleChange}
+                    )) : (<h1>No data found</h1>)}
+                  </div >
+                  <div>
+                    <Accordion defaultActiveKey="0" className="row">
+                      {data.length > 0 ? loggedInUser.role === 'Viewer' && (data.map((user, ind) => (
+                        <Accordion.Item eventKey={ind} key={ind} id='for-search' className="col-lg-6 mb-3" >
+                          <div className="professional_info">
+                            <div className="project-card-top">
+                              <Accordion.Header>
+                                <div className="project-card-heading d-flex align-items-center justify-content-between">
+                                  <div className="body_heading2 mb-0 ">
+                                    <div className='d-flex'>
+                                      <h2 className="font-18 mb-0"><span className="me-2"><img src='https://avatar.iran.liara.run/public' style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
+                                    </div>
+                                    <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
+                                  </div>
+                                  <p className="mb-0 font-14 body-sub-heading" style={{ margin: '30px' }}>Name: <span> {user.name}</span> </p>
+                                </div>
+                              </Accordion.Header>
+                              <Accordion.Body>
+                                <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
+                                  <p className="my-2 font-14 body-sub-heading ">Suite: <span className="me-2">{user.address.suite}
+                                  </span></p>
+                                  <p className="my-2 font-14 body-sub-heading ">City: <span> {user.address.city}</span></p>
+                                  <p className="my-2 font-14 body-sub-heading ">Street: <span>{user.address.street}</span>  </p>
+                                </div>
+                                <div className="project-card-heading d-flex align-items-center justify-content-between">
+                                  <p className="my-2 font-14 body-sub-heading ">ZipCode: <span className="me-2"> {user.address.zipcode}</span></p>
+                                  <p className="my-2 font-14 body-sub-heading ">Lat. <span>{user.address.geo.lat}</span> </p>
+                                  <p className="my-2 font-14 body-sub-heading ">Lng. <span>{user.address.geo.lng}</span> </p>
+                                </div>
+                              </Accordion.Body>
+                            </div>
+                          </div>
+                        </Accordion.Item>
+                      )
+                      )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
+                    </Accordion>
+                    {viewEdit && <UserForm />}
+                  </div>
+                  {editInd !== null && (
+                    <Modal show={show} onHide={handleClose}>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Modal heading</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Form className='row'>
+                          <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                            <FloatingLabel
+                              controlId="floatingInput"
+                              label="Username"
+                              className="mb-3"
+                            >
+                              <Form.Control
+                                type='text' name="username" value={editData.username || ''} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
                               />
-                              PCM
-                            </Form.Label>
-                            <Form.Label>
-                              <input
-                                type="radio"
-                                name="stream"
-                                value="Commerce"
-                                checked={editData.stream === "Commerce"}
-                                onChange={handleChange}
-                              />
-                              Commerce
-                            </Form.Label>
-                            <Form.Label>
-                              <input
-                                type="radio"
-                                name="stream"
-                                value="Arts"
-                                checked={editData.stream === "Arts"}
-                                onChange={handleChange}
-                              />
-                              Arts
-                            </Form.Label>
-                            <span id='stream-error' style={{ display: 'none', color: 'red' }}>Select a stream</span>
+                              <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
+                            </FloatingLabel>
                           </Form.Group>
+                          <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                            <FloatingLabel
+                              controlId="floatingInput"
+                              label="Select Gender"
+                              className="mb-3"
+                            >
+                              <Form.Select name="gender" value={editData.gender || ""} onChange={handleChange}>
+                                <option value="">Select</option>
+                                {genderOptions.map((val, ind) => (
+                                  <option key={ind} value={val}>
+                                    {val}
+                                  </option>
+                                ))}
+                              </Form.Select>
+                              <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
+                            </FloatingLabel>
+                          </Form.Group>
+                          <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                            <FloatingLabel
+                              controlId="floatingInput"
+                              label="Age"
+                              className="mb-3"
+                            >
+                              <Form.Control
+                                type='text' name="age" value={editData.age} onChange={handleChange} onInput={validateAge}
+                              />
+                              <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
+                            </FloatingLabel>
+                          </Form.Group>
+
                           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label className='label-me'>Subjects: </Form.Label>
-                            {checkOption.map((it) => (
-                              <label key={it.key}>
-                                {it.label}
+                            <FloatingLabel
+                              controlId="floatingInput"
+                              label="Email address"
+                              className="mb-3"
+                            >
+                              <Form.Control
+                                type='text' name="email" value={editData.email} onChange={handleChange} onInput={(e) => validateLocalEmail(e.target.value)}
+                              />
+                              <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
+                              <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
+                            </FloatingLabel>
+                          </Form.Group>
+                          <div className='row'>
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                              <Form.Label>Stream</Form.Label>
+                              <Form.Label>
                                 <input
-                                  type="checkbox"
-                                  name={it.name}
-                                  value={it.label}
-                                  checked={(editData.subject).includes(it.label)}
+                                  type="radio"
+                                  name="stream"
+                                  value="PCM"
+                                  checked={editData.stream === "PCM"}
                                   onChange={handleChange}
                                 />
-                              </label>
-                            ))}
-
-                            <span id='subject-error' style={{ display: 'none', color: 'red' }}>Select at least one subject</span>
-                          </Form.Group>
-                          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Profile photo</Form.Label>
-                            <Form.Control
-                              type='file' ref={fileUpdateRef} onChange={handleProfilePic}
-                            />
-
-                            <div style={{ position: 'relative' }}>
-                              <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
-                              <span onClick={handleImageClose} id='my-icon' className="close AClass" style={{ position: 'absolute', cursor: 'pointer', fontSize: '25px', display: 'none' }} >&times;</span>
-                              <img alt='' src={updateFile ? updateFile : editData.file} style={{ maxWidth: "154px" }} />
-                            </div>
-                          </Form.Group>
-                        </div>
-
-
-                      </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button variant="secondary" onClick={handleClose}>
-                        Close
-                      </Button>
-                      <Button variant="primary" onClick={handleSave}>
-                        Save Changes
-                      </Button>
-
-                    </Modal.Footer>
-                  </Modal>)}
-
-
-                <Modal show={showDelete} onHide={handleCloseDelete} className='modalSize'
-                  size='md'
-                  centered
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">Are you sure want to delete!
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseDelete}>
-                      No
-                    </Button>
-                    <Button variant="danger" onClick={() => handleDelete(deleteInd)}>
-                      Yes
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-
-              </div> }
-
-              {viewAdd && 
-              <div className="contact-profile" >
-                <div className="row">
-                  {userData.length > 0 ? (userData.map((user, ind) => (
-                    <div key={ind} id='for-search' className="col-lg-6 mb-3" >
-                      <div className="professional_info">
-                        <div className="project-card-top">
-                          <div className="project-card-heading d-flex align-items-center justify-content-between">
-                            <div className="body_heading2 mb-0 ">
-                              <div className='d-flex'>
-                                <h2 className="font-18 mb-0"><span className="me-2"><img src={user.file} style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
-                                { viewEdit &&
-                                  (<span className=''>
-                                    <button className="dropdown-toggle border-0 w-0 d-flex align-items-center" type="button"
-                                      data-bs-toggle="dropdown" aria-expanded="false">
-                                    </button>
-                                    <ul className="dropdown-menu w-100">
-                                      <li>
-                                        <span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleEdit(ind)}>Update</span></li>
-                                      <li><span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleShowDelete(ind)}>Delete</span></li>
-                                    </ul>
-                                  </span>)
-                                }
+                                PCM
+                              </Form.Label>
+                              <Form.Label>
+                                <input
+                                  type="radio"
+                                  name="stream"
+                                  value="Commerce"
+                                  checked={editData.stream === "Commerce"}
+                                  onChange={handleChange}
+                                />
+                                Commerce
+                              </Form.Label>
+                              <Form.Label>
+                                <input
+                                  type="radio"
+                                  name="stream"
+                                  value="Arts"
+                                  checked={editData.stream === "Arts"}
+                                  onChange={handleChange}
+                                />
+                                Arts
+                              </Form.Label>
+                              <span id='stream-error' style={{ display: 'none', color: 'red' }}>Select a stream</span>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                              <Form.Label className='label-me'>Subjects: </Form.Label>
+                              {checkOption.map((it) => (
+                                <label key={it.key}>
+                                  {it.label}
+                                  <input
+                                    type="checkbox"
+                                    name={it.name}
+                                    value={it.label}
+                                    checked={(editData.subject).includes(it.label)}
+                                    onChange={handleChange}
+                                  />
+                                </label>
+                              ))}
+                              <span id='subject-error' style={{ display: 'none', color: 'red' }}>Select at least one subject</span>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                              <Form.Label>Profile photo</Form.Label>
+                              <Form.Control
+                                type='file' ref={fileUpdateRef} onChange={handleProfilePic}
+                              />
+                              <div style={{ position: 'relative' }}>
+                                <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
+                                <span onClick={handleImageClose} id='my-icon' className="close AClass" style={{ position: 'absolute', cursor: 'pointer', fontSize: '25px', display: 'none' }} >&times;</span>
+                                <img alt='' src={updateFile ? updateFile : editData.file} style={{ maxWidth: "154px" }} />
                               </div>
-                              <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
-                            </div>
-                            <p className="mb-0 font-14 body-sub-heading ">Gender: <span> {user.gender}</span> </p>
+                            </Form.Group>
                           </div>
-                          <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
-                            <p className="my-2 font-14 body-sub-heading ">Stream: <span> {user.stream}</span></p>
-                            <p className="my-2 font-14 body-sub-heading ">Age: <span>{user.age}</span>  </p>
-                          </div>
+                        </Form>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                          Close
+                        </Button>
+                        <Button variant="primary" onClick={handleSave}>
+                          Save Changes
+                        </Button>
 
-                          <div className="project-card-heading d-flex align-items-center justify-content-between">
-                            <p className="my-2 font-14 body-sub-heading ">Subjects: <span> {user.subject}</span></p>
-                            {viewEdit ? (<p className="my-2 font-14 body-sub-heading ">Status <span><select
-                              value={user.status || "Active"}
-                              onChange={(e) => handleStatusChange(ind, e.target.value)}
-                            >
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select> </span> </p>): (<p className="my-2 font-14 body-sub-heading ">Status: {user.status}</p>)}
-                            
+                      </Modal.Footer>
+                    </Modal>)}
+                  <Modal show={showDelete} onHide={handleCloseDelete} className='modalSize'
+                    size='md'
+                    centered
+                  >
+                    <Modal.Header closeButton>
+                      <Modal.Title id="contained-modal-title-vcenter">Are you sure want to delete!
+                      </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={handleCloseDelete}>
+                        No
+                      </Button>
+                      <Button variant="danger" onClick={() => handleDelete(deleteInd)}>
+                        Yes
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </div>}
+              {viewAdd &&
+                <div className="contact-profile" >
+                  <div className="row">
+                    {userData.length > 0 ? (userData.map((user, ind) => (
+                      <div key={ind} id='for-search' className="col-lg-6 mb-3" >
+                        <div className="professional_info">
+                          <div className="project-card-top">
+                            <div className="project-card-heading d-flex align-items-center justify-content-between">
+                              <div className="body_heading2 mb-0 ">
+                                <div className='d-flex'>
+                                  <h2 className="font-18 mb-0"><span className="me-2"><img src={user.file} style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
+                                  {viewEdit &&
+                                    (<span className=''>
+                                      <button className="dropdown-toggle border-0 w-0 d-flex align-items-center" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                      </button>
+                                      <ul className="dropdown-menu w-100">
+                                        <li>
+                                          <span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleEdit(ind)}>Update</span></li>
+                                        <li><span className="dropdown-item" style={{ cursor: 'pointer' }} onClick={() => handleShowDelete(ind)}>Delete</span></li>
+                                      </ul>
+                                    </span>)
+                                  }
+                                </div>
+                                <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
+                              </div>
+                              <p className="mb-0 font-14 body-sub-heading ">Gender: <span> {user.gender}</span> </p>
+                            </div>
+                            <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
+                              <p className="my-2 font-14 body-sub-heading ">Stream: <span> {user.stream}</span></p>
+                              <p className="my-2 font-14 body-sub-heading ">Age: <span>{user.age}</span>  </p>
+                            </div>
+                            <div className="project-card-heading d-flex align-items-center justify-content-between">
+                              <p className="my-2 font-14 body-sub-heading ">Subjects: <span> {user.subject}</span></p>
+                              {viewEdit ? (<p className="my-2 font-14 body-sub-heading ">Status <span><select
+                                value={user.status || "Active"}
+                                onChange={(e) => handleStatusChange(ind, e.target.value)}
+                              >
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                              </select> </span> </p>) : (<p className="my-2 font-14 body-sub-heading ">Status: {user.status}</p>)}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  )
-                  )) : (<h1>No data found</h1>)}
-                </div >
-                <div>
-                  <Accordion defaultActiveKey="0" className="row">
-                    {data.length > 0 ? viewAdd && (data.map((user, ind) => (
-
-                      <Accordion.Item eventKey={ind} key={ind} id='for-search' className="col-lg-6 mb-3" >
-
-                        <div className="professional_info">
-                          <div className="project-card-top">
-                            <Accordion.Header>
-                              <div className="project-card-heading d-flex align-items-center justify-content-between">
-                                <div className="body_heading2 mb-0 ">
-                                  <div className='d-flex'>
-
-                                    <h2 className="font-18 mb-0"><span className="me-2"><img src='https://avatar.iran.liara.run/public' style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
-                                  </div>
-                                  <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
-                                </div>
-                                <p className="mb-0 font-14 body-sub-heading" style={{margin: '30px'}}>Name: <span> {user.name}</span> </p>
-                              </div>
-                            </Accordion.Header>
-                            <Accordion.Body>
-                              <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
-                                <p className="my-2 font-14 body-sub-heading ">Suite: <span className="me-2">{user.address.suite}
-                                </span></p>
-                                <p className="my-2 font-14 body-sub-heading ">City: <span> {user.address.city}</span></p>
-                                <p className="my-2 font-14 body-sub-heading ">Street: <span>{user.address.street}</span>  </p>
-                              </div>
-                              <div className="project-card-heading d-flex align-items-center justify-content-between">
-                                <p className="my-2 font-14 body-sub-heading ">ZipCode: <span className="me-2"> {user.address.zipcode}</span></p>
-                                <p className="my-2 font-14 body-sub-heading ">Lat. <span>{user.address.geo.lat}</span> </p>
-                                <p className="my-2 font-14 body-sub-heading ">Lng. <span>{user.address.geo.lng}</span> </p>
-
-                              </div>
-                            </Accordion.Body>
-                          </div>
-                        </div>
-                      </Accordion.Item>
                     )
-                    )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
-                  </Accordion>
-                  {viewEdit && <UserForm />}
-                </div>
+                    )) : (<h1>No data found</h1>)}
+                  </div >
+                  <div>
+                    <Accordion defaultActiveKey="0" className="row">
+                      {data.length > 0 ? viewAdd && (data.map((user, ind) => (
+                        <Accordion.Item eventKey={ind} key={ind} id='for-search' className="col-lg-6 mb-3" >
+                          <div className="professional_info">
+                            <div className="project-card-top">
+                              <Accordion.Header>
+                                <div className="project-card-heading d-flex align-items-center justify-content-between">
+                                  <div className="body_heading2 mb-0 ">
+                                    <div className='d-flex'>
+
+                                      <h2 className="font-18 mb-0"><span className="me-2"><img src='https://avatar.iran.liara.run/public' style={{ maxWidth: "30px", }} alt="" /></span>{user.username || ''}</h2>
+                                    </div>
+                                    <p className="mb-0 body-sub-heading font-12">Created by:- <span>{user.email}</span></p>
+                                  </div>
+                                  <p className="mb-0 font-14 body-sub-heading" style={{ margin: '30px' }}>Name: <span> {user.name}</span> </p>
+                                </div>
+                              </Accordion.Header>
+                              <Accordion.Body>
+                                <div className="project-card-heading technology-heading d-flex align-items-center justify-content-between">
+                                  <p className="my-2 font-14 body-sub-heading ">Suite: <span className="me-2">{user.address.suite}
+                                  </span></p>
+                                  <p className="my-2 font-14 body-sub-heading ">City: <span> {user.address.city}</span></p>
+                                  <p className="my-2 font-14 body-sub-heading ">Street: <span>{user.address.street}</span>  </p>
+                                </div>
+                                <div className="project-card-heading d-flex align-items-center justify-content-between">
+                                  <p className="my-2 font-14 body-sub-heading ">ZipCode: <span className="me-2"> {user.address.zipcode}</span></p>
+                                  <p className="my-2 font-14 body-sub-heading ">Lat. <span>{user.address.geo.lat}</span> </p>
+                                  <p className="my-2 font-14 body-sub-heading ">Lng. <span>{user.address.geo.lng}</span> </p>
+
+                                </div>
+                              </Accordion.Body>
+                            </div>
+                          </div>
+                        </Accordion.Item>
+                      )
+                      )) : isLoading ? <h5 style={{ textAlign: 'center' }}>Loading...</h5> : <h5 style={{ textAlign: 'center' }}>{'some thing wents wrong' || isError}</h5>}
+                    </Accordion>
+                    {viewEdit && <UserForm />}
+                  </div>
 
 
-                {editInd !== null && (
-                  <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Modal heading</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Form className='row'>
-                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <FloatingLabel
-                            controlId="floatingInput"
-                            label="Username"
-                            className="mb-3"
-                          >
-                            <Form.Control
-                              type='text' name="username" value={editData.username || ''} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
-                            />
-                            <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
-                          </FloatingLabel>
-                        </Form.Group>
-                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <FloatingLabel
-                            controlId="floatingInput"
-                            label="Select Gender"
-                            className="mb-3"
-                          >
-
-                            <Form.Select name="gender" value={editData.gender || ""} onChange={handleChange}>
-                              <option value="">Select</option>
-                              {genderOptions.map((val, ind) => (
-                                <option key={ind} value={val}>
-                                  {val}
-                                </option>
-                              ))}
-                            </Form.Select>
-                            <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
-                          </FloatingLabel>
-                        </Form.Group>
-                        <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
-                          <FloatingLabel
-                            controlId="floatingInput"
-                            label="Age"
-                            className="mb-3"
-                          >
-                            <Form.Control
-                              type='text' name="age" value={editData.age} onChange={handleChange} onInput={validateAge}
-                            />
-                            <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
-                          </FloatingLabel>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                          <FloatingLabel
-                            controlId="floatingInput"
-                            label="Email address"
-                            className="mb-3"
-                          >
-                            <Form.Control
-                              type='text' name="email" value={editData.email} onChange={handleChange} onInput={(e) => validateLocalEmail(e.target.value)}
-                            />
-                            <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
-                            <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
-                          </FloatingLabel>
-                        </Form.Group>
-                        <div className='row'>
-                          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Stream</Form.Label>
-                            <Form.Label>
-                              <input
-                                type="radio"
-                                name="stream"
-                                value="PCM"
-                                checked={editData.stream === "PCM"}
-                                onChange={handleChange}
+                  {editInd !== null && (
+                    <Modal show={show} onHide={handleClose}>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Modal heading</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Form className='row'>
+                          <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                            <FloatingLabel
+                              controlId="floatingInput"
+                              label="Username"
+                              className="mb-3"
+                            >
+                              <Form.Control
+                                type='text' name="username" value={editData.username || ''} onChange={handleChange} placeholder='Enter Username' minLength={6} maxLength={20}
                               />
-                              PCM
-                            </Form.Label>
-                            <Form.Label>
-                              <input
-                                type="radio"
-                                name="stream"
-                                value="Commerce"
-                                checked={editData.stream === "Commerce"}
-                                onChange={handleChange}
-                              />
-                              Commerce
-                            </Form.Label>
-                            <Form.Label>
-                              <input
-                                type="radio"
-                                name="stream"
-                                value="Arts"
-                                checked={editData.stream === "Arts"}
-                                onChange={handleChange}
-                              />
-                              Arts
-                            </Form.Label>
-                            <span id='stream-error' style={{ display: 'none', color: 'red' }}>Select a stream</span>
+                              <span id='username-error' style={{ display: "none", color: 'red' }}>Enter valid username</span>
+                            </FloatingLabel>
                           </Form.Group>
+                          <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                            <FloatingLabel
+                              controlId="floatingInput"
+                              label="Select Gender"
+                              className="mb-3"
+                            >
+
+                              <Form.Select name="gender" value={editData.gender || ""} onChange={handleChange}>
+                                <option value="">Select</option>
+                                {genderOptions.map((val, ind) => (
+                                  <option key={ind} value={val}>
+                                    {val}
+                                  </option>
+                                ))}
+                              </Form.Select>
+                              <span id='gender-error' style={{ display: 'none', color: 'red' }}>Select your gender</span>
+                            </FloatingLabel>
+                          </Form.Group>
+                          <Form.Group className="mb-3 col" controlId="exampleForm.ControlInput1">
+                            <FloatingLabel
+                              controlId="floatingInput"
+                              label="Age"
+                              className="mb-3"
+                            >
+                              <Form.Control
+                                type='text' name="age" value={editData.age} onChange={handleChange} onInput={validateAge}
+                              />
+                              <span id='age-error' style={{ display: 'none', color: 'red' }}>Age must be greater than 16 and less than 90</span>
+                            </FloatingLabel>
+                          </Form.Group>
+
                           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label className='label-me'>Subjects: </Form.Label>
-                            {checkOption.map((it) => (
-                              <label key={it.key}>
-                                {it.label}
+                            <FloatingLabel
+                              controlId="floatingInput"
+                              label="Email address"
+                              className="mb-3"
+                            >
+                              <Form.Control
+                                type='text' name="email" value={editData.email} onChange={handleChange} onInput={(e) => validateLocalEmail(e.target.value)}
+                              />
+                              <span id='email-error' style={{ display: "none", color: 'red' }}>Enter valid Email</span>
+                              <span id='duplicate-error' style={{ display: "none", color: 'red' }}>Email already exist</span>
+                            </FloatingLabel>
+                          </Form.Group>
+                          <div className='row'>
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                              <Form.Label>Stream</Form.Label>
+                              <Form.Label>
                                 <input
-                                  type="checkbox"
-                                  name={it.name}
-                                  value={it.label}
-                                  checked={(editData.subject).includes(it.label)}
+                                  type="radio"
+                                  name="stream"
+                                  value="PCM"
+                                  checked={editData.stream === "PCM"}
                                   onChange={handleChange}
                                 />
-                              </label>
-                            ))}
+                                PCM
+                              </Form.Label>
+                              <Form.Label>
+                                <input
+                                  type="radio"
+                                  name="stream"
+                                  value="Commerce"
+                                  checked={editData.stream === "Commerce"}
+                                  onChange={handleChange}
+                                />
+                                Commerce
+                              </Form.Label>
+                              <Form.Label>
+                                <input
+                                  type="radio"
+                                  name="stream"
+                                  value="Arts"
+                                  checked={editData.stream === "Arts"}
+                                  onChange={handleChange}
+                                />
+                                Arts
+                              </Form.Label>
+                              <span id='stream-error' style={{ display: 'none', color: 'red' }}>Select a stream</span>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                              <Form.Label className='label-me'>Subjects: </Form.Label>
+                              {checkOption.map((it) => (
+                                <label key={it.key}>
+                                  {it.label}
+                                  <input
+                                    type="checkbox"
+                                    name={it.name}
+                                    value={it.label}
+                                    checked={(editData.subject).includes(it.label)}
+                                    onChange={handleChange}
+                                  />
+                                </label>
+                              ))}
 
-                            <span id='subject-error' style={{ display: 'none', color: 'red' }}>Select at least one subject</span>
-                          </Form.Group>
-                          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Profile photo</Form.Label>
-                            <Form.Control
-                              type='file' ref={fileUpdateRef} onChange={handleProfilePic}
-                            />
+                              <span id='subject-error' style={{ display: 'none', color: 'red' }}>Select at least one subject</span>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                              <Form.Label>Profile photo</Form.Label>
+                              <Form.Control
+                                type='file' ref={fileUpdateRef} onChange={handleProfilePic}
+                              />
 
-                            <div style={{ position: 'relative' }}>
-                              <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
-                              <span onClick={handleImageClose} id='my-icon' className="close AClass" style={{ position: 'absolute', cursor: 'pointer', fontSize: '25px', display: 'none' }} >&times;</span>
-                              <img alt='' src={updateFile ? updateFile : editData.file} style={{ maxWidth: "154px" }} />
-                            </div>
-                          </Form.Group>
-                        </div>
+                              <div style={{ position: 'relative' }}>
+                                <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
+                                <span onClick={handleImageClose} id='my-icon' className="close AClass" style={{ position: 'absolute', cursor: 'pointer', fontSize: '25px', display: 'none' }} >&times;</span>
+                                <img alt='' src={updateFile ? updateFile : editData.file} style={{ maxWidth: "154px" }} />
+                              </div>
+                            </Form.Group>
+                          </div>
 
 
-                      </Form>
-                    </Modal.Body>
+                        </Form>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                          Close
+                        </Button>
+                        <Button variant="primary" onClick={handleSave}>
+                          Save Changes
+                        </Button>
+
+                      </Modal.Footer>
+                    </Modal>)}
+
+
+                  <Modal show={showDelete} onHide={handleCloseDelete} className='modalSize'
+                    size='md'
+                    centered
+                  >
+                    <Modal.Header closeButton>
+                      <Modal.Title id="contained-modal-title-vcenter">Are you sure want to delete!
+                      </Modal.Title>
+                    </Modal.Header>
                     <Modal.Footer>
-                      <Button variant="secondary" onClick={handleClose}>
-                        Close
+                      <Button variant="secondary" onClick={handleCloseDelete}>
+                        No
                       </Button>
-                      <Button variant="primary" onClick={handleSave}>
-                        Save Changes
+                      <Button variant="danger" onClick={() => handleDelete(deleteInd)}>
+                        Yes
                       </Button>
-
                     </Modal.Footer>
-                  </Modal>)}
+                  </Modal>
 
-
-                <Modal show={showDelete} onHide={handleCloseDelete} className='modalSize'
-                  size='md'
-                  centered
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">Are you sure want to delete!
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseDelete}>
-                      No
-                    </Button>
-                    <Button variant="danger" onClick={() => handleDelete(deleteInd)}>
-                      Yes
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-
-              </div> }
+                </div>}
             </div>
           </div>
         </div>

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import '../css/custom.css'
 import '../css/media.css'
-
 import { useDispatch, useSelector } from 'react-redux'
 import { setSuccess } from '../features/successSlice';
-import { getUsers }
-  from '../features/apiSlice'
+import { getUsers } from '../features/apiSlice'
 import Sideer from '../sider/Sideer'
 import Header from '../Header/Header'
 import 'react-calendar/dist/Calendar.css';
@@ -48,7 +46,6 @@ const Project = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
     console.log("Loggedin ", user);
-
     if (user) {
       handleRoles(user.access)
     }
@@ -57,9 +54,7 @@ const Project = () => {
   const handleRoles = (access) => {
     console.log('role.length ', ...access);
     const accessRole = [...access]
-
     let len = accessRole.length
-
     for (let i = 0; i < len; i++) {
       if (accessRole[i] === 'View ' && checkView === false) {
         checkView = true
@@ -91,14 +86,14 @@ const Project = () => {
     }
   }
 
-
   useEffect(() => {
     dispatch(getUsers())
   }, [dispatch])
 
-
-
   function calculateTotalTime(now, then) {
+    if (now === null) {
+      now = "04/09/2013 15:00:00"
+    }
     if (then === null) {
       then = "04/09/2013 15:00:00"
     }
@@ -123,13 +118,8 @@ const Project = () => {
     e.dayEl.onmouseover = 'pointer'
   };
 
-
-
-
   function toasterMessage() {
-
     return (
-
       <>
         <Toast style={{ background: '#D0F0C0', marginBottom: '5px', marginLeft: '600px', position: 'absolute' }} onClose={() => dispatch(setSuccess(false))} delay={3000} autohide>
 
@@ -138,8 +128,6 @@ const Project = () => {
       </>
     );
   }
-
-
 
   return (
     <>
@@ -151,7 +139,6 @@ const Project = () => {
         <div className="limani_body">
           <Sideer />
           <div className="intersight_content">
-
             <div className="body_content" >
               <Header />
               {(viewEdit || viewAdd) &&
@@ -201,38 +188,23 @@ const Project = () => {
                                 <p className="mb-0 font-14 body-sub-heading col">working hours: <span> {calculateTotalTime(user.track_times[0].start_time, user.track_times[0].end_time)}</span> </p>
                               </div>
                               <p className="mb-0 font-14 body-sub-heading ">End Time: <span> {user.track_times[0].end_time}</span> </p>
-
                             </div>
-
                           </div>
                         </div>
                       )
                       )) : (<p style={{ textAlign: 'center' }}>No data found</p>)}
-
                     </div >
-
-
-
                     <div style={{ marginLeft: '300px', marginTop: '50px' }}>
-
-
-
-
                       {BarsDataset()}
                     </div>
-
-
-
                   </div>
                 </div>)
               }
             </div>
           </div>
         </div>
-
       </div>
     </>
-
   )
 }
 
