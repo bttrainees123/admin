@@ -6,95 +6,8 @@ import Webcam from "react-webcam";
 import { difference } from 'lodash';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { invLists } from '../ImageTextReader/data';
 
-const inv1 =
-  ['lil',
-    'reds',
-    'takeout',
-    'and',
-    'c',
-    'subtotal',
-    'taxes',
-    'tip',
-    'discount',
-    'total']
-const inv2 =
-  ['order',
-    'sandwich',
-    'shop',
-    'tip',
-    'total',
-    'your',
-    'order',
-    'delivery',
-    'by',
-    'view',
-    'store',
-    'opens',
-    'at']
-const inv3 =
-  ['coastline',
-    'burgers',
-    'redmond',
-    'server',
-    'check',
-    'street',
-    '98052',
-    'ordered',
-    'tax',
-    'tip',
-    'subtotal']
-const inv4 =
-  ['greek',
-    'and',
-    'american',
-    'colby',
-    'everett',
-    '98201',
-    'take',
-    'out',
-    'ordered',
-    'how',
-    'was',
-    'your',
-    'visit',
-    'restaurant',
-    'reach',
-    'contact']
-const inv5 =
-  ['bao',
-    'boss',
-    'order',
-    'details',
-    'subtotal',
-    'estimated',
-    'tax',
-    'review',
-    'store',
-    'discount',
-    'total']
-const inv6 =
-  ['buffalo',
-    'wild',
-    'wings',
-    'grill',
-    'bar',
-    '1450',
-    'ala',
-    'moana',
-    'blvd',
-    'unit',
-    '3326',
-    'server',
-    'table',
-    'guests',
-    'order',
-    'type',
-    'subtotal',
-    'tax',
-    'total',
-    'balance',
-    'due']
 
 const HomePage = () => {
   const navigate = useNavigate()
@@ -271,7 +184,6 @@ const HomePage = () => {
         .trim()
         .toLowerCase();
       const words = cleanText.split(" ");
-      const invLists = [inv1, inv2, inv3, inv4, inv5, inv6];
       const matched = invLists.some(inv => difference(inv, words).length === 0);
       if (matched) {
         if (typeof imageFile === 'string' && !isCapture) {

@@ -19,7 +19,7 @@ import TextHome from './components/ImageTextReader/TextHome';
 const HomePage = lazy(() => import('./components/Pages/HomePage'));
 
 // const Product = lazy(() => import('./components/Pages/Product'))
-// const TextReader = lazy(() => import('./components/ImageTextReader/TextReader'))
+const TextReader = lazy(() => import('./components/ImageTextReader/TextReader'))
 // const InputParser = lazy(() => import('./components/Pages/Editor/InputParser'))
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
               {/* <Route path='/about' element={<PrivateRoute Component={About} />} /> */}
               {/* <Route path='/post' element={<PrivateRoute Component={Post} />} /> */}
               {/* <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} /> */}
-              {/* <Route path='/extract-text' element={<TextReader />} /> */}
+              <Route path='/extract-text' element={<TextReader />} />
               <Route path='/text-home' element={<TextHome />} />
               {/* <Route path='/loading' element={<PrivateRoute Component={Loader} />} /> */}
             </Routes>
