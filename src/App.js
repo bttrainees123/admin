@@ -20,6 +20,7 @@ const HomePage = lazy(() => import('./components/Pages/HomePage'));
 
 // const Product = lazy(() => import('./components/Pages/Product'))
 const TextReader = lazy(() => import('./components/ImageTextReader/TextReader'))
+const Main = lazy(() => import('./components/Pages/share/Main'))
 // const InputParser = lazy(() => import('./components/Pages/Editor/InputParser'))
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
         <BrowserRouter>
           <Suspense fallback={<Loader />}>
             <Routes>
-              <Route path='/' element={<HomePage />} />
+              <Route path='/' element={<Main />} />
               {/* <Route path='/login' element={<HandleLoginRoute Component={LoginPage} />} /> */}
               {/* <Route path='/dashboard' element={<PrivateRoute Component={Project} />} /> */}
               {/* <Route path='/users' element={<PrivateRoute Component={User} />} /> */}
@@ -43,7 +44,7 @@ function App() {
               {/* <Route path='/post' element={<PrivateRoute Component={Post} />} /> */}
               {/* <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} /> */}
               <Route path='/extract-text' element={<TextReader />} />
-              <Route path='/text-home' element={<TextHome />} />
+              {/* <Route path='/main' element={<Main />} /> */}
               {/* <Route path='/loading' element={<PrivateRoute Component={Loader} />} /> */}
             </Routes>
           </Suspense>

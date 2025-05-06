@@ -26,13 +26,12 @@ const inv3 =
   ['coastline',
     'burgers',
     'redmond',
-    'server',
+    'server:',
     'check',
     'street',
     '98052',
-    'ordered',
-    'tax',
-    'tip',
+    'ordered:',
+    // 'tax',
     'subtotal']
 const inv4 =
   ['greek',
