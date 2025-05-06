@@ -32,7 +32,7 @@ function App() {
         <BrowserRouter>
           <Suspense fallback={<Loader />}>
             <Routes>
-              <Route path='/main' element={<Main />} />
+              <Route path='/' element={<Main />} />
               {/* <Route path='/login' element={<HandleLoginRoute Component={LoginPage} />} /> */}
               {/* <Route path='/dashboard' element={<PrivateRoute Component={Project} />} /> */}
               {/* <Route path='/users' element={<PrivateRoute Component={User} />} /> */}

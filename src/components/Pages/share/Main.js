@@ -20,9 +20,14 @@ const Main = () => {
             if (response.data?.status) {
                 const uploadedUrl = 'https://n-again.com/images/' + response.data.data;
                 setScreenshotUrl(uploadedUrl);
-
-                const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(uploadedUrl)}`;
+                const link = window.location.href
+                const fbShareUrl = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(link)}?imageurl=${encodeURIComponent(uploadedUrl)}`;
+                console.log(fbShareUrl);
                 window.open(fbShareUrl, '_blank');
+                
+                
+                // const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(uploadedUrl)}`;
+                // window.open(fbShareUrl, '_blank');
             } else {
                 console.error("Something went wrong during image upload");
             }
@@ -52,6 +57,8 @@ const Main = () => {
                     <FacebookIcon size={40} round />
                 </FacebookShareButton>
             )} */}
+
+   
         </div>
     );
 };
