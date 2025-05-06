@@ -14,6 +14,7 @@ const Main = () => {
     };
     return (
         <div>
+            
             <div ref={targetElement}>
                 <img src={img} alt='' />
                 <h1>This is the content to be screenshot</h1>
@@ -25,6 +26,7 @@ const Main = () => {
             <div style={{ border: '2px solid black' }}>
                 {screenshotUrl && (
                     <img src={screenshotUrl} alt='' />
+                    
                 )}
             </div>
 
