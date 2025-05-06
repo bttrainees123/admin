@@ -13,21 +13,15 @@ const Main = () => {
             const canvas = await html2canvas(targetElement.current);
             const screenshotData = canvas.toDataURL('image/png');
             console.log("screenshotData", screenshotData);
-            
 
             const response = await axios.post(`https://n-again.com/api/uploadbase64`, { image: screenshotData });
 
             if (response.data?.status) {
                 const uploadedUrl = 'https://n-again.com/images/' + response.data.data;
                 setScreenshotUrl(uploadedUrl);
-                const link = window.location.href
-                const fbShareUrl = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(link)}?imageurl=${encodeURIComponent(uploadedUrl)}`;
-                console.log(fbShareUrl);
+                const pageLink = window.location.href
+                const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageLink)}}`;
                 window.open(fbShareUrl, '_blank');
-                
-                
-                // const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(uploadedUrl)}`;
-                // window.open(fbShareUrl, '_blank');
             } else {
                 console.error("Something went wrong during image upload");
             }
@@ -52,15 +46,20 @@ const Main = () => {
                 {screenshotUrl && <img src={screenshotUrl} alt='Screenshot' />}
             </div>
 
+            {screenshotUrl && (
+                <FacebookShareButton url={screenshotUrl}  >
+                    <FacebookIcon size={40} round />
+                </FacebookShareButton>
+            )}
+
             {/* {screenshotUrl && (
                 <FacebookShareButton url={screenshotUrl} className="SocialMediaShareButton">
                     <FacebookIcon size={40} round />
                 </FacebookShareButton>
             )} */}
-
-   
         </div>
     );
 };
 
 export default Main;
+
