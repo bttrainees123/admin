@@ -53,13 +53,13 @@ const User = () => {
 
         const pushNotification = () => {
             setNotifications(data1);
-            console.log("Notification ", notifications);
+            // console.log("Notification ", notifications);
         }
 
         getLocation();
         const intervalId = setInterval(() => {
             getLocation()
-            pushNotification()
+            // pushNotification()
         }, 5000);
 
         return () => {
@@ -92,8 +92,9 @@ const User = () => {
                     center={[location.latitude, location.longitude]}
                     zoom={13} scrollWheelZoom={true} >
                     <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution='Map <a href="https://memomaps.de/">memomaps.de</a> <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        // '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png"
                     />
                     <Marker position={[location.latitude, location.longitude]} icon={icon}>
                         <Popup>Your Location</Popup>
