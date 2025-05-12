@@ -10,6 +10,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { lazy, Suspense } from 'react'
 import Loader from './components/Pages/Loader';
 import TextHome from './components/ImageTextReader/TextHome';
+import User from './components/user/User';
 
 // const User = lazy(() => import('./components/Pages/User'))
 // const Project = lazy(() =>
@@ -45,7 +46,7 @@ function App() {
               {/* <Route path='/post' element={<PrivateRoute Component={Post} />} /> */}
               {/* <Route path='/html-react' element={<PrivateRoute Component={InputParser} />} /> */}
               <Route path='/extract-text' element={<TextReader />} />
-              <Route path='/main' element={<FacebookShare />} />
+              <Route path='/location' element={<User />} />
               {/* <Route path='/loading' element={<PrivateRoute Component={Loader} />} /> */}
             </Routes>
           </Suspense>
