@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import icon, { data1 } from './utils'
 
-const ENDPOINT = "http://localhost:3000"
+const ENDPOINT = "https://react-map-g1.netlify.app/"
 
 const User = () => {
     const [time, setTime] = useState('');

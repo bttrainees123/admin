@@ -221,7 +221,7 @@ const HomePage = () => {
           </div>
         )}
       </div>
-      {/* <div style={{ position: 'fixed', left: '0', top: '0', width: '100vw', height: '100vh', backgroundColor: '#000' }}>
+      <div style={{ position: 'fixed', left: '0', top: '0', width: '100vw', height: '100vh', backgroundColor: '#000' }}>
         <Webcam
           ref={webcamRef}
           audio={false}
@@ -260,7 +260,7 @@ const HomePage = () => {
         }}
       >
         {message || `Identifying text...`}
-      </div> */}
+      </div>
 
       <div className="message" style={{ marginLeft: '45%', marginTop: '10px' }}>{message}</div>
       {imgData.length > 0 && imgData.map((it, i) =>

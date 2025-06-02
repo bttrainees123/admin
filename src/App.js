@@ -11,6 +11,7 @@ import { lazy, Suspense } from 'react'
 import Loader from './components/Pages/Loader';
 import TextHome from './components/ImageTextReader/TextHome';
 import User from './components/user/User';
+import DataGrid from './components/DataTable/DataGrid';
 
 // const User = lazy(() => import('./components/Pages/User'))
 // const Project = lazy(() =>
@@ -22,7 +23,7 @@ const HomePage = lazy(() => import('./components/Pages/HomePage'));
 // const Product = lazy(() => import('./components/Pages/Product'))
 const TextReader = lazy(() => import('./components/ImageTextReader/TextReader'))
 const FacebookShare = lazy(() => import('./components/Pages/share/FacebookShare'))
-const Main = lazy(() => import('./components/Pages/share/Main'))
+const Text = lazy(() => import('./components/Pages/Text'))
 // const InputParser = lazy(() => import('./components/Pages/Editor/InputParser'))
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
         <BrowserRouter>
           <Suspense fallback={<Loader />}>
             <Routes>
-              <Route path='/' element={<User />} />
+              <Route path='/' element={<HomePage />} />
               {/* <Route path='/login' element={<HandleLoginRoute Component={LoginPage} />} /> */}
               {/* <Route path='/dashboard' element={<PrivateRoute Component={Project} />} /> */}
               {/* <Route path='/users' element={<PrivateRoute Component={User} />} /> */}

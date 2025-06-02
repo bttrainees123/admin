@@ -29,11 +29,11 @@ const Home = () => {
 
   const handleFile = (index, event) => {
     console.log("event.target.files", event.target.files);
-const files = Array.from(event.target.files)
-console.log("Files ", files)
-const newFormValues = [...formValues]
-newFormValues[index].images.push(...files)
-setFormValues(newFormValues)
+    const files = Array.from(event.target.files)
+    console.log("Files ", files)
+    const newFormValues = [...formValues]
+    newFormValues[index].images.push(...files)
+    setFormValues(newFormValues)
     uploadFiles(files)
   }
   const handleDrop = (index, event) => {
@@ -155,14 +155,14 @@ setFormValues(newFormValues)
                 }} />
                 <br />
                 <ProgressBar variant={progressBars === 100 ? 'success' : 'info'} id='progress-bar' animated now={progressBars} label={`${progressBars}%`} style={{ width: '97%', margin: '5px', display: progressBars === 0 ? 'none' : 'block' }} />
-<div style={{ display: 'flex', flexWrap: 'wrap' }}>
-  {element.images.map((img, i) => (
-    <div>
-      <img key={i} src={URL.createObjectURL(img)} alt="preview" style={{ width: '80px', height: '80px', margin: '5px' }} /><span onClick={(e) => handleImageClose(e, i, index)} id='my-icon' className="close AClass" style={{ cursor: 'pointer', fontSize: '25px', marginBottom: '25px' }}>&times;</span>
-      <p style={{ width: '80px', height: '80px', marginLeft: '5px' }}>{img.name.slice(0, 10)}</p>
-    </div>
-  ))}
-</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                  {element.images.map((img, i) => (
+                    <div>
+                      <img key={i} src={URL.createObjectURL(img)} alt="preview" style={{ width: '80px', height: '80px', margin: '5px' }} /><span onClick={(e) => handleImageClose(e, i, index)} id='my-icon' className="close AClass" style={{ cursor: 'pointer', fontSize: '25px', marginBottom: '25px' }}>&times;</span>
+                      <p style={{ width: '80px', height: '80px', marginLeft: '5px' }}>{img.name.slice(0, 10)}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
               {index ? (
                 <button type="button" className="btn btn-danger" onClick={() => removeFormFields(index)}>Remove</button>
